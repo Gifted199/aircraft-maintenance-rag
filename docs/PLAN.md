@@ -206,8 +206,14 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
 
 ### AWS
 - **ECS Fargate.** Runs containers without us managing servers; we pay per second while the task runs.
-- **One task, two containers (API + UI), same image, different start commands.** Containers in one
-  Fargate task share `localhost`, so the UI reaches the API at `http://localhost:8000` with no extra networking.
+- **One task, two containers (API + UI), two images.** Containers in one Fargate task share
+  `localhost`, so the UI reaches the API at `http://localhost:8000` with no extra networking. The
+  UI has its own small image (Streamlit only, no `aero_rag`, no secrets) instead of sharing the API
+  image, so a UI change never rebuilds or risks the API, and the UI container never receives the
+  secret. Changed in phase 6 from the original "same image, two commands".
+- **Locally, docker compose runs the same two images** (`docker-compose.yml`,
+  `scripts/compose_up.ps1`). Compose puts them on a private network where the service name is the
+  host name, so there the UI uses `http://api:8000`; only `API_URL` differs from ECS.
 - **One Secrets Manager secret, `akinsds1126-aero-rag/app`, is the only place secrets exist.** It is
   a JSON object with five keys (Azure endpoint and key; OpenSearch endpoint, username and password).
   Nothing secret is in the repo, the image, `.env` or the task definition text.
@@ -249,7 +255,7 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
 | 4a | Containerise the API | Dockerfile, `.dockerignore`, `scripts/run_local_container.ps1` | Done: image `akinsds1126-aero-rag-api:0.1.0` answers locally as user `app` |
 | 4b | Deploy the API to ECS Fargate | Commands for ECR, IAM, ECS service, and the one-off ingestion task | Public URL answers `/query`; ingestion task exits 0 with logs in CloudWatch |
 | 5 | Evaluation | 47 labelled questions, metrics, before/after tables, README Metrics draft | Done: `scripts/evaluate.py` reproduces `data/results/` (~$0.14); v2 fixed both v1 failures (47/47) |
-| 6 | Streamlit UI and redeploy | Streamlit app as a second container in the same task | UI on the public URL answers a question |
+| 6 | Streamlit UI and redeploy | `ui/` (app, presenter, Dockerfile), `docker-compose.yml`, `scripts/compose_up.ps1`; then the UI as a second container in the same task | Local: done, compose runs both healthy (UI :8501). ECS: UI on the public URL answers a question |
 | 7 | Langfuse + README | Tracing, README with diagram, "Future: agents" | Trace visible; README runs from clean clone |
 
 **Why this order.** The live ECS demo is assessed, so the API is deployed as soon as it works

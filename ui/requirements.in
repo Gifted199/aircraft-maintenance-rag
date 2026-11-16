@@ -1,0 +1,3 @@
+# Direct dependencies of the UI image. Compile the pinned lock file with:
+#   uv pip compile ui/requirements.in -o ui/requirements.txt --python-version 3.12 --python-platform x86_64-manylinux_2_28
+streamlit==1.67.0

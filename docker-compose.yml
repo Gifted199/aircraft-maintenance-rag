@@ -1,0 +1,54 @@
+# Run the API and the UI together on this laptop, the way they will run on ECS.
+#
+#   .\scripts\compose_up.ps1          build, start, and wait until both are healthy
+#   .\scripts\compose_up.ps1 -Down    stop and remove both
+#
+# Use the script rather than a bare `docker compose up`: it reads the secret from Secrets Manager
+# into its own process only, and compose passes each value to the API container by NAME (see
+# `environment` below), so no secret is ever written to disk or shown on a command line.
+#
+# Networking: compose puts both containers on one private network where each service name is a
+# host name, so the UI reaches the API at http://api:8000. (On ECS both containers share one
+# network namespace instead, and the UI uses http://localhost:8000.)
+
+name: akinsds1126-aero-rag
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: akinsds1126-aero-rag-api:0.2.0
+    container_name: akinsds1126-aero-rag-api
+    platform: linux/amd64
+    # The same non-secret settings the API uses when run with `uv run` (index, deployments, ...).
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # Laptop-only settings are blanked: in a container the secret arrives as environment
+      # variables (exactly as on ECS), so the API never calls Secrets Manager itself.
+      - AWS_PROFILE=
+      - APP_SECRET_NAME=
+      # Name only, no value: compose copies each value from the environment of compose_up.ps1.
+      - AZURE_OPENAI_ENDPOINT
+      - AZURE_OPENAI_API_KEY
+      - OPENSEARCH_ENDPOINT
+      - OPENSEARCH_USERNAME
+      - OPENSEARCH_PASSWORD
+    ports:
+      - "8000:8000"   # published so /docs can be opened locally; the UI does not need it
+
+  ui:
+    build:
+      context: ui
+    image: akinsds1126-aero-rag-ui:0.1.0
+    container_name: akinsds1126-aero-rag-ui
+    platform: linux/amd64
+    environment:
+      - API_URL=http://api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      api:
+        condition: service_healthy   # the API image's HEALTHCHECK on /health

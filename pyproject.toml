@@ -3,7 +3,10 @@ name = "aero-rag"
 version = "0.1.0"
 description = "Aircraft maintenance manual assistant: hybrid-search RAG on AWS (S3, OpenSearch, ECS Fargate) with Azure OpenAI."
 requires-python = ">=3.12"
-# Dependencies are added in the phase that first needs them (FastAPI in 3, Streamlit in 5, Langfuse in 7).
+# Dependencies are added in the phase that first needs them (FastAPI in 3, Langfuse in 7).
+# The Streamlit UI has its own image and ui/requirements.txt; the "ui" group below only lets it
+# run locally with `uv run --group ui streamlit run ui/app.py`. It is not installed by `uv sync`
+# by default and never goes into the API image.
 dependencies = [
     "boto3>=1.35",
     "fastapi>=0.115",
@@ -20,6 +23,9 @@ dev = [
     "pytest>=8.3",
     "ruff>=0.7",
 ]
+ui = [
+    "streamlit==1.67.0",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -30,11 +36,11 @@ packages = ["src/aero_rag"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["scripts"]
+pythonpath = ["scripts", "ui"]
 
 [tool.ruff]
 line-length = 100
-src = ["src", "scripts", "tests"]
+src = ["src", "scripts", "tests", "ui"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]

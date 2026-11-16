@@ -1,0 +1,6 @@
+# Allow-list: the UI image needs exactly three files.
+*
+
+!requirements.txt
+!app.py
+!presenter.py

@@ -83,6 +83,12 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
 - The image contains only `.venv` (allow-list `.dockerignore`), runs as user `app`, and gets
   secrets only as environment variables. In a container `AWS_PROFILE` and `APP_SECRET_NAME` are
   not set; `S3_BUCKET` must be passed for ingestion (it has no default).
+- The Streamlit UI (`ui/`) is a separate image with its own pinned `ui/requirements.txt`
+  (compiled from `requirements.in`). It only calls the API at `API_URL` and never imports
+  `aero_rag`, holds secrets or reaches Azure/OpenSearch. All logic is in `ui/presenter.py`
+  (pure, tested offline); `ui/app.py` is layout only. Model text is Markdown-escaped before display.
+  Locally (compose) the UI reaches the API at `http://api:8000`; on ECS both containers share the
+  task's network, so `http://localhost:8000`.
 - Never log the question text, the prompt or model output; log sizes, decisions, scores, tokens.
 - Prices used for estimates: `gpt-5.4-mini` about $0.75 / 1M input and $4.50 / 1M output tokens;
   `text-embedding-3-small` about $0.02 / 1M. A `/query` that reaches the model costs about $0.002.
@@ -101,8 +107,11 @@ uv run python -m aero_rag.api            # API on :8000 (GET /health, GET /ready
 uv run python scripts/build_eval_set.py      # rebuild data/eval/questions.json from the spec (free)
 uv run python scripts/evaluate.py --dry-run  # evaluation call count + cost estimate (free)
 uv run python scripts/evaluate.py            # full evaluation -> data/results/ (paid: ~51 LLM calls, ~$0.14)
-docker build --platform linux/amd64 -t akinsds1126-aero-rag-api:0.1.0 .   # local image build
-.\scripts\run_local_container.ps1        # run the image with secrets as env vars; -Stop to remove
+docker build --platform linux/amd64 -t akinsds1126-aero-rag-api:0.2.0 .   # local API image build
+docker build --platform linux/amd64 -t akinsds1126-aero-rag-ui:0.1.0 ui    # local UI image build
+.\scripts\run_local_container.ps1        # run the API image alone with secrets as env vars; -Stop
+.\scripts\compose_up.ps1                 # API + UI together (UI on :8501); -Down to remove
+uv run --group ui streamlit run ui/app.py    # UI without Docker, against an API on :8000
 aws sso login --profile aero             # needed before anything that touches AWS
 uv run python scripts/check_connections.py   # PASS/FAIL: Secrets Manager, S3, OpenSearch, Azure chat, embeddings
 ```
