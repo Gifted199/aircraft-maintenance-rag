@@ -1,0 +1,2 @@
+# Store text with LF so files copied into the Linux Docker image behave the same as on Windows.
+* text=auto eol=lf

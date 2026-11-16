@@ -1,0 +1,37 @@
+[project]
+name = "aero-rag"
+version = "0.1.0"
+description = "Aircraft maintenance manual assistant: hybrid-search RAG on AWS (S3, OpenSearch, ECS Fargate) with Azure OpenAI."
+requires-python = ">=3.12"
+# Dependencies are added in the phase that first needs them (FastAPI in 3, Streamlit in 5, Langfuse in 7).
+dependencies = [
+    "boto3>=1.35",
+    "openai>=1.60",
+    "opensearch-py>=2.7",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.7",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aero_rag"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["scripts"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "scripts", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

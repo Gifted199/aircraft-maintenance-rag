@@ -1,0 +1,30 @@
+# Secrets: never commit. .env.example is the only env file in git.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.aws/
+.streamlit/secrets.toml
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local run outputs (evaluation reports that we want to keep go in docs/)
+data/tmp/
+*.log
