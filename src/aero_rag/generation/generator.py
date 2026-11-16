@@ -50,8 +50,10 @@ text word for word. Put that step's WARNING and CAUTION texts, word for word and
 reorder or skip steps, even if the procedure is long. In this case answer is one or two sentences \
 naming the task, aircraft type and revision; do not repeat the steps in answer.
    For every other kind of question, steps is an empty array.
-7. When steps is empty and your answer relies on a step that carries a WARNING or CAUTION, include \
-that WARNING or CAUTION in answer.
+7. relied_on_steps: when steps is empty, list every procedure step your answer is based on, as \
+its source id and step number (for example the step that states the torque you quote). Do not \
+copy WARNING or CAUTION text into answer: the system attaches the warnings of those steps itself. \
+When steps is not empty, relied_on_steps is an empty array.
 8. Write answer as short plain text, and mention the aircraft type, task number and revision.
 """
 
@@ -73,6 +75,12 @@ _STEP_SCHEMA = {
     "required": ["number", "warnings", "cautions", "text"],
     "additionalProperties": False,
 }
+_STEP_REF_SCHEMA = {
+    "type": "object",
+    "properties": {"source_id": {"type": "integer"}, "number": {"type": "integer"}},
+    "required": ["source_id", "number"],
+    "additionalProperties": False,
+}
 ANSWER_SCHEMA = {
     "type": "object",
     "properties": {
@@ -80,8 +88,9 @@ ANSWER_SCHEMA = {
         "answer": {"type": "string"},
         "steps": {"type": "array", "items": _STEP_SCHEMA},
         "source_ids": {"type": "array", "items": {"type": "integer"}},
+        "relied_on_steps": {"type": "array", "items": _STEP_REF_SCHEMA},
     },
-    "required": ["status", "answer", "steps", "source_ids"],
+    "required": ["status", "answer", "steps", "source_ids", "relied_on_steps"],
     "additionalProperties": False,
 }
 RESPONSE_FORMAT = {

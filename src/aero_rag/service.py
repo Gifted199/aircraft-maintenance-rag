@@ -9,6 +9,7 @@ import time
 import uuid
 
 from aero_rag.generation.generator import GenerationError, Generator
+from aero_rag.guardrails.alerts import collect_alerts
 from aero_rag.guardrails.input import check_input
 from aero_rag.guardrails.output import check_output
 from aero_rag.guardrails.retrieval import decide
@@ -144,6 +145,7 @@ class RagService:
                     "answered",
                     answer.answer,
                     steps=answer.steps,
+                    warnings=collect_alerts(answer, decision.context),
                     citations=[_citation(hit) for hit in cited],
                     **common,
                 )

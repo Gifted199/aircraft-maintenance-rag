@@ -13,6 +13,11 @@ class AnswerStep(BaseModel):
     text: str
 
 
+class StepRef(BaseModel):
+    source_id: int
+    number: int
+
+
 class LLMAnswer(BaseModel):
     """Exactly what the model must return (enforced by a strict JSON schema)."""
 
@@ -20,6 +25,17 @@ class LLMAnswer(BaseModel):
     answer: str
     steps: list[AnswerStep]
     source_ids: list[int]
+    relied_on_steps: list[StepRef] = []  # steps a short answer is based on (pointers only)
+
+
+class StepAlert(BaseModel):
+    """A WARNING or CAUTION attached to an answer by code, copied from the indexed task."""
+
+    kind: Literal["WARNING", "CAUTION"]
+    text: str
+    aircraft_type: str
+    task_number: str
+    step_number: int
 
 
 class Citation(BaseModel):
@@ -46,6 +62,7 @@ class QueryResponse(BaseModel):
     status: Literal["answered", "abstained", "clarification_needed", "rejected"]
     answer: str
     steps: list[AnswerStep] = []
+    warnings: list[StepAlert] = []  # for short answers; full procedures carry them in steps
     citations: list[Citation] = []
     scores: Scores = Scores()
     aircraft_unspecified: bool = False

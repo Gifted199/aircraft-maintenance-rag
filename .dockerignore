@@ -1,0 +1,10 @@
+# Allow-list: ignore everything, then admit only what the image needs. A new file (a .env, a key,
+# test data) is therefore excluded by default instead of leaking into the build context.
+*
+
+!pyproject.toml
+!uv.lock
+!src/
+
+**/__pycache__/
+**/*.py[cod]

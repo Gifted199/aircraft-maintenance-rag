@@ -54,6 +54,10 @@ def test_answered_with_citation_built_from_the_index_not_from_the_model():
         "revision_date": "2026-01-19",
         "source_key": "manuals/A-200_32-41-01_rev03.md",
     }
+    # The model's text has no warning; code attached the one on step 7 from the indexed task.
+    (warning,) = response.warnings
+    assert warning.kind == "WARNING" and warning.step_number == 7
+    assert warning.text.startswith("DO NOT USE THE SEATING TORQUE AS THE FINAL TORQUE.")
     assert len(generator.calls) == 1 and generator.calls[0]["problems"] is None
     assert searcher.calls[0][4] is False  # include_superseded is never set by the service
 
@@ -65,6 +69,7 @@ def test_procedure_answer_returns_every_step_with_its_warnings():
     assert response.status == "answered"
     assert [s.number for s in response.steps] == list(range(1, 11))
     assert response.steps[6].warnings and "135 Nm" in response.steps[6].text
+    assert response.warnings == []  # already inside the steps
 
 
 def test_failed_check_retries_once_with_the_problems_then_succeeds():
@@ -82,6 +87,7 @@ def test_two_failed_checks_abstain_and_never_return_the_bad_value():
     response = service.answer(QUESTION)
     assert response.status == "abstained" and response.answer.startswith("I don't know")
     assert "120" not in response.answer and response.citations == [] and response.steps == []
+    assert response.warnings == []
     assert len(generator.calls) == 2  # exactly one retry
 
 
@@ -188,6 +194,7 @@ def test_query_returns_the_documented_shape_and_request_id(api):
         "status",
         "answer",
         "steps",
+        "warnings",
         "citations",
         "scores",
         "aircraft_unspecified",
@@ -196,6 +203,7 @@ def test_query_returns_the_documented_shape_and_request_id(api):
     }
     assert body["status"] == "answered" and body["answer"] == GOOD
     assert set(body["scores"]) == {"hybrid", "cosine", "exact_identifier_match"}
+    assert body["warnings"][0]["kind"] == "WARNING" and body["warnings"][0]["step_number"] == 7
     assert body["request_id"] == response.headers["X-Request-ID"] and len(body["request_id"]) == 32
 
 

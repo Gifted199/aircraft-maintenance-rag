@@ -265,3 +265,59 @@ def test_schema_is_strict():
 
     walk(ANSWER_SCHEMA)
     assert set(ANSWER_SCHEMA["properties"]) == set(LLMAnswer.model_fields)
+
+
+# ------------------------------------------------------------------ warnings attached by code
+
+from aero_rag.guardrails.alerts import collect_alerts  # noqa: E402
+from aero_rag.schemas import StepRef  # noqa: E402
+
+SEATING_WARNING = "DO NOT USE THE SEATING TORQUE AS THE FINAL TORQUE."
+
+
+def test_quoting_a_torque_attaches_the_warning_of_the_step_that_states_it():
+    """The model says nothing about the warning and points at no step; code finds it."""
+    alerts = collect_alerts(answer("The final torque is 135 Nm."), context())
+    assert len(alerts) == 1
+    alert = alerts[0]
+    assert alert.kind == "WARNING" and alert.text.startswith(SEATING_WARNING)
+    assert (alert.aircraft_type, alert.task_number, alert.step_number) == ("A-200", "32-41-01", 7)
+    # Word for word from the indexed task, not from the model.
+    assert alert.text in context()[0].text
+
+
+def test_quoting_a_part_number_attaches_the_caution_of_its_step():
+    alerts = collect_alerts(answer("The axle nut is P/N a200-32-4107."), context())
+    assert [(a.kind, a.step_number) for a in alerts] == [("CAUTION", 2)]
+
+
+def test_a_step_the_model_points_at_gets_its_alerts_even_without_a_value():
+    reply = answer("Turn the wheel while you apply the seating torque.")
+    assert collect_alerts(reply, context()) == []
+    reply.relied_on_steps = [StepRef(source_id=1, number=5), StepRef(source_id=9, number=1)]
+    alerts = collect_alerts(reply, context())  # the invalid pointer (source 9) is ignored
+    assert [(a.kind, a.step_number) for a in alerts] == [("CAUTION", 5)]
+
+
+def test_a_step_without_alerts_adds_nothing():
+    assert collect_alerts(answer("Torque the lock bolts to 45 in-lb."), context()) == []
+
+
+def test_only_cited_sources_are_searched_for_alerts():
+    """54 Nm is in source 2 (brake); citing only source 1 must not pull in the brake caution."""
+    assert collect_alerts(answer("54 Nm", source_ids=[1]), context()) == []
+    alerts = collect_alerts(answer("54 Nm", source_ids=[2]), context())
+    assert [(a.task_number, a.kind, a.step_number) for a in alerts] == [("32-42-03", "CAUTION", 7)]
+
+
+def test_full_procedure_answers_do_not_duplicate_alerts():
+    reply = faithful_answer(context(), with_steps=True)
+    assert collect_alerts(reply, context()) == []
+
+
+def test_alert_order_is_warning_before_caution_and_by_step():
+    reply = answer("Seat at 200 Nm, then final torque 135 Nm.")
+    assert [(a.step_number, a.kind) for a in collect_alerts(reply, context())] == [
+        (5, "CAUTION"),
+        (7, "WARNING"),
+    ]
