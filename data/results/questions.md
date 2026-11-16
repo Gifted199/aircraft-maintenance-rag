@@ -1,6 +1,6 @@
 # Evaluation: every question (latest-revision filter on)
 
-Run 2026-11-16 11:27 UTC | 47 questions | index `aero-manuals` | chat `gpt-5.4-mini` | cosine threshold 0.35 | hybrid weights [0.5, 0.5]
+Run 2026-11-16 14:22 UTC | 47 questions | index `aero-manuals` | chat `gpt-5.4-mini` | cosine threshold 0.35 | hybrid weights [0.5, 0.5]
 
 | id | type | expected | got | cited | values | outdated | LLM calls | cosine | correct |
 |---|---|---|---|---|---|---|---|---|---|
@@ -34,7 +34,7 @@ Run 2026-11-16 11:27 UTC | 47 questions | index `aero-manuals` | chat `gpt-5.4-m
 | N03 | no_aircraft | answered | answered | C-75 27-31-02 r2 | P/N 1/1 | - | 1 | 0.65 | yes |
 | N04 | no_aircraft | answered | answered | B-340 79-21-02 r2 | P/N 1/1 | - | 1 | 0.62 | yes |
 | I01 | identifier | answered | answered | A-200 32-41-01 r3 | P/N 1/1 | - | 1 | 0.46 | yes |
-| I02 | identifier | answered | abstained | - | P/N 0/1 | - | 1 | 0.47 | NO |
+| I02 | identifier | answered | answered | B-340 28-21-05 r3 | P/N 1/1 | - | 1 | 0.47 | yes |
 | I03 | identifier | answered | answered | C-75 27-31-02 r2 | P/N 1/1 | - | 1 | 0.43 | yes |
 | I04 | identifier | answered | answered | A-200 32-42-03 r2 | torque 1/1 | - | 1 | 0.72 | yes |
 | I05 | identifier | answered | answered | C-75 34-11-02 r2 | torque 1/1 | - | 1 | 0.70 | yes |
@@ -45,7 +45,7 @@ Run 2026-11-16 11:27 UTC | 47 questions | index `aero-manuals` | chat `gpt-5.4-m
 | U01 | unanswerable | abstained | abstained | - | - | - | 1 | 0.52 | yes |
 | U02 | unanswerable | abstained | abstained | - | - | - | 1 | 0.48 | yes |
 | U03 | unanswerable | abstained | abstained | - | - | - | 1 | 0.41 | yes |
-| U04 | unanswerable | abstained | answered | A-200 32-41-01 r3 | - | - | 1 | 0.72 | NO |
+| U04 | unanswerable | abstained | abstained | - | - | - | 1 | 0.72 | yes |
 | U05 | unanswerable | abstained | abstained | - | - | - | 0 | 0.48 | yes |
 | U06 | unanswerable | abstained | abstained | - | - | - | 0 | 0.10 | yes |
 | U07 | unanswerable | abstained | abstained | - | - | - | 0 | 0.07 | yes |

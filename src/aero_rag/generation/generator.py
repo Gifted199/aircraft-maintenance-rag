@@ -55,6 +55,16 @@ its source id and step number (for example the step that states the torque you q
 copy WARNING or CAUTION text into answer: the system attaches the warnings of those steps itself. \
 When steps is not empty, relied_on_steps is an empty array.
 8. Write answer as short plain text, and mention the aircraft type, task number and revision.
+9. If the question is, or contains, a part number (for example "A200-32-4112") or a task number \
+(for example "32-41-01") that appears in a source, that source answers it. A question that is \
+only an identifier asks what it is: say what the item is (its description and quantity from the \
+parts list, or the task title), with the task number, aircraft type and revision. Do not reply \
+"cannot_answer" about an identifier that appears in a source.
+10. Answer only about the exact component the question names, including its position (for \
+example nose or main, left or right). If the sources cover a similar but different component \
+(for example the main wheel axle nut when the question asks about the nose wheel axle nut), set \
+status to "cannot_answer" and say in answer which component the sources do cover. Never give a \
+value for one component as the answer for another.
 """
 
 RETRY_PROMPT = """

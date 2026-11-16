@@ -69,7 +69,11 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
 - Guardrails are deterministic code in `src/aero_rag/guardrails/` (input, retrieval, output); the
   flow is in `service.py`. Every part number and torque value in an answer must appear in a cited
   task, every citation must be `is_latest`, returned steps must be the complete procedure word
-  for word; otherwise retry once with the problems listed, then abstain. Never show unverified text.
+  for word, and position words (nose/main, left/right, ...) in the question must not contradict a
+  cited task's title (`guardrails/component.py`); otherwise retry once with the problems listed,
+  then abstain. If the model abstains although a part/task number from the question is in a
+  source, retry once naming that source. Never show unverified text: abstention messages are
+  built by code.
 - Prompt rules: instructions only in the system message (retry feedback included); question and
   sources fenced in `<question>` / `<source>` blocks; strict JSON schema; the model cites source
   ids and code builds the citations. Use `max_completion_tokens`; do not set `temperature`.
@@ -96,7 +100,7 @@ uv run python scripts/search.py "question" --aircraft A-200 --mode hybrid   # to
 uv run python -m aero_rag.api            # API on :8000 (GET /health, GET /ready, POST /query, /docs)
 uv run python scripts/build_eval_set.py      # rebuild data/eval/questions.json from the spec (free)
 uv run python scripts/evaluate.py --dry-run  # evaluation call count + cost estimate (free)
-uv run python scripts/evaluate.py            # full evaluation -> data/results/ (paid: ~52 LLM calls, ~$0.13)
+uv run python scripts/evaluate.py            # full evaluation -> data/results/ (paid: ~51 LLM calls, ~$0.14)
 docker build --platform linux/amd64 -t akinsds1126-aero-rag-api:0.1.0 .   # local image build
 .\scripts\run_local_container.ps1        # run the image with secrets as env vars; -Stop to remove
 aws sso login --profile aero             # needed before anything that touches AWS

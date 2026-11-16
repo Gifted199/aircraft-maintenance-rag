@@ -7,6 +7,7 @@ to the model for one retry.
 
 import re
 
+from aero_rag.guardrails.component import component_mismatch
 from aero_rag.guardrails.retrieval import PART_NUMBER
 from aero_rag.ingestion.chunker import parse_procedure
 from aero_rag.models import Step
@@ -58,10 +59,11 @@ def _compare_steps(steps: list[AnswerStep], expected: list[Step], source_id: int
     return problems
 
 
-def check_output(answer: LLMAnswer, context: list[SearchHit]) -> list[str]:
+def check_output(answer: LLMAnswer, context: list[SearchHit], question: str = "") -> list[str]:
     """Problems with an 'answered' response; an empty list means it passed.
 
-    `context` is the list of tasks the model was given; source id N is context[N-1].
+    `context` is the list of tasks the model was given; source id N is context[N-1]. With the
+    question given, each cited task must also be about the component the question asks about.
     """
     problems: list[str] = []
     ids = list(dict.fromkeys(answer.source_ids))
@@ -79,8 +81,15 @@ def check_output(answer: LLMAnswer, context: list[SearchHit]) -> list[str]:
             problems.append(
                 f"source {source_id} is a superseded revision and must not be used or cited."
             )
+        if conflict := component_mismatch(question, hit):
+            asked, covered = conflict
+            problems.append(
+                f'source {source_id} ("{hit.title}") is about the {covered}, but the question asks '
+                f"about the {asked}. Answer only about the component asked; if no source covers "
+                'it, use status "cannot_answer".'
+            )
 
-    said = " ".join([answer.answer, *[s.text for s in answer.steps]])
+    said =" ".join([answer.answer, *[s.text for s in answer.steps]])
     cited_text = " ".join(hit.text for _, hit in cited)
     cited_parts = {match.upper() for match in PART_NUMBER.findall(cited_text)}
     cited_torques = extract_torques(cited_text)

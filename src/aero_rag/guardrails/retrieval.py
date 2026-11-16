@@ -56,6 +56,20 @@ def extract_task_numbers(text: str) -> set[str]:
     return set(TASK_NUMBER.findall(text))
 
 
+def identifier_sources(question: str, context: list[SearchHit]) -> dict[str, list[int]]:
+    """Each part or task number in the question -> the source ids (1-based) that contain it."""
+    found: dict[str, list[int]] = {}
+    for ident in sorted(extract_part_numbers(question)):
+        ids = [i for i, h in enumerate(context, start=1) if ident in h.text.upper()]
+        if ids:
+            found[ident] = ids
+    for ident in sorted(extract_task_numbers(question)):
+        ids = [i for i, h in enumerate(context, start=1) if h.task_number == ident]
+        if ids:
+            found[ident] = ids
+    return found
+
+
 def decide(
     question: str, result: SearchResult, cosine_threshold: float, context_k: int
 ) -> RetrievalDecision:

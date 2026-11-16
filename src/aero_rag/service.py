@@ -10,9 +10,10 @@ import uuid
 
 from aero_rag.generation.generator import GenerationError, Generator
 from aero_rag.guardrails.alerts import collect_alerts
+from aero_rag.guardrails.component import mismatch_message
 from aero_rag.guardrails.input import check_input
 from aero_rag.guardrails.output import check_output
-from aero_rag.guardrails.retrieval import decide
+from aero_rag.guardrails.retrieval import decide, identifier_sources
 from aero_rag.retrieval.aircraft import AIRCRAFT_TYPES, normalise_aircraft
 from aero_rag.retrieval.search import Searcher, SearchHit, SearchMode
 from aero_rag.schemas import Citation, QueryResponse, Scores
@@ -119,8 +120,13 @@ class RagService:
             )
 
         # 4. Generate, check, retry once with the problems listed, then abstain.
+        # An abstention names the component the manual does cover when the question asked about a
+        # different one (nose vs main wheel). The text is built by code from the index, never by
+        # the model.
+        mismatch = mismatch_message(question, decision.context[0])
+        identifiers = identifier_sources(question, decision.context)
         problems: list[str] = []
-        for _attempt in range(MAX_ATTEMPTS):
+        for attempt in range(MAX_ATTEMPTS):
             try:
                 generation = self._generator.generate(question, decision.context, problems or None)
             except GenerationError:
@@ -132,13 +138,16 @@ class RagService:
             trace["completion_tokens"] += generation.completion_tokens
             answer = generation.answer
             if answer.status == "cannot_answer":
+                # An exact part or task number found in a source is decisive evidence: the model
+                # must answer from it. Retry once with the location spelled out.
+                if identifiers and not mismatch and attempt + 1 < MAX_ATTEMPTS:
+                    trace["identifier_retry"] = True
+                    problems = [_identifier_problem(identifiers)]
+                    continue
                 trace["reason"] = "model_abstained"
-                return reply(
-                    "abstained",
-                    DONT_KNOW + "The maintenance tasks I found do not contain this information.",
-                    **common,
-                )
-            problems = check_output(answer, decision.context)
+                not_found = "The maintenance tasks I found do not contain this information."
+                return reply("abstained", DONT_KNOW + (mismatch or not_found), **common)
+            problems = check_output(answer, decision.context, question)
             if not problems:
                 cited = [decision.context[i - 1] for i in dict.fromkeys(answer.source_ids)]
                 return reply(
@@ -152,9 +161,20 @@ class RagService:
             trace.setdefault("guardrail_problems", []).append(problems)
 
         trace["reason"] = "output_guardrail_failed"
-        return reply(
-            "abstained",
-            DONT_KNOW + "I could not produce an answer that I can verify against the latest "
-            "revision of the manual.",
-            **common,
+        unverified = (
+            "I could not produce an answer that I can verify against the latest revision of the "
+            "manual."
         )
+        return reply("abstained", DONT_KNOW + (mismatch or unverified), **common)
+
+
+def _identifier_problem(identifiers: dict[str, list[int]]) -> str:
+    where = "; ".join(
+        f"{ident} appears word for word in source {', '.join(map(str, ids))}"
+        for ident, ids in identifiers.items()
+    )
+    return (
+        f"You replied cannot_answer, but {where}. A question that is, or contains, an identifier "
+        "asks what it is: answer from that source with what the item is (its description and "
+        "quantity, or the task title), the task number, aircraft type and revision."
+    )

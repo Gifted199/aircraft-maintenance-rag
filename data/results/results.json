@@ -1,6 +1,6 @@
 {
   "meta": {
-    "run_at": "2026-11-16 11:27 UTC",
+    "run_at": "2026-11-16 14:22 UTC",
     "questions": 47,
     "cosine_threshold": 0.35,
     "hybrid_weights": [
@@ -2809,8 +2809,8 @@
               "task_number": "24-31-01",
               "revision": 3,
               "is_latest": true,
-              "score": 0.81296426,
-              "cosine": 0.6259284615967465
+              "score": 0.8129493,
+              "cosine": 0.625898637171108
             },
             {
               "parent_id": "A-200_32-41-01_rev03",
@@ -2818,8 +2818,8 @@
               "task_number": "32-41-01",
               "revision": 3,
               "is_latest": true,
-              "score": 0.7219977,
-              "cosine": 0.4439953621347185
+              "score": 0.72199774,
+              "cosine": 0.4439955333044514
             },
             {
               "parent_id": "A-200_61-10-02_rev01",
@@ -2827,8 +2827,8 @@
               "task_number": "61-10-02",
               "revision": 1,
               "is_latest": true,
-              "score": 0.71430546,
-              "cosine": 0.4286109193518557
+              "score": 0.71430004,
+              "cosine": 0.4286001497532843
             },
             {
               "parent_id": "A-200_32-42-03_rev02",
@@ -2836,8 +2836,8 @@
               "task_number": "32-42-03",
               "revision": 2,
               "is_latest": true,
-              "score": 0.7135837,
-              "cosine": 0.4271674134327016
+              "score": 0.71356535,
+              "cosine": 0.42713064825096436
             },
             {
               "parent_id": "A-200_21-31-04_rev02",
@@ -2845,8 +2845,8 @@
               "task_number": "21-31-04",
               "revision": 2,
               "is_latest": true,
-              "score": 0.71210265,
-              "cosine": 0.4242052773239461
+              "score": 0.7120789,
+              "cosine": 0.42415790228831596
             }
           ]
         },
@@ -2959,8 +2959,8 @@
               "task_number": "21-31-04",
               "revision": 2,
               "is_latest": true,
-              "score": 0.87181646,
-              "cosine": 0.7436329689235568
+              "score": 0.87184966,
+              "cosine": 0.7436994313044837
             },
             {
               "parent_id": "A-200_34-11-02_rev02",
@@ -2968,8 +2968,8 @@
               "task_number": "34-11-02",
               "revision": 2,
               "is_latest": true,
-              "score": 0.7720405,
-              "cosine": 0.5440808617299856
+              "score": 0.77205515,
+              "cosine": 0.5441103878414987
             },
             {
               "parent_id": "A-200_32-42-03_rev02",
@@ -2977,8 +2977,8 @@
               "task_number": "32-42-03",
               "revision": 2,
               "is_latest": true,
-              "score": 0.7410296,
-              "cosine": 0.4820591662342096
+              "score": 0.7410352,
+              "cosine": 0.4820704786238901
             },
             {
               "parent_id": "A-200_28-21-05_rev01",
@@ -2986,8 +2986,8 @@
               "task_number": "28-21-05",
               "revision": 1,
               "is_latest": true,
-              "score": 0.7386516,
-              "cosine": 0.477303121357767
+              "score": 0.738649,
+              "cosine": 0.4772979493081881
             },
             {
               "parent_id": "A-200_24-31-01_rev03",
@@ -2995,8 +2995,8 @@
               "task_number": "24-31-01",
               "revision": 3,
               "is_latest": true,
-              "score": 0.73391986,
-              "cosine": 0.4678396995974309
+              "score": 0.7339168,
+              "cosine": 0.4678335737927981
             }
           ]
         },
@@ -4711,8 +4711,8 @@
               "task_number": "24-31-01",
               "revision": 3,
               "is_latest": true,
-              "score": 0.9238873,
-              "cosine": 0.6111211203822549
+              "score": 0.92384326,
+              "cosine": 0.611064257205045
             },
             {
               "parent_id": "A-200_21-31-04_rev02",
@@ -4720,8 +4720,8 @@
               "task_number": "21-31-04",
               "revision": 2,
               "is_latest": true,
-              "score": 0.64985245,
-              "cosine": 0.4242052773239461
+              "score": 0.64985913,
+              "cosine": 0.42415790228831596
             },
             {
               "parent_id": "A-200_32-41-01_rev03",
@@ -4729,8 +4729,8 @@
               "task_number": "32-41-01",
               "revision": 3,
               "is_latest": true,
-              "score": 0.37933955,
-              "cosine": 0.4439953621347185
+              "score": 0.37942514,
+              "cosine": 0.4439955333044514
             },
             {
               "parent_id": "A-200_32-42-03_rev02",
@@ -4738,8 +4738,8 @@
               "task_number": "32-42-03",
               "revision": 2,
               "is_latest": true,
-              "score": 0.36118823,
-              "cosine": 0.4271674134327016
+              "score": 0.361213,
+              "cosine": 0.42713064825096436
             },
             {
               "parent_id": "A-200_61-10-02_rev01",
@@ -4747,8 +4747,8 @@
               "task_number": "61-10-02",
               "revision": 1,
               "is_latest": true,
-              "score": 0.22636804,
-              "cosine": 0.4043670619040686
+              "score": 0.22638848,
+              "cosine": 0.4043255417178521
             }
           ]
         },
@@ -4862,7 +4862,7 @@
               "revision": 2,
               "is_latest": true,
               "score": 1.0,
-              "cosine": 0.7436329689235568
+              "cosine": 0.7436994313044837
             },
             {
               "parent_id": "A-200_32-42-03_rev02",
@@ -4870,8 +4870,8 @@
               "task_number": "32-42-03",
               "revision": 2,
               "is_latest": true,
-              "score": 0.3595385,
-              "cosine": 0.4820591662342096
+              "score": 0.35950518,
+              "cosine": 0.4820704786238901
             },
             {
               "parent_id": "A-200_34-11-02_rev02",
@@ -4879,8 +4879,8 @@
               "task_number": "34-11-02",
               "revision": 2,
               "is_latest": true,
-              "score": 0.32904154,
-              "cosine": 0.5440808617299856
+              "score": 0.32902247,
+              "cosine": 0.5441103878414987
             },
             {
               "parent_id": "A-200_24-31-01_rev03",
@@ -4888,8 +4888,8 @@
               "task_number": "24-31-01",
               "revision": 3,
               "is_latest": true,
-              "score": 0.29682928,
-              "cosine": 0.4678396995974309
+              "score": 0.29677618,
+              "cosine": 0.4678335737927981
             },
             {
               "parent_id": "A-200_28-21-05_rev01",
@@ -4897,8 +4897,8 @@
               "task_number": "28-21-05",
               "revision": 1,
               "is_latest": true,
-              "score": 0.24485406,
-              "cosine": 0.477303121357767
+              "score": 0.24480084,
+              "cosine": 0.4772979493081881
             }
           ]
         },
@@ -6614,8 +6614,8 @@
             "task_number": "24-31-01",
             "revision": 3,
             "is_latest": true,
-            "score": 0.8439878,
-            "cosine": 0.6111211203822549
+            "score": 0.84393704,
+            "cosine": 0.611064257205045
           },
           {
             "parent_id": "A-200_32-41-01_rev02",
@@ -6623,8 +6623,8 @@
             "task_number": "32-41-01",
             "revision": 2,
             "is_latest": false,
-            "score": 0.6646219,
-            "cosine": 0.44763548221798993
+            "score": 0.6646757,
+            "cosine": 0.4476349934931423
           },
           {
             "parent_id": "A-200_21-31-04_rev02",
@@ -6632,8 +6632,8 @@
             "task_number": "21-31-04",
             "revision": 2,
             "is_latest": true,
-            "score": 0.53567255,
-            "cosine": 0.4242052773239461
+            "score": 0.53563803,
+            "cosine": 0.42415790228831596
           },
           {
             "parent_id": "A-200_32-41-01_rev03",
@@ -6641,8 +6641,8 @@
             "task_number": "32-41-01",
             "revision": 3,
             "is_latest": true,
-            "score": 0.31113905,
-            "cosine": 0.4439953621347185
+            "score": 0.31119418,
+            "cosine": 0.4439955333044514
           },
           {
             "parent_id": "A-200_32-42-03_rev02",
@@ -6650,8 +6650,8 @@
             "task_number": "32-42-03",
             "revision": 2,
             "is_latest": true,
-            "score": 0.28897965,
-            "cosine": 0.4271674134327016
+            "score": 0.28896534,
+            "cosine": 0.42713064825096436
           }
         ]
       },
@@ -6765,7 +6765,7 @@
             "revision": 1,
             "is_latest": false,
             "score": 1.0,
-            "cosine": 0.7437804265838345
+            "cosine": 0.743847791622542
           },
           {
             "parent_id": "A-200_21-31-04_rev02",
@@ -6773,8 +6773,8 @@
             "task_number": "21-31-04",
             "revision": 2,
             "is_latest": true,
-            "score": 0.99981415,
-            "cosine": 0.7436329689235568
+            "score": 0.99981296,
+            "cosine": 0.7436994313044837
           },
           {
             "parent_id": "A-200_32-42-03_rev02",
@@ -6782,8 +6782,8 @@
             "task_number": "32-42-03",
             "revision": 2,
             "is_latest": true,
-            "score": 0.35943308,
-            "cosine": 0.4820591662342096
+            "score": 0.35939938,
+            "cosine": 0.4820704786238901
           },
           {
             "parent_id": "A-200_34-11-02_rev02",
@@ -6791,8 +6791,8 @@
             "task_number": "34-11-02",
             "revision": 2,
             "is_latest": true,
-            "score": 0.3288924,
-            "cosine": 0.5440808617299856
+            "score": 0.32887277,
+            "cosine": 0.5441103878414987
           },
           {
             "parent_id": "A-200_24-31-01_rev03",
@@ -6800,8 +6800,8 @@
             "task_number": "24-31-01",
             "revision": 3,
             "is_latest": true,
-            "score": 0.2967245,
-            "cosine": 0.4678396995974309
+            "score": 0.29667103,
+            "cosine": 0.4678335737927981
           }
         ]
       },
@@ -7711,7 +7711,7 @@
     "questions": 47,
     "torques_found": 15,
     "torques_expected": 15,
-    "parts_found": 12,
+    "parts_found": 13,
     "parts_expected": 13,
     "procedures": 6,
     "step_completeness": 1.0,
@@ -7722,20 +7722,20 @@
     "answered": 34,
     "outdated": 0,
     "unanswerable": 9,
-    "correct_abstentions": 8,
+    "correct_abstentions": 9,
     "clarification_items": 4,
     "correct_clarifications": 4,
     "answerable": 34,
-    "answerable_answered": 33,
-    "false_abstentions": 1,
+    "answerable_answered": 34,
+    "false_abstentions": 0,
     "false_clarifications": 0,
-    "target_cited": 33,
+    "target_cited": 34,
     "answers_with_unexpected_values": 0,
-    "fully_correct": 45,
+    "fully_correct": 47,
     "llm_calls": 38,
     "retries": 0
   },
-  "summary_retries_total": 1,
+  "summary_retries_total": 0,
   "categories": [
     {
       "category": "torque",
@@ -7769,8 +7769,8 @@
       "category": "identifier",
       "n": 5,
       "expected": "answered",
-      "outcome_correct": 4,
-      "fully_correct": 4
+      "outcome_correct": 5,
+      "fully_correct": 5
     },
     {
       "category": "clarification",
@@ -7783,8 +7783,8 @@
       "category": "unanswerable",
       "n": 9,
       "expected": "abstained, rejected",
-      "outcome_correct": 8,
-      "fully_correct": 8
+      "outcome_correct": 9,
+      "fully_correct": 9
     }
   ],
   "rows": [
@@ -8164,7 +8164,7 @@
       "llm_calls": 1,
       "retries": 0,
       "status_correct": true,
-      "cosine": 0.6111211203822549,
+      "cosine": 0.611064257205045,
       "cited": [
         "A-200 24-31-01 r3"
       ],
@@ -8218,7 +8218,7 @@
       "torques_found": 0,
       "parts_expected": 1,
       "parts_found": 1,
-      "warnings_attached": 1,
+      "warnings_attached": 2,
       "outdated": false,
       "target_cited": true,
       "unexpected_values": [],
@@ -8233,7 +8233,7 @@
       "llm_calls": 1,
       "retries": 0,
       "status_correct": true,
-      "cosine": 0.7436329689235568,
+      "cosine": 0.7436994313044837,
       "cited": [
         "A-200 21-31-04 r2"
       ],
@@ -8506,19 +8506,24 @@
       "id": "I02",
       "category": "identifier",
       "expected": "answered",
-      "status": "abstained",
+      "status": "answered",
       "llm_calls": 1,
       "retries": 0,
-      "status_correct": false,
+      "status_correct": true,
       "cosine": 0.4677915640320542,
-      "cited": [],
+      "cited": [
+        "B-340 28-21-05 r3"
+      ],
       "torques_expected": 0,
       "torques_found": 0,
       "parts_expected": 1,
-      "parts_found": 0,
-      "warnings_attached": 0,
-      "target_cited": false,
-      "fully_correct": false
+      "parts_found": 1,
+      "warnings_attached": 1,
+      "outdated": false,
+      "target_cited": true,
+      "unexpected_values": [],
+      "first_attempt_outdated": false,
+      "fully_correct": true
     },
     {
       "id": "I03",
@@ -8716,22 +8721,18 @@
       "id": "U04",
       "category": "unanswerable",
       "expected": "abstained",
-      "status": "answered",
+      "status": "abstained",
       "llm_calls": 1,
       "retries": 0,
-      "status_correct": false,
+      "status_correct": true,
       "cosine": 0.7186874097878226,
-      "cited": [
-        "A-200 32-41-01 r3"
-      ],
+      "cited": [],
       "torques_expected": 0,
       "torques_found": 0,
       "parts_expected": 0,
       "parts_found": 0,
-      "warnings_attached": 1,
-      "outdated": false,
-      "first_attempt_outdated": false,
-      "fully_correct": false
+      "warnings_attached": 0,
+      "fully_correct": true
     },
     {
       "id": "U05",
@@ -8758,7 +8759,7 @@
       "llm_calls": 0,
       "retries": 0,
       "status_correct": true,
-      "cosine": 0.10389207767526937,
+      "cosine": 0.10389936059410243,
       "cited": [],
       "torques_expected": 0,
       "torques_found": 0,
@@ -8917,8 +8918,8 @@
       "category": "part_number",
       "expected": "answered",
       "status": "answered",
-      "llm_calls": 2,
-      "retries": 1,
+      "llm_calls": 1,
+      "retries": 0,
       "status_correct": true,
       "cosine": 0.6717460767739688,
       "cited": [
@@ -8932,7 +8933,7 @@
       "outdated": false,
       "target_cited": true,
       "unexpected_values": [],
-      "first_attempt_outdated": true,
+      "first_attempt_outdated": false,
       "fully_correct": true
     },
     {
@@ -8989,7 +8990,7 @@
       "llm_calls": 1,
       "retries": 0,
       "status_correct": true,
-      "cosine": 0.7437804265838345,
+      "cosine": 0.743847791622542,
       "cited": [
         "A-200 21-31-04 r2"
       ],
@@ -9089,19 +9090,24 @@
       "id": "I02",
       "category": "identifier",
       "expected": "answered",
-      "status": "abstained",
+      "status": "answered",
       "llm_calls": 1,
       "retries": 0,
-      "status_correct": false,
+      "status_correct": true,
       "cosine": 0.4677915640320542,
-      "cited": [],
+      "cited": [
+        "B-340 28-21-05 r3"
+      ],
       "torques_expected": 0,
       "torques_found": 0,
       "parts_expected": 1,
-      "parts_found": 0,
-      "warnings_attached": 0,
-      "target_cited": false,
-      "fully_correct": false
+      "parts_found": 1,
+      "warnings_attached": 2,
+      "outdated": false,
+      "target_cited": true,
+      "unexpected_values": [],
+      "first_attempt_outdated": false,
+      "fully_correct": true
     },
     {
       "id": "I05",
@@ -9132,35 +9138,35 @@
       "setting": "on (default)",
       "n": 13,
       "first_attempt_outdated": 0,
-      "first_attempts": 12,
-      "answered": 12,
+      "first_attempts": 13,
+      "answered": 13,
       "final_outdated": 0,
-      "fully_correct": 12,
+      "fully_correct": 13,
       "retries": 0
     },
     {
       "setting": "off (include_superseded)",
       "n": 13,
-      "first_attempt_outdated": 1,
-      "first_attempts": 12,
-      "answered": 12,
+      "first_attempt_outdated": 0,
+      "first_attempts": 13,
+      "answered": 13,
       "final_outdated": 0,
-      "fully_correct": 12,
-      "retries": 1
+      "fully_correct": 13,
+      "retries": 0
     }
   ],
   "cost": {
-    "llm_calls": 52,
-    "prompt_tokens": 127872,
-    "completion_tokens": 7859,
-    "llm_cost_usd": 0.1312695
+    "llm_calls": 51,
+    "prompt_tokens": 134877,
+    "completion_tokens": 7837,
+    "llm_cost_usd": 0.13642425
   },
   "texts_embedded": 46,
   "responses": {
     "filter_on": {
       "T01": {
         "status": "answered",
-        "answer": "A-200 Task 32-41-01 Revision 3: the main wheel axle nut final torque is 135 Nm.",
+        "answer": "The torque for the main wheel axle nut on the A-200 is 135 Nm, final torque, in Task 32-41-01 Revision 3.",
         "steps": [],
         "warnings": [
           {
@@ -9224,7 +9230,7 @@
       },
       "T03": {
         "status": "answered",
-        "answer": "C-75 Task 34-11-02 Revision 2: torque the 4 pitot probe mounting screws to 25 in-lb.",
+        "answer": "C-75 Task 34-11-02 Revision 2: Torque the 4 pitot probe mounting screws to 25 in-lb.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -9248,7 +9254,7 @@
       },
       "T04": {
         "status": "answered",
-        "answer": "On the C-75, Task 24-31-01, Revision 2, the battery terminal bolts torque is 12 Nm.",
+        "answer": "C-75 Task 24-31-01 Revision 2: torque the battery terminal bolts to 12 Nm.",
         "steps": [],
         "warnings": [
           {
@@ -9312,7 +9318,7 @@
       },
       "T06": {
         "status": "answered",
-        "answer": "B-340 Task 27-51-04 Revision 1: the flap actuator body attachment bolt torque is 48 Nm at step 5.",
+        "answer": "B-340 Task 27-51-04 Revision 1: the flap actuator body attachment bolt is torqued to 48 Nm in step 5.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -9336,7 +9342,7 @@
       },
       "T07": {
         "status": "answered",
-        "answer": "A-200 Task 29-11-03 Revision 2: the hydraulic return filter bowl torque is 25 Nm in step 6.",
+        "answer": "On the A-200, Task 29-11-03, Revision 2, the hydraulic return filter bowl is torqued to 25 Nm in step 6.",
         "steps": [],
         "warnings": [
           {
@@ -9368,7 +9374,7 @@
       },
       "T08": {
         "status": "answered",
-        "answer": "B-340 Task 79-21-02 Revision 2: torque the engine oil filter cover to 16 Nm.",
+        "answer": "B-340 Task 79-21-02 Revision 2: Torque the engine oil filter cover to 16 Nm.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -9392,7 +9398,7 @@
       },
       "T09": {
         "status": "answered",
-        "answer": "C-75 Task 32-42-03 Revision 1: the brake attachment bolts are torqued to 28 Nm in step 7.",
+        "answer": "The torque for the brake attachment bolts on the C-75 is 28 Nm, in Task 32-42-03 Revision 1, for step 7.",
         "steps": [],
         "warnings": [
           {
@@ -9424,7 +9430,7 @@
       },
       "T10": {
         "status": "answered",
-        "answer": "B-340 Task 21-31-04 Revision 3: torque the sense line B-nut to 18 Nm on the cabin pressure sensor.",
+        "answer": "On the B-340, Task 21-31-04 Revision 3 specifies 18 Nm for the sense line B-nut of the cabin pressure sensor.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -9448,7 +9454,7 @@
       },
       "T11": {
         "status": "answered",
-        "answer": "C-75 Task 27-31-02 Revision 2: torque the elevator trim actuator rod-end nut to 30 in-lb in step 6.",
+        "answer": "C-75 Task 27-31-02 Revision 2: the elevator trim actuator rod-end nut torque is 30 in-lb in step 6.",
         "steps": [],
         "warnings": [
           {
@@ -9480,7 +9486,7 @@
       },
       "P01": {
         "status": "answered",
-        "answer": "A-200 Task 32-41-01 Revision 3: the lock bolt part number is P/N A200-32-4112.",
+        "answer": "A-200 Task 32-41-01 Revision 3: The lock bolt part number is P/N A200-32-4112, described as \u201cLock bolt, axle nut.\u201d",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -9504,7 +9510,7 @@
       },
       "P02": {
         "status": "answered",
-        "answer": "A-200 Task 21-31-04 Revision 2 lists the cabin pressure sensor as P/N A200-21-3110.",
+        "answer": "A-200 Task 21-31-04 Revision 2 identifies the cabin pressure sensor as P/N A200-21-3110.",
         "steps": [],
         "warnings": [
           {
@@ -9536,7 +9542,7 @@
       },
       "P03": {
         "status": "answered",
-        "answer": "For B-340 Task 28-21-05, Revision 3, use O-ring P/N B340-28-5209 when installing the fuel boost pump.",
+        "answer": "Use P/N B340-28-5209 for the fuel boost pump O-ring on B-340, Task 28-21-05, Revision 3.",
         "steps": [],
         "warnings": [
           {
@@ -9568,7 +9574,7 @@
       },
       "P04": {
         "status": "answered",
-        "answer": "C-75 Task 32-21-02 Revision 1: the nose landing gear shimmy damper part number is P/N C75-32-6202.",
+        "answer": "P/N C75-32-6202 is the shimmy damper, nose landing gear for C-75 Task 32-21-02 Revision 1.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -9592,7 +9598,7 @@
       },
       "P05": {
         "status": "answered",
-        "answer": "B-340 Task 34-11-02 Revision 1 identifies the heated pitot probe as P/N B340-34-5102.",
+        "answer": "B-340 Task 34-11-02, Revision 1: the heated pitot probe part number is P/N B340-34-5102.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -9616,7 +9622,7 @@
       },
       "P06": {
         "status": "answered",
-        "answer": "A-200 Task 24-31-01 Revision 3: The main battery part number is P/N A200-24-3101.",
+        "answer": "The main battery part number on the A-200 is P/N A200-24-3101 in Task 24-31-01, Revision 3.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -9630,8 +9636,8 @@
           }
         ],
         "scores": {
-          "hybrid": 0.9238873,
-          "cosine": 0.6111211203822549,
+          "hybrid": 0.92384326,
+          "cosine": 0.611064257205045,
           "exact_identifier_match": false
         },
         "aircraft_unspecified": false,
@@ -9640,7 +9646,7 @@
       },
       "P07": {
         "status": "answered",
-        "answer": "For the C-75, Task 28-21-05 Revision 2 lists P/N C75-28-6105 as the fuel boost pump.",
+        "answer": "C-75 Task 28-21-05 Revision 2 identifies P/N C75-28-6105 as the fuel boost pump.",
         "steps": [],
         "warnings": [
           {
@@ -9672,9 +9678,16 @@
       },
       "P08": {
         "status": "answered",
-        "answer": "B-340 Task 32-42-03 Revision 3 lists the main wheel brake assembly as P/N B340-32-5301.",
+        "answer": "B-340 Task 32-42-03 Revision 3 identifies the main wheel brake assembly as P/N B340-32-5301, quantity 1.",
         "steps": [],
         "warnings": [
+          {
+            "kind": "WARNING",
+            "text": "DO NOT TOUCH THE BRAKE ASSEMBLY UNTIL IT IS COOL. HOT BRAKES CAN CAUSE SEVERE BURNS.",
+            "aircraft_type": "B-340",
+            "task_number": "32-42-03",
+            "step_number": 1
+          },
           {
             "kind": "CAUTION",
             "text": "Do not use the removed attachment bolts again. Always install new bolts.",
@@ -9704,7 +9717,7 @@
       },
       "S01": {
         "status": "answered",
-        "answer": "A-200 Task 21-31-04 Revision 2 provides the replacement procedure for the cabin pressure sensor.",
+        "answer": "A-200 Task 21-31-04 Revision 2: Cabin Pressure Sensor - Removal and Installation.",
         "steps": [
           {
             "number": 1,
@@ -9800,7 +9813,7 @@
         ],
         "scores": {
           "hybrid": 1.0,
-          "cosine": 0.7436329689235568,
+          "cosine": 0.7436994313044837,
           "exact_identifier_match": false
         },
         "aircraft_unspecified": false,
@@ -9809,7 +9822,7 @@
       },
       "S02": {
         "status": "answered",
-        "answer": "B-340 Task 21-31-04 Revision 3, Cabin Pressure Sensor - Removal and Installation.",
+        "answer": "B-340 Task 21-31-04 Revision 3: Cabin Pressure Sensor - Removal and Installation.",
         "steps": [
           {
             "number": 1,
@@ -9914,7 +9927,7 @@
       },
       "S03": {
         "status": "answered",
-        "answer": "C-75 Task 34-11-02, Revision 2. Replace the pitot probe by following these steps.",
+        "answer": "C-75 Task 34-11-02 Revision 2: Pitot Probe - Removal and Installation. This task replaces the pitot probe and includes removal, installation, leak test, and operational test steps.",
         "steps": [
           {
             "number": 1,
@@ -10007,7 +10020,7 @@
       },
       "S04": {
         "status": "answered",
-        "answer": "B-340 Task 27-51-04, Revision 1: remove and install the flap actuator by following the full procedure in source 1.",
+        "answer": "B-340 Task 27-51-04 Revision 1 gives the removal and installation procedure for the flap actuator.",
         "steps": [
           {
             "number": 1,
@@ -10094,7 +10107,7 @@
       },
       "S05": {
         "status": "answered",
-        "answer": "A-200 Task 32-41-01 Revision 3: Install and torque the main wheel axle nut using the steps below.",
+        "answer": "A-200 Task 32-41-01 Revision 3: Main Wheel Axle Nut - Installation and Torque.",
         "steps": [
           {
             "number": 1,
@@ -10298,7 +10311,7 @@
       },
       "N02": {
         "status": "answered",
-        "answer": "B-340 Task 27-51-04 Revision 1: the flap actuator rod-end bolt torque is 34 Nm in step 6.",
+        "answer": "B-340 Task 27-51-04 Revision 1: Torque the flap actuator rod-end bolt to 34 Nm.",
         "steps": [],
         "warnings": [
           {
@@ -10330,7 +10343,7 @@
       },
       "N03": {
         "status": "answered",
-        "answer": "For C-75 Task 27-31-02, Revision 2, the elevator trim actuator part number is P/N C75-27-6302.",
+        "answer": "The elevator trim actuator part number is P/N C75-27-6302 in C-75 Task 27-31-02, Revision 2.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -10354,7 +10367,7 @@
       },
       "N04": {
         "status": "answered",
-        "answer": "Install P/N B340-79-2102 for B-340 Task 79-21-02 Revision 2.",
+        "answer": "Install P/N B340-79-2102, Filter element, engine oil, Quantity 1, for B-340 Task 79-21-02 Revision 2.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -10378,7 +10391,7 @@
       },
       "I01": {
         "status": "answered",
-        "answer": "A-200 Task 32-41-01 Revision 3 gives P/N A200-32-4112 as the lock bolt for the axle nut; torque the 2 lock bolts to 45 in-lb in step 9.",
+        "answer": "P/N A200-32-4112 is the lock bolt, axle nut, quantity 2, in A-200 Task 32-41-01 Revision 3.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -10401,11 +10414,28 @@
         "request_id": "eval-I01"
       },
       "I02": {
-        "status": "abstained",
-        "answer": "I don't know. The maintenance tasks I found do not contain this information.",
+        "status": "answered",
+        "answer": "B340-28-5209 is the O-ring, fuel boost pump, quantity 1, for B-340 Task 28-21-05 Revision 3.",
         "steps": [],
-        "warnings": [],
-        "citations": [],
+        "warnings": [
+          {
+            "kind": "CAUTION",
+            "text": "Use only clean fuel to lubricate the O-ring. Grease or oil will contaminate the fuel system.",
+            "aircraft_type": "B-340",
+            "task_number": "28-21-05",
+            "step_number": 6
+          }
+        ],
+        "citations": [
+          {
+            "aircraft_type": "B-340",
+            "task_number": "28-21-05",
+            "title": "Fuel Boost Pump - Removal and Installation",
+            "revision": 3,
+            "revision_date": "2026-04-13",
+            "source_key": "manuals/B-340_28-21-05_rev03.md"
+          }
+        ],
         "scores": {
           "hybrid": 0.9437151,
           "cosine": 0.4677915640320542,
@@ -10417,7 +10447,7 @@
       },
       "I03": {
         "status": "answered",
-        "answer": "C75-27-6307 is P/N C75-27-6307, a bolt, trim actuator rod end, for C-75 Task 27-31-02 Revision 2.",
+        "answer": "C75-27-6307 is a bolt, trim actuator rod end, quantity 1, in C-75 Task 27-31-02, Revision 2.",
         "steps": [],
         "warnings": [
           {
@@ -10449,7 +10479,7 @@
       },
       "I04": {
         "status": "answered",
-        "answer": "A-200 Task 32-42-03 Revision 2: torque the brake attachment bolts to 54 Nm in step 7.",
+        "answer": "Task 32-42-03, A-200, Revision 2: the brake attachment bolts are torqued to 54 Nm in step 7.",
         "steps": [],
         "warnings": [
           {
@@ -10481,7 +10511,7 @@
       },
       "I05": {
         "status": "answered",
-        "answer": "C-75 Task 34-11-02 Revision 2: the pitot line B-nut torque is 9 Nm, in step 6.",
+        "answer": "C-75 Task 34-11-02 Revision 2: The pitot line B-nut torque is 9 Nm in step 6.",
         "steps": [],
         "warnings": [
           {
@@ -10589,7 +10619,7 @@
       },
       "U01": {
         "status": "abstained",
-        "answer": "I don't know. The maintenance tasks I found do not contain this information.",
+        "answer": "I don't know. The manuals do not cover this for the nose; the closest task is for the main: A-200 task 32-42-03 revision 2, \"Main Wheel Brake Assembly - Wear Check and Replacement\".",
         "steps": [],
         "warnings": [],
         "citations": [],
@@ -10633,28 +10663,11 @@
         "request_id": "eval-U03"
       },
       "U04": {
-        "status": "answered",
-        "answer": "For A-200 Task 32-41-01, Revision 3, the final torque for the main wheel axle nut is 135 Nm.",
+        "status": "abstained",
+        "answer": "I don't know. The manuals do not cover this for the nose; the closest task is for the main: A-200 task 32-41-01 revision 3, \"Main Wheel Axle Nut - Installation and Torque\".",
         "steps": [],
-        "warnings": [
-          {
-            "kind": "WARNING",
-            "text": "DO NOT USE THE SEATING TORQUE AS THE FINAL TORQUE. AN AXLE NUT WITH TOO MUCH TORQUE CAN CAUSE BEARING FAILURE AND LOSS OF THE WHEEL.",
-            "aircraft_type": "A-200",
-            "task_number": "32-41-01",
-            "step_number": 7
-          }
-        ],
-        "citations": [
-          {
-            "aircraft_type": "A-200",
-            "task_number": "32-41-01",
-            "title": "Main Wheel Axle Nut - Installation and Torque",
-            "revision": 3,
-            "revision_date": "2026-01-19",
-            "source_key": "manuals/A-200_32-41-01_rev03.md"
-          }
-        ],
+        "warnings": [],
+        "citations": [],
         "scores": {
           "hybrid": 0.9934226,
           "cosine": 0.7186874097878226,
@@ -10686,8 +10699,8 @@
         "warnings": [],
         "citations": [],
         "scores": {
-          "hybrid": 0.86888385,
-          "cosine": 0.10389207767526937,
+          "hybrid": 0.8690046,
+          "cosine": 0.10389936059410243,
           "exact_identifier_match": false
         },
         "aircraft_unspecified": true,
@@ -10743,7 +10756,7 @@
     "filter_off": {
       "T01": {
         "status": "answered",
-        "answer": "A-200 Task 32-41-01 Revision 3: the final torque for the main wheel axle nut is 135 Nm.",
+        "answer": "For A-200 Task 32-41-01 Revision 3, the main wheel axle nut final torque is 135 Nm.",
         "steps": [],
         "warnings": [
           {
@@ -10775,7 +10788,7 @@
       },
       "T02": {
         "status": "answered",
-        "answer": "B-340 Task 32-41-01 Revision 5: the final torque for the main wheel axle nut is 190 Nm.",
+        "answer": "B-340 Task 32-41-01 Revision 5: apply the final torque of 190 Nm to the main wheel axle nut.",
         "steps": [],
         "warnings": [
           {
@@ -10807,7 +10820,7 @@
       },
       "T03": {
         "status": "answered",
-        "answer": "C-75 Task 34-11-02 Revision 2: torque the pitot probe mounting screws to 25 in-lb.",
+        "answer": "On C-75 Task 34-11-02, Revision 2, torque the 4 pitot probe mounting screws to 25 in-lb.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -10831,7 +10844,7 @@
       },
       "T04": {
         "status": "answered",
-        "answer": "On the C-75, Task 24-31-01, Revision 2, torque the battery terminal bolts to 12 Nm.",
+        "answer": "The C-75 Main Battery - Removal and Installation, Task 24-31-01, Revision 2 specifies 12 Nm for the battery terminal bolts.",
         "steps": [],
         "warnings": [
           {
@@ -10863,7 +10876,7 @@
       },
       "P01": {
         "status": "answered",
-        "answer": "A-200 Task 32-41-01 Revision 3: the lock bolt part number is P/N A200-32-4112.",
+        "answer": "The lock bolt part number for the A-200 main wheel axle nut is P/N A200-32-4112, from Task 32-41-01, Revision 3.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -10887,7 +10900,7 @@
       },
       "P02": {
         "status": "answered",
-        "answer": "A-200 Task 21-31-04 Revision 2 specifies the cabin pressure sensor part number as P/N A200-21-3110.",
+        "answer": "P/N A200-21-3110 is the cabin pressure sensor for A-200 Task 21-31-04, Revision 2.",
         "steps": [],
         "warnings": [
           {
@@ -10919,7 +10932,7 @@
       },
       "P03": {
         "status": "answered",
-        "answer": "For B-340 Task 28-21-05 Revision 3, use O-ring P/N B340-28-5209 when installing the fuel boost pump.",
+        "answer": "Use P/N B340-28-5209 for the fuel boost pump O-ring on the B-340, Task 28-21-05, Revision 3.",
         "steps": [],
         "warnings": [
           {
@@ -10951,7 +10964,7 @@
       },
       "S01": {
         "status": "answered",
-        "answer": "A-200 Task 21-31-04 Revision 2: cabin pressure sensor removal and installation steps are listed below.",
+        "answer": "A-200 Task 21-31-04 Revision 2: Cabin Pressure Sensor - Removal and Installation.",
         "steps": [
           {
             "number": 1,
@@ -11047,7 +11060,7 @@
         ],
         "scores": {
           "hybrid": 1.0,
-          "cosine": 0.7437804265838345,
+          "cosine": 0.743847791622542,
           "exact_identifier_match": false
         },
         "aircraft_unspecified": false,
@@ -11056,7 +11069,7 @@
       },
       "S03": {
         "status": "answered",
-        "answer": "C-75 Task 34-11-02 Revision 2: Pitot Probe - Removal and Installation.",
+        "answer": "C-75 Task 34-11-02 Revision 2 shows how to remove and install the pitot probe.",
         "steps": [
           {
             "number": 1,
@@ -11149,7 +11162,7 @@
       },
       "S05": {
         "status": "answered",
-        "answer": "A-200 Task 32-41-01 Revision 3. Step-by-step installation and torque procedure for the main wheel axle nut is provided below.",
+        "answer": "A-200 Task 32-41-01 Revision 3: Main Wheel Axle Nut - Installation and Torque. Follow the procedure below for installing and torquing the main wheel axle nut.",
         "steps": [
           {
             "number": 1,
@@ -11244,7 +11257,7 @@
       },
       "I01": {
         "status": "answered",
-        "answer": "A-200 Task 32-41-01 Revision 3: P/N A200-32-4112 is the lock bolt for the main wheel axle nut, and step 9 torques the 2 lock bolts to 45 in-lb.",
+        "answer": "P/N A200-32-4112 is the lock bolt, axle nut, quantity 2, for A-200 Task 32-41-01, Revision 3.",
         "steps": [],
         "warnings": [],
         "citations": [
@@ -11267,11 +11280,35 @@
         "request_id": "eval-I01"
       },
       "I02": {
-        "status": "abstained",
-        "answer": "I don't know. The maintenance tasks I found do not contain this information.",
+        "status": "answered",
+        "answer": "B340-28-5209 is the O-ring, fuel boost pump, in B-340 Task 28-21-05 Revision 3.",
         "steps": [],
-        "warnings": [],
-        "citations": [],
+        "warnings": [
+          {
+            "kind": "WARNING",
+            "text": "FUEL VAPOUR IS FLAMMABLE AND EXPLOSIVE. DO NOT PERMIT OPEN FLAMES, SPARKS OR SMOKING WITHIN 15 METRES OF THE AIRCRAFT. BOND THE AIRCRAFT AND ALL EQUIPMENT TO GROUND BEFORE YOU OPEN THE FUEL SYSTEM.",
+            "aircraft_type": "B-340",
+            "task_number": "28-21-05",
+            "step_number": 1
+          },
+          {
+            "kind": "CAUTION",
+            "text": "Use only clean fuel to lubricate the O-ring. Grease or oil will contaminate the fuel system.",
+            "aircraft_type": "B-340",
+            "task_number": "28-21-05",
+            "step_number": 6
+          }
+        ],
+        "citations": [
+          {
+            "aircraft_type": "B-340",
+            "task_number": "28-21-05",
+            "title": "Fuel Boost Pump - Removal and Installation",
+            "revision": 3,
+            "revision_date": "2026-04-13",
+            "source_key": "manuals/B-340_28-21-05_rev03.md"
+          }
+        ],
         "scores": {
           "hybrid": 0.9410529,
           "cosine": 0.4677915640320542,
@@ -11283,7 +11320,7 @@
       },
       "I05": {
         "status": "answered",
-        "answer": "C-75 Task 34-11-02 Revision 2: the pitot line B-nut torque is 9 Nm at step 6.",
+        "answer": "C-75 Task 34-11-02 Revision 2: torque the pitot line B-nut to 9 Nm in step 6.",
         "steps": [],
         "warnings": [
           {

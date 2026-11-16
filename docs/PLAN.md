@@ -154,6 +154,14 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
   returned they are the complete procedure of a cited task, in order, word for word, each with its
   WARNINGs and CAUTIONs. A wrong torque value is the worst possible output, so these checks are
   deterministic code, not another LLM.
+- **Component check (added in evaluation v2).** Position words in the question (nose/main,
+  left/right, inboard/outboard, forward/aft, upper/lower) must not contradict a cited task's title.
+  This catches "nose wheel axle nut" answered from the main wheel task, which the value checks
+  cannot see because the value really is in that task. The abstention names the component the
+  manual does cover, built by code from the index.
+- **Identifier retry (added in evaluation v2).** If the model abstains although a part or task
+  number from the question appears word for word in a source, it is retried once and told which
+  source contains it. An exact identifier match is the strongest evidence the system has.
 - **One retry, then abstain.** The failed checks are listed to the model in the system message; a
   second failure returns "I don't know" and the unverified text is never shown.
 - **Warnings on short answers are attached by code, not the model.** "The final torque is 135 Nm"
@@ -240,7 +248,7 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
 | 3 | Generation + API + guardrails | `/health`, `/ready`, `/query`, abstain, clarify, output checks | Done: six test questions behave as designed locally |
 | 4a | Containerise the API | Dockerfile, `.dockerignore`, `scripts/run_local_container.ps1` | Done: image `akinsds1126-aero-rag-api:0.1.0` answers locally as user `app` |
 | 4b | Deploy the API to ECS Fargate | Commands for ECR, IAM, ECS service, and the one-off ingestion task | Public URL answers `/query`; ingestion task exits 0 with logs in CloudWatch |
-| 5 | Evaluation | 47 labelled questions, metrics, before/after tables, README Metrics draft | Done: `scripts/evaluate.py` reproduces `data/results/` (~$0.13) |
+| 5 | Evaluation | 47 labelled questions, metrics, before/after tables, README Metrics draft | Done: `scripts/evaluate.py` reproduces `data/results/` (~$0.14); v2 fixed both v1 failures (47/47) |
 | 6 | Streamlit UI and redeploy | Streamlit app as a second container in the same task | UI on the public URL answers a question |
 | 7 | Langfuse + README | Tracing, README with diagram, "Future: agents" | Trace visible; README runs from clean clone |
 
@@ -251,7 +259,8 @@ instead), then the size of the evaluation. The README is short but is never cut.
 
 ## 4. Evaluation
 
-Results and their explanation are in the README "Metrics" section and `data/results/`.
+Results and their explanation are in the README "Metrics" section and `data/results/`; the run
+history (v1 baseline 45/47, v2 47/47 after fixing the two v1 failures) is in `docs/EVALUATION.md`.
 
 - **47 hand-written questions, labels looked up in the spec** (`data/eval/questions.json`, built by
   `scripts/build_eval_set.py`). Torque (11), part number (8), full procedure (6), no aircraft named
