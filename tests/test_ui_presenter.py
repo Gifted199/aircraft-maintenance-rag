@@ -17,6 +17,7 @@ from aero_rag.schemas import QueryResponse
 from presenter import (
     AIRCRAFT_CHOICES,
     AUTO_DETECT,
+    CONVERSATION_DETAILS,
     CONVERSATION_NOTE,
     DEFAULT_API_URL,
     EXAMPLES,
@@ -379,7 +380,9 @@ def test_citation_markdown_has_revision_date_and_s3_key():
 
 
 def test_sidebar_note_explains_that_answers_are_independent():
-    assert "never" in CONVERSATION_NOTE and "aircraft" in CONVERSATION_NOTE
+    assert CONVERSATION_NOTE == ("Each question is checked against the manuals on its own. "
+                                 "Only the aircraft is remembered.")
+    assert "never" in CONVERSATION_DETAILS and "B-340" in CONVERSATION_DETAILS  # the tooltip
 
 
 # ------------------------------------------------------------- small talk and the aircraft chip

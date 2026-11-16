@@ -14,6 +14,7 @@ import streamlit as st
 from presenter import (
     AIRCRAFT_CHOICES,
     AUTO_DETECT,
+    CONVERSATION_DETAILS,
     CONVERSATION_NOTE,
     EXAMPLES,
     MAX_QUESTION_CHARS,
@@ -113,7 +114,7 @@ with st.sidebar:
     )  # fmt: skip
     st.button("New conversation", icon=":material/add_comment:", width="stretch",
               on_click=new_conversation)  # fmt: skip
-    st.info(CONVERSATION_NOTE, icon=":material/info:")
+    st.markdown(f":material/info: {CONVERSATION_NOTE}", help=CONVERSATION_DETAILS)
 
     st.divider()
     st.caption(

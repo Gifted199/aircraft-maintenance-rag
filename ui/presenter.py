@@ -530,6 +530,10 @@ def with_aircraft(conversation: Conversation, aircraft: str) -> Conversation:
 
 
 CONVERSATION_NOTE = (
+    "Each question is checked against the manuals on its own. Only the aircraft is remembered."
+)
+# Shown in the note's ? tooltip.
+CONVERSATION_DETAILS = (
     "The assistant remembers the **aircraft** for this conversation, nothing else. Every "
     "question is searched and checked against the manuals on its own: earlier answers are never "
     "sent back to the model, so one answer cannot leak into the next. Ask complete questions; "
