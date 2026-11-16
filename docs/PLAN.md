@@ -156,9 +156,30 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
   deterministic code, not another LLM.
 - **One retry, then abstain.** The failed checks are listed to the model in the system message; a
   second failure returns "I don't know" and the unverified text is never shown.
-- **Known gap:** the prompt asks the model to quote a step's WARNING when a short answer relies on
-  that step (for example the axle nut final torque). Nothing enforces it, and in the local run the
-  model did not do it. The full procedure answer does carry every WARNING, and that is enforced.
+- **Warnings on short answers are attached by code, not the model.** "The final torque is 135 Nm"
+  comes from a step that carries a WARNING. Code finds the steps of the cited task that state a
+  torque value or part number quoted in the answer (plus any step the model points at by number),
+  and copies their WARNINGs and CAUTIONs from the index into the response's `warnings` field, the
+  same way citations are built. The text is therefore always word for word and cannot be forgotten.
+
+### Container
+- **One image, two commands.** The default command starts the API; `python -m aero_rag.ingestion`
+  runs the ingestion job. The code that was tested is the code that runs in both.
+- **Two-stage build.** The first stage uses `uv` to build the virtual environment from the lock
+  file; the final image is `python:3.12-slim` plus that environment only (336 MB), with no build
+  tools, tests, data or `uv`.
+- **Dependencies are a separate layer before the code,** so a code change rebuilds in seconds and
+  `uv sync --locked` fails the build if the lock file is stale.
+- **`linux/amd64` is fixed in the Dockerfile** because that is what the Fargate task runs; an image
+  built on an ARM laptop would otherwise fail with "exec format error".
+- **Runs as an unprivileged user (`app`, uid 10001),** so a compromised app is not root.
+- **`.dockerignore` is an allow-list:** everything is excluded except `pyproject.toml`, `uv.lock`
+  and `src/`, so a `.env` or key file can never enter the build by accident.
+- **`HEALTHCHECK` calls `/health`** (liveness, no dependencies) using Python, as slim has no curl.
+- **Secrets enter the container only as environment variables,** exactly as ECS injects them, so the
+  app never calls Secrets Manager there. `scripts/run_local_container.ps1` reproduces that locally:
+  it reads the secret into memory and passes each value to Docker by name, never on a command line
+  or on disk.
 
 ### API and UI
 - **FastAPI with Pydantic models** for `POST /query`. Pydantic validates input and documents the
@@ -217,8 +238,9 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
 | 1 | Documents | `data/spec/manuals.json`, generator, 31 manuals, parser, round-trip tests | Done; user uploads `data/manuals/` to S3 under `manuals/` |
 | 2 | Ingestion + hybrid search | Chunker, embeddings, index + search pipeline, search function, `python -m aero_rag.ingestion`, `scripts/search.py` | Done: 93 documents indexed; four spot-check searches correct |
 | 3 | Generation + API + guardrails | `/health`, `/ready`, `/query`, abstain, clarify, output checks | Done: six test questions behave as designed locally |
-| 4 | Deploy the API to ECS Fargate | Dockerfile, commands for ECR, IAM, ECS service, and the one-off ingestion task | Public URL answers `/query`; ingestion task exits 0 with logs in CloudWatch |
-| 5 | Evaluation | Questions from the spec, metrics script, before/after report | Numbers reproducible from one command |
+| 4a | Containerise the API | Dockerfile, `.dockerignore`, `scripts/run_local_container.ps1` | Done: image `akinsds1126-aero-rag-api:0.1.0` answers locally as user `app` |
+| 4b | Deploy the API to ECS Fargate | Commands for ECR, IAM, ECS service, and the one-off ingestion task | Public URL answers `/query`; ingestion task exits 0 with logs in CloudWatch |
+| 5 | Evaluation | 47 labelled questions, metrics, before/after tables, README Metrics draft | Done: `scripts/evaluate.py` reproduces `data/results/` (~$0.13) |
 | 6 | Streamlit UI and redeploy | Streamlit app as a second container in the same task | UI on the public URL answers a question |
 | 7 | Langfuse + README | Tracing, README with diagram, "Future: agents" | Trace visible; README runs from clean clone |
 
@@ -229,18 +251,28 @@ instead), then the size of the evaluation. The README is short but is never cut.
 
 ## 4. Evaluation
 
-Questions are generated from the spec (about 60), so each has a known task, revision and expected values.
+Results and their explanation are in the README "Metrics" section and `data/results/`.
 
-| Metric | Definition | Target |
-|--------|------------|--------|
-| Recall@5 | Correct task (latest revision) is in the top 5 chunks | High; reported |
-| Exact match | Part numbers / torque values in the answer equal the spec | High; reported |
-| Step completeness | Fraction of the task's numbered steps and WARNINGs present, in order | High; reported |
-| Outdated revision | % of answers citing a superseded revision | **0** |
-
-**Improvement with before/after:** naive fixed-size chunking (before) versus structure-aware
-one-task-per-chunk (after), same retriever. This is the central design decision in the brief and it
-directly moves step completeness. If time allows, a free extra ablation: BM25-only vs k-NN-only vs hybrid.
+- **47 hand-written questions, labels looked up in the spec** (`data/eval/questions.json`, built by
+  `scripts/build_eval_set.py`). Torque (11), part number (8), full procedure (6), no aircraft named
+  but only one aircraft has the task (4), bare part or task number (5), must ask which aircraft
+  (4), cannot be answered (9: off-topic, in-domain, a superseded part number, an injection).
+- **Labels are correct by construction.** A question names its task and fastener or part; the
+  expected value, step count and the values that exist only in old revisions are read from the
+  spec, and a test fails if the JSON drifts from the spec.
+- **13 "trap" questions** target tasks whose older revision has a different value; they measure the
+  latest-revision filter.
+- **Metrics:** Recall@5 and top-1 (retrieval); exact match of torque values and part numbers; step
+  completeness including every WARNING and CAUTION; outdated citations (target 0); correct
+  abstentions; correct clarifications; plus false abstentions and values from the wrong task.
+- **Before/after comparisons:** keyword vs vector vs hybrid by question type; latest-revision filter
+  off vs on, both at retrieval level and end to end (including what the model drafted before the
+  output guardrail).
+- **Changed from the original plan:** the before/after is search mode and the revision filter, as the
+  brief's phase 5 asked, not fixed-size vs structure-aware chunking.
+- **Caveat to state when presenting:** the corpus is small (8 tasks per aircraft), so Recall@5
+  saturates; top-1 is the more telling number. Six unanswerable questions overlap with the probes
+  used to pick the abstention threshold, so that result is partly in-sample.
 
 ## 5. AWS resource names
 

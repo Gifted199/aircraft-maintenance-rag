@@ -73,6 +73,12 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
 - Prompt rules: instructions only in the system message (retry feedback included); question and
   sources fenced in `<question>` / `<source>` blocks; strict JSON schema; the model cites source
   ids and code builds the citations. Use `max_completion_tokens`; do not set `temperature`.
+- Safety text is copied by code from the index, never written by the model: citations, and the
+  WARNINGs/CAUTIONs of the steps a short answer relies on (`guardrails/alerts.py`, response field
+  `warnings`).
+- The image contains only `.venv` (allow-list `.dockerignore`), runs as user `app`, and gets
+  secrets only as environment variables. In a container `AWS_PROFILE` and `APP_SECRET_NAME` are
+  not set; `S3_BUCKET` must be passed for ingestion (it has no default).
 - Never log the question text, the prompt or model output; log sizes, decisions, scores, tokens.
 - Prices used for estimates: `gpt-5.4-mini` about $0.75 / 1M input and $4.50 / 1M output tokens;
   `text-embedding-3-small` about $0.02 / 1M. A `/query` that reaches the model costs about $0.002.
@@ -88,6 +94,11 @@ uv run python -m aero_rag.ingestion --dry-run   # counts + embedding cost estima
 uv run python -m aero_rag.ingestion          # S3 -> parse -> embed -> OpenSearch (paid: ~$0.0004)
 uv run python scripts/search.py "question" --aircraft A-200 --mode hybrid   # top 5; --stats for counts
 uv run python -m aero_rag.api            # API on :8000 (GET /health, GET /ready, POST /query, /docs)
+uv run python scripts/build_eval_set.py      # rebuild data/eval/questions.json from the spec (free)
+uv run python scripts/evaluate.py --dry-run  # evaluation call count + cost estimate (free)
+uv run python scripts/evaluate.py            # full evaluation -> data/results/ (paid: ~52 LLM calls, ~$0.13)
+docker build --platform linux/amd64 -t akinsds1126-aero-rag-api:0.1.0 .   # local image build
+.\scripts\run_local_container.ps1        # run the image with secrets as env vars; -Stop to remove
 aws sso login --profile aero             # needed before anything that touches AWS
 uv run python scripts/check_connections.py   # PASS/FAIL: Secrets Manager, S3, OpenSearch, Azure chat, embeddings
 ```
