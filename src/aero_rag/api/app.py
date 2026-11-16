@@ -19,16 +19,18 @@ from fastapi.responses import JSONResponse
 
 from aero_rag.schemas import QueryRequest, QueryResponse
 from aero_rag.service import RagService
+from aero_rag.tracing import NULL_TRACER, Tracer, build_tracer
 
 log = logging.getLogger("aero_rag.api")
+APP_VERSION = "0.2.0"
 
 OPENSEARCH_TIMEOUT_SECONDS = 10
 AZURE_TIMEOUT_SECONDS = 60
 
 
-def build_real_service() -> tuple[RagService, Callable[[], bool]]:
+def build_real_service() -> tuple[RagService, Callable[[], bool], Tracer]:
     """Create every client once, at start-up, and reuse them for all requests (connection
-    pooling; no per-request credential fetch)."""
+    pooling; no per-request credential fetch). Tracing is optional and never stops start-up."""
     from aero_rag.clients import AzureEmbedder, make_azure_openai, make_opensearch
     from aero_rag.config import get_settings
     from aero_rag.generation.generator import AzureGenerator
@@ -46,6 +48,7 @@ def build_real_service() -> tuple[RagService, Callable[[], bool]]:
     # The middleware below already writes one line per request.
     logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
 
+    tracer = build_tracer(settings)
     opensearch = make_opensearch(settings, timeout=OPENSEARCH_TIMEOUT_SECONDS)
     azure = make_azure_openai(settings, timeout=AZURE_TIMEOUT_SECONDS)
     searcher = Searcher(
@@ -61,25 +64,33 @@ def build_real_service() -> tuple[RagService, Callable[[], bool]]:
         ),
         cosine_threshold=settings.abstain_cosine_threshold,
         max_question_chars=settings.max_question_chars,
+        tracer=tracer,
     )
-    return service, opensearch.ping
+    return service, opensearch.ping, tracer
 
 
 def create_app(
-    service: RagService | None = None, ready_check: Callable[[], bool] | None = None
+    service: RagService | None = None,
+    ready_check: Callable[[], bool] | None = None,
+    tracer: Tracer | None = None,
 ) -> FastAPI:
     """Pass a service and ready_check to run with fakes; otherwise real clients are built."""
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         if service is None:
-            app.state.service, app.state.ready_check = build_real_service()
+            app.state.service, app.state.ready_check, app.state.tracer = build_real_service()
         else:
             app.state.service, app.state.ready_check = service, ready_check or (lambda: True)
+            app.state.tracer = tracer or NULL_TRACER
         log.info("startup complete")
         yield
+        # Shutdown (uvicorn runs this on SIGTERM, which is how ECS stops a task): send any
+        # buffered traces before the process exits.
+        app.state.tracer.shutdown()
 
-    app = FastAPI(title="Aircraft maintenance manual assistant", version="0.1.0", lifespan=lifespan)
+    app = FastAPI(title="Aircraft maintenance manual assistant", version=APP_VERSION,
+                  lifespan=lifespan)  # fmt: skip
 
     @app.middleware("http")
     async def request_log(request: Request, call_next):

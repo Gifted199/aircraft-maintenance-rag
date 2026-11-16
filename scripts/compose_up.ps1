@@ -34,6 +34,8 @@ $SecretKeys = @(
     "AZURE_OPENAI_ENDPOINT", "AZURE_OPENAI_API_KEY",
     "OPENSEARCH_ENDPOINT", "OPENSEARCH_USERNAME", "OPENSEARCH_PASSWORD"
 )
+# Optional: without them the API runs with tracing off.
+$OptionalKeys = @("LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY", "LANGFUSE_HOST")
 
 $json = aws secretsmanager get-secret-value --secret-id $SecretName --query SecretString `
     --output text --profile $Profile --region $Region
@@ -49,6 +51,10 @@ try {
         if (-not $value) { throw "The secret has no value for $key." }
         Set-Item -Path "Env:$key" -Value $value
     }
+    foreach ($key in $OptionalKeys) {
+        if ($secret.$key) { Set-Item -Path "Env:$key" -Value $secret.$key }
+        else { Write-Host "Note: $key is not in the secret; tracing will be off." }
+    }
     # --wait returns once both containers report healthy (or fails if one does not).
     # Docker writes progress to stderr; judge success by the exit code, not by stderr output.
     $ErrorActionPreference = "Continue"
@@ -58,7 +64,9 @@ try {
     if ($code -ne 0) { throw "docker compose up failed. See: docker compose logs" }
 }
 finally {
-    foreach ($key in $SecretKeys) { Remove-Item -Path "Env:$key" -ErrorAction SilentlyContinue }
+    foreach ($key in $SecretKeys + $OptionalKeys) {
+        Remove-Item -Path "Env:$key" -ErrorAction SilentlyContinue
+    }
     $secret = $null
 }
 

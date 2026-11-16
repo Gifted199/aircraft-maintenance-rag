@@ -24,6 +24,11 @@ SECRET_KEYS = (
     "OPENSEARCH_USERNAME",
     "OPENSEARCH_PASSWORD",
 )
+# Optional keys in the same secret. Missing ones never trigger a fetch or an error: tracing is
+# simply switched off.
+OPTIONAL_SECRET_KEYS = ("LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY", "LANGFUSE_HOST")
+_MASKED_FIELDS = ("azure_openai_api_key", "opensearch_password", "langfuse_secret_key")
+DEFAULT_LANGFUSE_HOST = "https://cloud.langfuse.com"
 
 
 class Settings(BaseSettings):
@@ -59,10 +64,22 @@ class Settings(BaseSettings):
     opensearch_username: str | None = None
     opensearch_password: SecretStr | None = None
 
-    # Langfuse Cloud (phase 7; tracing is skipped when keys are absent)
+    # Langfuse Cloud tracing: optional, from the same secret (local) or env vars (ECS). Tracing is
+    # off when either key is missing. The host has no default here so that the secret's value is
+    # used when the environment does not set one (see langfuse_base_url).
     langfuse_public_key: str | None = None
     langfuse_secret_key: SecretStr | None = None
-    langfuse_host: str = "https://cloud.langfuse.com"
+    langfuse_host: str | None = None
+    langfuse_timeout_seconds: int = 5
+    environment: str = "dev"
+
+    @property
+    def langfuse_enabled(self) -> bool:
+        return bool(self.langfuse_public_key and self.langfuse_secret_key)
+
+    @property
+    def langfuse_base_url(self) -> str:
+        return (self.langfuse_host or DEFAULT_LANGFUSE_HOST).strip().rstrip("/")
 
     @property
     def opensearch_host(self) -> str | None:
@@ -89,7 +106,7 @@ class Settings(BaseSettings):
     def secret_values(self) -> list[str]:
         """Plain values, used only to redact them from log output."""
         values = []
-        for key in SECRET_KEYS:
+        for key in (*SECRET_KEYS, "LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY"):
             value = getattr(self, key.lower())
             if isinstance(value, SecretStr):
                 value = value.get_secret_value()
@@ -121,12 +138,12 @@ def merge_secret(settings: Settings, values: dict[str, str]) -> Settings:
     """Fill in secret fields that are not already set. Environment variables win, so ECS-injected
     values are never overridden."""
     update: dict[str, Any] = {}
-    for key in settings.missing_secrets():
+    optional_missing = [k for k in OPTIONAL_SECRET_KEYS if not getattr(settings, k.lower())]
+    for key in (*settings.missing_secrets(), *optional_missing):
         value = values.get(key)
         if value:
             field = key.lower()
-            is_masked = field in ("azure_openai_api_key", "opensearch_password")
-            update[field] = SecretStr(str(value)) if is_masked else str(value)
+            update[field] = SecretStr(str(value)) if field in _MASKED_FIELDS else str(value)
     return settings.model_copy(update=update)
 
 

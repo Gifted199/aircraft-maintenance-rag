@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 #
 # The Streamlit UI, as its own small image (separate from the API image):
-#   docker build --platform linux/amd64 -t akinsds1126-aero-rag-ui:0.1.0 ui
+#   docker build --platform linux/amd64 -t akinsds1126-aero-rag-ui:0.2.0 ui
 #
 # The build context is the ui/ folder only, so the image cannot see .env, src/ or the spec. It
 # contains Streamlit and two Python files; it holds no secrets and talks only to API_URL.

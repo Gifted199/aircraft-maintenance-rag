@@ -59,6 +59,24 @@ def _compare_steps(steps: list[AnswerStep], expected: list[Step], source_id: int
     return problems
 
 
+def problem_kind(problem: str) -> str:
+    """A short category for a problem sentence, for traces. The sentence itself can quote values
+    from the model's answer, which traces must not contain."""
+    text = problem.lower()
+    for marker, kind in (
+        ("superseded", "superseded_revision"),
+        ("part number", "part_number"),
+        ("torque value", "torque"),
+        ("but the question asks about", "component"),
+        ("source_ids", "citation"),
+        ("cite at least", "citation"),
+        ("step", "steps"),
+    ):
+        if marker in text:
+            return kind
+    return "other"
+
+
 def check_output(answer: LLMAnswer, context: list[SearchHit], question: str = "") -> list[str]:
     """Problems with an 'answered' response; an empty list means it passed.
 

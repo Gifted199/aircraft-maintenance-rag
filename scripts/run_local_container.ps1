@@ -19,7 +19,7 @@
   .\scripts\run_local_container.ps1 -Stop
 #>
 param(
-    [string]$Image = "akinsds1126-aero-rag-api:0.1.0",
+    [string]$Image = "akinsds1126-aero-rag-api:0.2.0",
     [string]$Name = "akinsds1126-aero-rag-api",
     [int]$Port = 8000,
     [string]$SecretName = "akinsds1126-aero-rag/app",
@@ -33,6 +33,7 @@ $SecretKeys = @(
     "AZURE_OPENAI_ENDPOINT", "AZURE_OPENAI_API_KEY",
     "OPENSEARCH_ENDPOINT", "OPENSEARCH_USERNAME", "OPENSEARCH_PASSWORD"
 )
+$OptionalKeys = @("LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY", "LANGFUSE_HOST")
 # Non-secret settings come from .env, except the two that only make sense on a laptop.
 $LocalOnly = @("AWS_PROFILE", "APP_SECRET_NAME")
 
@@ -55,6 +56,12 @@ try {
         Set-Item -Path "Env:$key" -Value $value
         $dockerArgs += @("--env", $key)          # name only: docker reads the value itself
     }
+    foreach ($key in $OptionalKeys) {            # tracing: off if absent
+        if ($secret.$key) {
+            Set-Item -Path "Env:$key" -Value $secret.$key
+            $dockerArgs += @("--env", $key)
+        }
+    }
     $envFile = Join-Path $PSScriptRoot "..\.env"
     if (Test-Path $envFile) {
         foreach ($line in Get-Content $envFile) {
@@ -68,7 +75,9 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "docker run failed." }
 }
 finally {
-    foreach ($key in $SecretKeys) { Remove-Item -Path "Env:$key" -ErrorAction SilentlyContinue }
+    foreach ($key in $SecretKeys + $OptionalKeys) {
+        Remove-Item -Path "Env:$key" -ErrorAction SilentlyContinue
+    }
     $secret = $null
 }
 

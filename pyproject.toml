@@ -1,6 +1,6 @@
 [project]
 name = "aero-rag"
-version = "0.1.0"
+version = "0.2.0"
 description = "Aircraft maintenance manual assistant: hybrid-search RAG on AWS (S3, OpenSearch, ECS Fargate) with Azure OpenAI."
 requires-python = ">=3.12"
 # Dependencies are added in the phase that first needs them (FastAPI in 3, Langfuse in 7).
@@ -10,6 +10,7 @@ requires-python = ">=3.12"
 dependencies = [
     "boto3>=1.35",
     "fastapi>=0.115",
+    "langfuse>=5.2,<6",
     "openai>=1.60",
     "opensearch-py>=2.7",
     "pydantic>=2.9",

@@ -36,13 +36,19 @@ services:
       - OPENSEARCH_ENDPOINT
       - OPENSEARCH_USERNAME
       - OPENSEARCH_PASSWORD
+      # Optional tracing keys (tracing is off if they are absent).
+      - LANGFUSE_PUBLIC_KEY
+      - LANGFUSE_SECRET_KEY
+      - LANGFUSE_HOST
+    # ECS sends SIGTERM then waits stopTimeout; compose waits this long, so traces can be flushed.
+    stop_grace_period: 30s
     ports:
       - "8000:8000"   # published so /docs can be opened locally; the UI does not need it
 
   ui:
     build:
       context: ui
-    image: akinsds1126-aero-rag-ui:0.1.0
+    image: akinsds1126-aero-rag-ui:0.2.0
     container_name: akinsds1126-aero-rag-ui
     platform: linux/amd64
     environment:

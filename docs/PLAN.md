@@ -243,6 +243,16 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
   accidentally importing un-installed code.
 - **Tests use fakes** for Azure OpenAI, OpenSearch and S3 so they run offline, free and in seconds.
 - **Langfuse is optional at runtime.** With no keys set, tracing is a no-op, so tests and local runs do not need it.
+- **Tracing never touches the answer path's reliability.** Spans are recorded in memory and sent by
+  the SDK's background thread; every SDK call is wrapped so the first failure logs one warning and
+  turns tracing off. Start-up checks the keys once (`auth_check`, about 2-3 s if Langfuse is down).
+- **Traces carry metadata, not text** (the logging rule): chunk ids, scores, decisions, model,
+  tokens, cost, latency. The question and answer are not sent, so a trace can be shared without
+  exposing what a technician asked. Turning text capture on later would be one setting.
+- **The trace id is derived from the request id** (`create_trace_id(seed=request_id)`), so the
+  request id shown in the UI or a log line finds the trace directly.
+- **Langfuse SDK 5.x (OpenTelemetry based), with its own tracer provider**, so it never becomes the
+  process-wide OpenTelemetry tracer and exports only our spans.
 
 ## 3. Phases
 
@@ -256,7 +266,8 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
 | 4b | Deploy the API to ECS Fargate | Commands for ECR, IAM, ECS service, and the one-off ingestion task | Public URL answers `/query`; ingestion task exits 0 with logs in CloudWatch |
 | 5 | Evaluation | 47 labelled questions, metrics, before/after tables, README Metrics draft | Done: `scripts/evaluate.py` reproduces `data/results/` (~$0.14); v2 fixed both v1 failures (47/47) |
 | 6 | Streamlit UI and redeploy | `ui/` (app, presenter, Dockerfile), `docker-compose.yml`, `scripts/compose_up.ps1`; then the UI as a second container in the same task | Local: done, compose runs both healthy (UI :8501). ECS: UI on the public URL answers a question |
-| 7 | Langfuse + README | Tracing, README with diagram, "Future: agents" | Trace visible; README runs from clean clone |
+| 7a | Langfuse tracing | `tracing.py`, a span per step, flush on shutdown, `docs/DEPLOY.md` + task definition rev 2 | Done locally: a compose query produced an 8-observation trace in Langfuse Cloud. ECS: rev 2 deployed by the user |
+| 7b | README | README with diagram, "Future: agents" | README runs from clean clone |
 
 **Why this order.** The live ECS demo is assessed, so the API is deployed as soon as it works
 (phase 4) and everything after that adds to a system that is already live. **If time runs short,

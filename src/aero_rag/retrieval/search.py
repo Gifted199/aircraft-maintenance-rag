@@ -13,7 +13,7 @@ from typing import Any
 from pydantic import BaseModel
 
 from aero_rag.ingestion.chunker import CHILD_TYPES
-from aero_rag.retrieval.aircraft import detect_aircraft, normalise_aircraft
+from aero_rag.retrieval.aircraft import resolve_aircraft
 
 # Each parent has two children, so we fetch several children per wanted parent before collapsing.
 CHILDREN_PER_RESULT = 4
@@ -97,12 +97,7 @@ class Searcher:
         include_superseded: bool = False,  # evaluation only: lets old revisions compete
     ) -> SearchResult:
         mode = SearchMode(mode)
-        if aircraft_type:
-            aircraft, source = normalise_aircraft(aircraft_type), "given"
-        elif detected := detect_aircraft(query):
-            aircraft, source = detected, "detected"
-        else:
-            aircraft, source = None, "none"
+        aircraft, source = resolve_aircraft(query, aircraft_type)
 
         vector = None if mode is SearchMode.KEYWORD else self._embedder.embed([query])[0]
         filters = build_filters(aircraft, include_superseded)

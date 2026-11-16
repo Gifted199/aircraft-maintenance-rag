@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1
 #
 # One image, two jobs:
-#   API (default)   docker run ... akinsds1126-aero-rag-api:0.1.0
-#   Ingestion       docker run ... akinsds1126-aero-rag-api:0.1.0 python -m aero_rag.ingestion
+#   API (default)   docker run ... akinsds1126-aero-rag-api:0.2.0
+#   Ingestion       docker run ... akinsds1126-aero-rag-api:0.2.0 python -m aero_rag.ingestion
 #
 # linux/amd64 is stated explicitly because that is what the Fargate task runs on. Without it, a
 # build on an ARM laptop would produce an image that fails on Fargate with "exec format error".

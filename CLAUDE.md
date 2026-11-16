@@ -7,7 +7,8 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
 
 1. **Secrets.** Never print, log or commit secret values. They live only in AWS Secrets Manager,
    secret `akinsds1126-aero-rag/app` (JSON keys: `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`,
-   `OPENSEARCH_ENDPOINT`, `OPENSEARCH_USERNAME`, `OPENSEARCH_PASSWORD`). `.env` holds non-secret
+   `OPENSEARCH_ENDPOINT`, `OPENSEARCH_USERNAME`, `OPENSEARCH_PASSWORD`, and the optional
+   `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, `LANGFUSE_HOST`). `.env` holds non-secret
    settings only and is still git-ignored; only `.env.example` is committed. Error output shows the
    exception *type*, never the message, because messages can echo endpoints and keys. When
    debugging, print shapes and error codes, never values.
@@ -90,6 +91,14 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
   Locally (compose) the UI reaches the API at `http://api:8000`; on ECS both containers share the
   task's network, so `http://localhost:8000`.
 - Never log the question text, the prompt or model output; log sizes, decisions, scores, tokens.
+  The same rule applies to Langfuse traces.
+- Tracing (`tracing.py`) is optional and must never fail or slow a request: the service only uses
+  the no-op `Tracer` / `QueryTrace` / `Span` interface; `LangfuseTracer` guards every SDK call (first
+  failure: one warning, then off) and redacts every value like the logs. One trace per `/query`, trace
+  id = `Langfuse.create_trace_id(seed=request_id)`, one span per step, tags `status:`, `aircraft:`,
+  `request_id:`. Flushed in the FastAPI lifespan shutdown (SIGTERM). Tests use fakes or the real SDK
+  with an in-memory exporter.
+- ECS deployment steps for each release are in `docs/DEPLOY.md`; task definition JSON in `deploy/ecs/`.
 - Prices used for estimates: `gpt-5.4-mini` about $0.75 / 1M input and $4.50 / 1M output tokens;
   `text-embedding-3-small` about $0.02 / 1M. A `/query` that reaches the model costs about $0.002.
 
@@ -108,7 +117,7 @@ uv run python scripts/build_eval_set.py      # rebuild data/eval/questions.json 
 uv run python scripts/evaluate.py --dry-run  # evaluation call count + cost estimate (free)
 uv run python scripts/evaluate.py            # full evaluation -> data/results/ (paid: ~51 LLM calls, ~$0.14)
 docker build --platform linux/amd64 -t akinsds1126-aero-rag-api:0.2.0 .   # local API image build
-docker build --platform linux/amd64 -t akinsds1126-aero-rag-ui:0.1.0 ui    # local UI image build
+docker build --platform linux/amd64 -t akinsds1126-aero-rag-ui:0.2.0 ui    # local UI image build
 .\scripts\run_local_container.ps1        # run the API image alone with secrets as env vars; -Stop
 .\scripts\compose_up.ps1                 # API + UI together (UI on :8501); -Down to remove
 uv run --group ui streamlit run ui/app.py    # UI without Docker, against an API on :8000

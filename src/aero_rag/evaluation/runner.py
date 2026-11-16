@@ -14,12 +14,9 @@ from typing import Any
 from aero_rag.evaluation.dataset import EvalItem
 from aero_rag.generation.generator import Generation, GenerationError
 from aero_rag.guardrails.input import check_input
+from aero_rag.pricing import EMBED_PRICE, LLM_INPUT_PRICE, LLM_OUTPUT_PRICE
 from aero_rag.retrieval.search import SearchMode
 
-# Price assumptions for the estimate (USD per 1M tokens); see CLAUDE.md.
-LLM_INPUT_PRICE = 0.75
-LLM_OUTPUT_PRICE = 4.50
-EMBED_PRICE = 0.02
 # Measured in phase 3: about 2,600 prompt tokens per call; short answers about 60 output tokens,
 # full procedures about 600. Rounded up for the estimate.
 EST_PROMPT_TOKENS = 2800

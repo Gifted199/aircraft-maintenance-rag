@@ -1,0 +1,135 @@
+{
+  "family": "akinsds1126-aero-rag-api",
+  "taskRoleArn": "arn:aws:iam::666127452756:role/akinsds1126-aero-rag-task-role",
+  "executionRoleArn": "arn:aws:iam::666127452756:role/akinsds1126-aero-rag-exec-role",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "cpu": "1024",
+  "memory": "2048",
+  "containerDefinitions": [
+    {
+      "name": "api",
+      "image": "666127452756.dkr.ecr.eu-west-2.amazonaws.com/akinsds1126-aero-rag-api:0.2.0",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "hostPort": 8000,
+          "protocol": "tcp",
+          "name": "api-8000",
+          "appProtocol": "http"
+        }
+      ],
+      "environment": [
+        { "name": "S3_BUCKET", "value": "akinsds1126-aero-rag-docs" },
+        { "name": "AWS_REGION", "value": "eu-west-2" },
+        { "name": "AZURE_OPENAI_CHAT_DEPLOYMENT", "value": "gpt-5.4-mini" },
+        { "name": "AZURE_OPENAI_API_VERSION", "value": "2025-04-01-preview" },
+        { "name": "OPENSEARCH_INDEX", "value": "aero-manuals" },
+        { "name": "AZURE_OPENAI_EMBED_DEPLOYMENT", "value": "text-embedding-3-small" },
+        { "name": "ENVIRONMENT", "value": "dev" }
+      ],
+      "secrets": [
+        {
+          "name": "AZURE_OPENAI_ENDPOINT",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:666127452756:secret:akinsds1126-aero-rag/app-uUSUsb:AZURE_OPENAI_ENDPOINT::"
+        },
+        {
+          "name": "AZURE_OPENAI_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:666127452756:secret:akinsds1126-aero-rag/app-uUSUsb:AZURE_OPENAI_API_KEY::"
+        },
+        {
+          "name": "OPENSEARCH_ENDPOINT",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:666127452756:secret:akinsds1126-aero-rag/app-uUSUsb:OPENSEARCH_ENDPOINT::"
+        },
+        {
+          "name": "OPENSEARCH_USERNAME",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:666127452756:secret:akinsds1126-aero-rag/app-uUSUsb:OPENSEARCH_USERNAME::"
+        },
+        {
+          "name": "OPENSEARCH_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:666127452756:secret:akinsds1126-aero-rag/app-uUSUsb:OPENSEARCH_PASSWORD::"
+        },
+        {
+          "name": "LANGFUSE_PUBLIC_KEY",
+          "valueFrom": "SECRET_ARN_HERE:LANGFUSE_PUBLIC_KEY::"
+        },
+        {
+          "name": "LANGFUSE_SECRET_KEY",
+          "valueFrom": "SECRET_ARN_HERE:LANGFUSE_SECRET_KEY::"
+        },
+        {
+          "name": "LANGFUSE_HOST",
+          "valueFrom": "SECRET_ARN_HERE:LANGFUSE_HOST::"
+        }
+      ],
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)\" || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 30
+      },
+      "stopTimeout": 30,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/akinsds1126-aero-rag-api",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "api"
+        }
+      }
+    },
+    {
+      "name": "ui",
+      "image": "666127452756.dkr.ecr.eu-west-2.amazonaws.com/akinsds1126-aero-rag-ui:0.2.0",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8501,
+          "hostPort": 8501,
+          "protocol": "tcp",
+          "name": "ui-8501",
+          "appProtocol": "http"
+        }
+      ],
+      "environment": [
+        { "name": "API_URL", "value": "http://localhost:8000" }
+      ],
+      "dependsOn": [
+        { "containerName": "api", "condition": "HEALTHY" }
+      ],
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health', timeout=3)\" || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 30
+      },
+      "stopTimeout": 10,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/akinsds1126-aero-rag-api",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "ui"
+        }
+      }
+    }
+  ],
+  "tags": [
+    { "key": "project", "value": "aero-rag" },
+    { "key": "env", "value": "dev" },
+    { "key": "owner", "value": "akinlolu" }
+  ]
+}

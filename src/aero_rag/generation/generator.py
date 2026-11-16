@@ -150,6 +150,7 @@ class AzureGenerator:
         self._client = client
         self._deployment = deployment
         self._max_completion_tokens = max_completion_tokens
+        self.model = deployment  # recorded on each generation in the trace
 
     def generate(
         self, question: str, context: list[SearchHit], problems: list[str] | None = None
