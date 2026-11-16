@@ -11,7 +11,7 @@ from aero_rag.config import Settings
 log = logging.getLogger(__name__)
 
 
-def make_opensearch(settings: Settings):
+def make_opensearch(settings: Settings, timeout: float = 30):
     from opensearchpy import OpenSearch
 
     return OpenSearch(
@@ -19,20 +19,20 @@ def make_opensearch(settings: Settings):
         http_auth=(settings.opensearch_username, settings.opensearch_password.get_secret_value()),
         use_ssl=True,
         verify_certs=True,
-        timeout=30,
+        timeout=timeout,
         max_retries=2,
         retry_on_timeout=True,
     )
 
 
-def make_azure_openai(settings: Settings):
+def make_azure_openai(settings: Settings, timeout: float = 60):
     from openai import AzureOpenAI
 
     return AzureOpenAI(
         azure_endpoint=settings.azure_openai_base_url,
         api_key=settings.azure_openai_api_key.get_secret_value(),
         api_version=settings.azure_openai_api_version,
-        timeout=60,
+        timeout=timeout,
         max_retries=2,
     )
 

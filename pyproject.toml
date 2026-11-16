@@ -6,14 +6,17 @@ requires-python = ">=3.12"
 # Dependencies are added in the phase that first needs them (FastAPI in 3, Streamlit in 5, Langfuse in 7).
 dependencies = [
     "boto3>=1.35",
+    "fastapi>=0.115",
     "openai>=1.60",
     "opensearch-py>=2.7",
     "pydantic>=2.9",
     "pydantic-settings>=2.6",
+    "uvicorn>=0.32",
 ]
 
 [dependency-groups]
 dev = [
+    "httpx>=0.27",
     "pytest>=8.3",
     "ruff>=0.7",
 ]

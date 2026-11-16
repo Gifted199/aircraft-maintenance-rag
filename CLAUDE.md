@@ -66,8 +66,16 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
   `ingestion/index.py`. Changing the mapping needs `--recreate-index` (then re-ingest).
 - HTTP client libraries log request URLs; keep them at WARNING in `logging_config.py` and never
   log an endpoint.
-- Guardrail: every part number and torque value in an answer must appear in a cited chunk;
-  otherwise retry once, then abstain.
+- Guardrails are deterministic code in `src/aero_rag/guardrails/` (input, retrieval, output); the
+  flow is in `service.py`. Every part number and torque value in an answer must appear in a cited
+  task, every citation must be `is_latest`, returned steps must be the complete procedure word
+  for word; otherwise retry once with the problems listed, then abstain. Never show unverified text.
+- Prompt rules: instructions only in the system message (retry feedback included); question and
+  sources fenced in `<question>` / `<source>` blocks; strict JSON schema; the model cites source
+  ids and code builds the citations. Use `max_completion_tokens`; do not set `temperature`.
+- Never log the question text, the prompt or model output; log sizes, decisions, scores, tokens.
+- Prices used for estimates: `gpt-5.4-mini` about $0.75 / 1M input and $4.50 / 1M output tokens;
+  `text-embedding-3-small` about $0.02 / 1M. A `/query` that reaches the model costs about $0.002.
 
 ## Commands
 
@@ -79,6 +87,7 @@ uv run python scripts/generate_manuals.py    # rebuild data/manuals/ from the sp
 uv run python -m aero_rag.ingestion --dry-run   # counts + embedding cost estimate; writes nothing
 uv run python -m aero_rag.ingestion          # S3 -> parse -> embed -> OpenSearch (paid: ~$0.0004)
 uv run python scripts/search.py "question" --aircraft A-200 --mode hybrid   # top 5; --stats for counts
+uv run python -m aero_rag.api            # API on :8000 (GET /health, GET /ready, POST /query, /docs)
 aws sso login --profile aero             # needed before anything that touches AWS
 uv run python scripts/check_connections.py   # PASS/FAIL: Secrets Manager, S3, OpenSearch, Azure chat, embeddings
 ```

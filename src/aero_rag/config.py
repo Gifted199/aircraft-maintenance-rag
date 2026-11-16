@@ -44,6 +44,11 @@ class Settings(BaseSettings):
     azure_openai_embed_deployment: str = "text-embedding-3-small"
     embedding_dim: int = 1536
     api_url: str = "http://localhost:8000"
+
+    # Guardrails and generation (see guardrails/retrieval.py for how the threshold was chosen)
+    abstain_cosine_threshold: float = 0.35
+    max_question_chars: int = 500
+    llm_max_completion_tokens: int = 4000
     log_level: str = "INFO"
 
     # Secret values: from Secrets Manager (local) or injected environment variables (ECS).

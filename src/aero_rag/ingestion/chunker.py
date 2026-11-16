@@ -10,12 +10,13 @@ task, including every WARNING. Chunks are built from the parsed structure, not b
 characters, so a step cannot be cut away from its warning.
 """
 
+import re
 from datetime import date
 from typing import Literal
 
 from pydantic import BaseModel
 
-from aero_rag.models import ManualDoc
+from aero_rag.models import ManualDoc, Step
 
 CHILD_TYPES = ("reference", "procedure")
 MAX_EMBEDDING_TOKENS = 8000  # text-embedding-3-small accepts 8,191 tokens per input
@@ -88,6 +89,28 @@ def procedure_body(doc: ManualDoc) -> str:
         lines.append(step.text)
         blocks.append("\n".join(lines))
     return "Procedure:\n\n" + "\n\n".join(blocks)
+
+
+def parse_procedure(text: str) -> list[Step]:
+    """The inverse of `procedure_body`: read the steps back out of a parent or procedure chunk.
+
+    The output guardrail uses this to check that an answer returns every step with its alerts.
+    """
+    _, _, body = text.partition("Procedure:\n\n")
+    steps = []
+    for block in body.split("\n\n"):
+        lines = block.split("\n")
+        heading = re.fullmatch(r"Step (\d+)", lines[0])
+        if heading and len(lines) >= 2:
+            steps.append(
+                Step(
+                    number=int(heading.group(1)),
+                    warnings=[ln[9:] for ln in lines[1:-1] if ln.startswith("WARNING: ")],
+                    cautions=[ln[9:] for ln in lines[1:-1] if ln.startswith("CAUTION: ")],
+                    text=lines[-1],
+                )
+            )
+    return steps
 
 
 def build_chunks(doc: ManualDoc, is_latest: bool, source_key: str) -> list[Chunk]:

@@ -37,6 +37,7 @@ class SearchHit(BaseModel):
     revision: int
     revision_date: date
     is_latest: bool
+    source_key: str  # S3 key of the original document, for citations
     text: str  # the full parent task: this is what goes to the LLM
 
 
@@ -142,6 +143,7 @@ class Searcher:
                             "revision",
                             "revision_date",
                             "is_latest",
+                            "source_key",
                         )
                     },
                 )

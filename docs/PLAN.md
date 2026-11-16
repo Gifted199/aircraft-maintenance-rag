@@ -123,17 +123,55 @@ Each choice is written so it can be defended in one or two sentences.
   cosine similarity, 1,536 dimensions to match `text-embedding-3-small`.
 
 ### Generation and guardrails
-- **Answer only from retrieved chunks, with citations** (task number + revision). The response model
-  returns `answer`, `citations`, `scores` and an `abstained` flag.
-- **Input guardrails:** length limit and simple prompt-injection patterns, checked before any paid call.
-- **Grounding guardrail:** every part number and torque value in the answer must literally appear in
-  a cited chunk. If not, retry once with the failure explained to the model, then abstain. A wrong
-  torque value is the worst possible output, so this check is deterministic code, not another LLM.
-- **Revision guardrail:** citations are checked against `is_latest` a second time after generation.
+The flow is: input guardrail -> hybrid search -> retrieval guardrail (abstain or clarify) ->
+generate -> output guardrail -> one retry -> answer or abstain. Every guardrail is plain code.
+
+- **The model reads the top 3 full parent tasks.** Instructions are only in the system message;
+  the question and each task sit in marked `<question>` / `<source>` blocks that the system
+  message declares to be data, never instructions.
+- **Strict JSON schema output** (`status`, `answer`, `steps`, `source_ids`). The model cannot
+  return anything outside those fields, so there is nothing to parse loosely.
+- **The model cites by source id; our code builds the citation.** Aircraft, task number, revision,
+  date and S3 key come from the index, so a citation cannot be invented or mistyped.
+- **Input guardrail (free):** empty check, 500-character limit, simple injection patterns. The
+  patterns are a first filter; the real defences are the fenced prompt, the fixed output shape and
+  the output checks.
+- **Abstain before the LLM when retrieval is weak.** Rule: a part or task number in the question
+  must be found verbatim in a retrieved task (found = strong evidence; not found = abstain, which
+  also covers superseded part numbers); otherwise the top result's cosine similarity must be at
+  least 0.35. Measured on the live index with 26 probe questions: off-topic 0.07 to 0.30, in-domain
+  0.41 to 0.80, so 0.35 is the middle of the gap. The hybrid score cannot be used: min-max
+  normalisation gives "Who won the 2022 World Cup?" 0.81.
+- **The threshold only stops off-topic questions.** A question that is in-domain but not in the
+  manuals (tyre pressure, 0.52) scores like a real one, so it goes to the model, which is
+  instructed to say it cannot answer. Two layers, each doing what it is able to do.
+- **Clarify instead of guessing the aircraft.** If no aircraft is given or detected and the best
+  results are the same task on different aircraft, the reply is `clarification_needed` with the
+  options, and no LLM call is made. A part number settles the aircraft by itself; a task number does not.
+- **Output guardrail:** at least one valid citation; every citation is the latest revision
+  (second check after the search filter); every part number and torque value in the answer appears
+  in a cited task (so unit conversions and values from the wrong aircraft fail); and if steps are
+  returned they are the complete procedure of a cited task, in order, word for word, each with its
+  WARNINGs and CAUTIONs. A wrong torque value is the worst possible output, so these checks are
+  deterministic code, not another LLM.
+- **One retry, then abstain.** The failed checks are listed to the model in the system message; a
+  second failure returns "I don't know" and the unverified text is never shown.
+- **Known gap:** the prompt asks the model to quote a step's WARNING when a short answer relies on
+  that step (for example the axle nut final torque). Nothing enforces it, and in the local run the
+  model did not do it. The full procedure answer does carry every WARNING, and that is enforced.
 
 ### API and UI
-- **FastAPI with Pydantic models** for `GET /health` and `POST /query`. Pydantic validates input and
-  documents the contract automatically (`/docs`).
+- **FastAPI with Pydantic models** for `POST /query`. Pydantic validates input and documents the
+  contract automatically (`/docs`). The status is one of `answered`, `abstained`,
+  `clarification_needed`, `rejected`; all four are HTTP 200 because the service worked. A failed
+  dependency is HTTP 503 with a request id and no details.
+- **`/health` and `/ready` are separate.** `/health` only says the process is alive, so a slow
+  OpenSearch never makes ECS kill a healthy container; `/ready` checks OpenSearch is reachable.
+- **Clients are created once at start-up** and reused (connection pooling), with timeouts of 10 s
+  on OpenSearch and 60 s on Azure so a stuck dependency cannot hang a request for ever.
+- **One JSON log line per request, with a request id** that is also returned in the body and the
+  `X-Request-ID` header. Logs hold sizes, decisions, scores and token counts; never the question,
+  the prompt or a secret. `python -m aero_rag.api` starts the server with every line as JSON.
 - **Streamlit UI calls the API over HTTP** rather than importing the RAG code, so the API is the single
   entry point and is what we test and trace.
 
@@ -178,7 +216,7 @@ Each choice is written so it can be defended in one or two sentences.
 | 0 | Setup | Repo skeleton, config (Secrets Manager), JSON logging, `check_connections.py` | Five PASS lines (done) |
 | 1 | Documents | `data/spec/manuals.json`, generator, 31 manuals, parser, round-trip tests | Done; user uploads `data/manuals/` to S3 under `manuals/` |
 | 2 | Ingestion + hybrid search | Chunker, embeddings, index + search pipeline, search function, `python -m aero_rag.ingestion`, `scripts/search.py` | Done: 93 documents indexed; four spot-check searches correct |
-| 3 | Generation + API + guardrails | `/health`, `/query`, abstention, grounding check | Curl examples; guardrail tests |
+| 3 | Generation + API + guardrails | `/health`, `/ready`, `/query`, abstain, clarify, output checks | Done: six test questions behave as designed locally |
 | 4 | Deploy the API to ECS Fargate | Dockerfile, commands for ECR, IAM, ECS service, and the one-off ingestion task | Public URL answers `/query`; ingestion task exits 0 with logs in CloudWatch |
 | 5 | Evaluation | Questions from the spec, metrics script, before/after report | Numbers reproducible from one command |
 | 6 | Streamlit UI and redeploy | Streamlit app as a second container in the same task | UI on the public URL answers a question |
