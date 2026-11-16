@@ -61,20 +61,34 @@ Each choice is written so it can be defended in one or two sentences.
   half-understood procedure.
 
 ### Chunking and metadata
-- **One task = one chunk.** A maintenance task is the unit a mechanic acts on; splitting it could
-  return steps 4 to 7 without the WARNING on step 3, which is a safety failure, not just a quality one.
-- **Hierarchical context in each chunk.** Every chunk starts with its breadcrumb (aircraft type >
-  ATA chapter > task number and title) so the text is self-describing for both keyword and vector search.
-- **Oversize guard.** If a task ever exceeded the embedding model's input limit it is split only on
-  step boundaries, with each WARNING/CAUTION kept attached to its step. Our generated tasks are short,
-  so this is a safety net with a test, not the normal path.
+- **One parent and two children per task revision (93 index documents for 31 manuals).** The
+  *parent* is the full task; it is not embedded or searched, it is what the LLM reads. The
+  *reference* child (header details, tools, parts table, torque table) and the *procedure* child
+  (every step with its WARNINGs and CAUTIONs) are what search runs on.
+- **Why children for search and parents for the answer.** A short, focused child matches a question
+  more sharply than a whole task ("what torque" lands on the reference child, "how do I" on the
+  procedure child). Handing the model the whole parent then guarantees it sees the complete task,
+  so it can never answer from steps 4 to 7 without the WARNING on step 3.
+- **The procedure is never split.** Chunks are built from the parsed structure, not by counting
+  characters. If a procedure were ever too large to embed whole, ingestion stops with an error
+  rather than cutting it.
+- **Every chunk starts with a one-line header** (aircraft | task number | title | revision) so it
+  is understandable on its own and both keyword and vector search see the aircraft and task.
+- **Only children are embedded** (62 texts, one API call). Parents are fetched by id, so embedding
+  them would be paying for vectors nobody searches.
 - **Metadata on every chunk:** `aircraft_type`, `ata_chapter`, `task_number`, `revision`,
   `revision_date`, `is_latest`. These are stored as exact-match fields so they can be filtered, not searched.
 - **`is_latest` is computed at ingestion** by comparing all revisions of the same aircraft + task,
   and older ones are flipped to `false` when a newer one arrives. Deciding this once at write time is
   cheaper and less error-prone than working it out on every query.
-- **Deterministic chunk IDs** (`aircraft-task-revision`). Re-running ingestion overwrites instead of
-  duplicating, so the job is safe to run twice.
+- **Deterministic document IDs** (`A-200_32-41-01_rev03`, plus `#reference` / `#procedure`).
+  Re-running ingestion overwrites instead of duplicating, so the job is safe to run twice.
+- **Ingestion always reads the whole bucket and parses everything before writing anything.**
+  `is_latest` depends on every revision present, so a full pass is the simple way to keep it right
+  (a new revision flips the old one), and one unparseable file stops the job with nothing half-written.
+  Known limit: a document deleted from S3 is not removed from the index; `--recreate-index` rebuilds it.
+- **Strict mapping.** The index rejects any field we did not declare, so a typo in a field name
+  fails loudly instead of silently creating an unfiltered column.
 
 ### Retrieval
 - **Hybrid search (BM25 + k-NN).** Keyword search (BM25) is exact on part numbers like `AX2-32-4411`,
@@ -82,8 +96,26 @@ Each choice is written so it can be defended in one or two sentences.
 - **OpenSearch search pipeline with a normalization processor.** BM25 and cosine scores are on
   different scales; the pipeline rescales and combines them inside OpenSearch, so we make one request
   instead of merging two result lists in Python.
-- **Filters applied inside both sub-queries:** `aircraft_type = <selected>` and `is_latest = true`.
-  Filtering is a hard guarantee; relying on ranking to push old revisions down is not.
+- **Pipeline `aero-manuals-hybrid`: min-max normalisation, weighted arithmetic mean, weights
+  0.5 / 0.5** (keyword, vector). Equal weights are the neutral starting point; phase 5 measures
+  keyword-only, vector-only and hybrid so the weighting is justified by numbers.
+- **Filters applied inside both sub-queries, not afterwards:** `is_latest = true` always, and
+  `aircraft_type` when known. Filtering afterwards would let old or wrong-aircraft chunks occupy
+  top places and then be discarded, leaving fewer than k results; inside, they are never candidates.
+  `include_superseded` exists only so evaluation can show what happens without the filter.
+- **Aircraft type is optional.** If it is not given, it is detected from the question (A-200, A200,
+  "a 200"); a part number such as `A200-32-4112` does not count, and two aircraft in one question
+  is treated as none. With no aircraft we search all and set `aircraft_unspecified`, because a
+  wrong guess on a hard filter is worse than no guess. Phase 3 uses that flag: when the top results
+  are the same task on different aircraft, the assistant must ask which aircraft rather than pick one.
+- **Collapse children to parents in Python.** The hybrid query in OpenSearch 2.19 has no field
+  collapsing, so we fetch 4 children per wanted result, keep the best child per parent, and fetch
+  the parents by id.
+- **Lucene k-NN engine.** It applies the filter while searching the vector graph, which is what
+  "filter inside the sub-query" needs, and suits a small index.
+- **Each hit carries two scores:** the mode's own score and the raw cosine similarity of the best
+  child (computed from the stored vector). Measured on the live index, the right task scores about
+  0.66 to 0.73 cosine and unrelated tasks 0.38 to 0.59, which is the gap the abstention threshold uses.
 - **"I don't know" threshold uses raw cosine similarity of the top hit, not the hybrid score.**
   Min-max normalisation always gives the best hit a score of 1.0, even when it is irrelevant, so the
   combined score cannot tell us that nothing matched. The threshold value is tuned in phase 4.
@@ -145,7 +177,7 @@ Each choice is written so it can be defended in one or two sentences.
 |---|-------|-------------|------------------------|
 | 0 | Setup | Repo skeleton, config (Secrets Manager), JSON logging, `check_connections.py` | Five PASS lines (done) |
 | 1 | Documents | `data/spec/manuals.json`, generator, 31 manuals, parser, round-trip tests | Done; user uploads `data/manuals/` to S3 under `manuals/` |
-| 2 | Ingestion + hybrid search | Chunker, embeddings, index + search pipeline, search function, `python -m aero_rag.ingestion` | Chunking invariant tests pass; spot-check queries |
+| 2 | Ingestion + hybrid search | Chunker, embeddings, index + search pipeline, search function, `python -m aero_rag.ingestion`, `scripts/search.py` | Done: 93 documents indexed; four spot-check searches correct |
 | 3 | Generation + API + guardrails | `/health`, `/query`, abstention, grounding check | Curl examples; guardrail tests |
 | 4 | Deploy the API to ECS Fargate | Dockerfile, commands for ECR, IAM, ECS service, and the one-off ingestion task | Public URL answers `/query`; ingestion task exits 0 with logs in CloudWatch |
 | 5 | Evaluation | Questions from the spec, metrics script, before/after report | Numbers reproducible from one command |

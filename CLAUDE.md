@@ -56,9 +56,16 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
   a local file system or a named profile; documents are always read from S3.
 - Tests use fakes for Azure OpenAI, OpenSearch and S3, so `uv run pytest` passes offline with no `.env`.
 - External clients are passed into functions/classes (dependency injection) so fakes can replace them.
-- Chunking invariants (never break these): one task per chunk; a numbered procedure is never split;
-  a WARNING/CAUTION always stays with its step.
-- Retrieval always filters `is_latest = true` and the requested `aircraft_type`.
+- Chunking invariants (never break these): per task revision one parent (full task, not embedded)
+  and two children, `reference` and `procedure`; a numbered procedure is never split; a
+  WARNING/CAUTION always stays with its step; every chunk starts with the one-line header.
+- Retrieval searches children, collapses to parents in Python, and returns the full parent text.
+  Filters go inside every sub-query: `is_latest = true` always (`include_superseded` is for
+  evaluation only) and `aircraft_type` when given or detected; otherwise `aircraft_unspecified`.
+- The order of the hybrid sub-queries (keyword, vector) must match `HYBRID_WEIGHTS` in
+  `ingestion/index.py`. Changing the mapping needs `--recreate-index` (then re-ingest).
+- HTTP client libraries log request URLs; keep them at WARNING in `logging_config.py` and never
+  log an endpoint.
 - Guardrail: every part number and torque value in an answer must appear in a cited chunk;
   otherwise retry once, then abstain.
 
@@ -69,6 +76,9 @@ uv sync                                  # install dependencies
 uv run pytest                            # offline tests
 uv run ruff check .                      # lint
 uv run python scripts/generate_manuals.py    # rebuild data/manuals/ from the spec (offline, free)
+uv run python -m aero_rag.ingestion --dry-run   # counts + embedding cost estimate; writes nothing
+uv run python -m aero_rag.ingestion          # S3 -> parse -> embed -> OpenSearch (paid: ~$0.0004)
+uv run python scripts/search.py "question" --aircraft A-200 --mode hybrid   # top 5; --stats for counts
 aws sso login --profile aero             # needed before anything that touches AWS
 uv run python scripts/check_connections.py   # PASS/FAIL: Secrets Manager, S3, OpenSearch, Azure chat, embeddings
 ```

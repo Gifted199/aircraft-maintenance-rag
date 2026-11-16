@@ -38,6 +38,7 @@ class Settings(BaseSettings):
 
     # Non-secret application settings
     opensearch_index: str = "aero-manuals"
+    opensearch_search_pipeline: str = "aero-manuals-hybrid"
     azure_openai_api_version: str = "2025-04-01-preview"
     azure_openai_chat_deployment: str = "gpt-5.4-mini"
     azure_openai_embed_deployment: str = "text-embedding-3-small"
@@ -89,6 +90,10 @@ class Settings(BaseSettings):
                 value = value.get_secret_value()
             if value:
                 values.append(value)
+        # Libraries log request URLs built from the host, not the stored endpoint string, so the
+        # bare hostnames are redacted as well.
+        azure_host = urlsplit(self.azure_openai_base_url or "").netloc
+        values += [host for host in (azure_host, self.opensearch_host) if host]
         return values
 
 

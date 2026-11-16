@@ -58,6 +58,31 @@ def test_secret_values_are_redacted_from_logs():
     assert json.loads(line)["message"] == "auth failed for *** and ***"
 
 
+def test_endpoint_hostnames_are_redacted_even_when_the_stored_value_is_a_longer_url():
+    settings = Settings(
+        _env_file=None,
+        azure_openai_endpoint="https://my-res.openai.azure.com/openai/responses?api-version=x",
+        opensearch_endpoint="https://search-dom.eu-west-2.es.amazonaws.com",
+    )
+    formatter = JsonFormatter(redact=settings.secret_values())
+    line = formatter.format(
+        _record(
+            "POST https://my-res.openai.azure.com/openai/deployments/e/embeddings and "
+            "GET https://search-dom.eu-west-2.es.amazonaws.com:443/_search"
+        )
+    )
+    assert "my-res" not in line and "search-dom" not in line
+
+
+def test_http_client_loggers_do_not_log_request_urls_at_info():
+    setup_logging("INFO")
+    try:
+        for name in ("httpx", "httpx2", "opensearch", "botocore"):
+            assert not logging.getLogger(name).isEnabledFor(logging.INFO), name
+    finally:
+        logging.getLogger().handlers.clear()
+
+
 def test_setup_logging_writes_json_to_stdout(capsys):
     setup_logging("INFO")
     try:

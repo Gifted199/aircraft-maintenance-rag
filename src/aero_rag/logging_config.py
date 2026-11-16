@@ -54,5 +54,7 @@ def setup_logging(level: str = "INFO", redact: Iterable[str] = ()) -> None:
     root.handlers[:] = [handler]
     root.setLevel(level.upper())
     # These log every HTTP request at INFO; keep them to warnings.
-    for noisy in ("httpx", "httpcore", "opensearch", "botocore", "urllib3"):
+    # (openai 3.x uses the renamed httpx2/httpcore2 packages; both spellings are listed.)
+    for noisy in ("httpx", "httpx2", "httpcore", "httpcore2", "openai", "opensearch",
+                  "opensearchpy", "botocore", "boto3", "urllib3"):  # fmt: skip
         logging.getLogger(noisy).setLevel(logging.WARNING)
