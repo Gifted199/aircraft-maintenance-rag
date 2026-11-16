@@ -1,11 +1,13 @@
 """Everything the UI decides, as plain functions with no Streamlit import, so it can be tested
-offline: calling the API, turning a response into what to show, and the API health indicator.
+offline: calling the API, turning a response into what to show, the API health indicator, and the
+chat conversation (what to send for each message, clarifications, the remembered aircraft).
 
 app.py only lays out what this module returns. The UI never talks to Azure OpenAI or OpenSearch and
 holds no secrets: its only dependency is the API's URL.
 """
 
 import json
+import re
 import urllib.error
 import urllib.request
 from collections.abc import Callable, Mapping
@@ -173,7 +175,7 @@ def check_health(config: UiConfig, opener: Opener = urllib.request.urlopen) -> H
 
 # ------------------------------------------------------------------ what to show
 
-Kind = Literal["answered", "clarification", "abstained", "rejected", "error"]
+Kind = Literal["answered", "clarification", "abstained", "rejected", "error", "notice"]
 
 
 @dataclass(frozen=True)
@@ -221,6 +223,11 @@ class CitationView:
     @property
     def detail(self) -> str:
         return escape_markdown(f"Revision {self.revision}, dated {self.revision_date}")
+
+    @property
+    def markdown(self) -> str:
+        """One compact block for a chat message: task and title, revision and date, S3 key."""
+        return f"**{self.heading}**  \n{self.detail} · `{self.source_key.replace('`', '')}`"
 
 
 @dataclass(frozen=True)
@@ -326,3 +333,149 @@ def build_view(response: dict | ApiError) -> View:
         "answered", _TITLES["answered"], message, steps=steps,
         alert_groups=_alert_groups(response.get("warnings") or []), citations=citations, **common,
     )  # fmt: skip
+
+
+# ------------------------------------------------------------------ the chat conversation
+#
+# The conversation remembers two things only: the messages to display, and the current aircraft.
+# Every message becomes one complete, standalone question sent to /query with that aircraft:
+# previous answers are never sent to the API or the model, so each answer is retrieved and
+# verified on its own, exactly like a single API call.
+
+# Same rule as the API's aero_rag.retrieval.aircraft.detect_aircraft (a test keeps them in step):
+# "A-200", "A200", "a 200", but not inside a part number such as "A200-32-4112".
+_AIRCRAFT_PATTERNS = {
+    aircraft: re.compile(
+        rf"(?<![A-Za-z0-9-]){aircraft[0]}[- ]?{aircraft.split('-')[1]}(?![A-Za-z0-9]|-\d)",
+        re.IGNORECASE,
+    )
+    for aircraft in AIRCRAFT_CHOICES[1:]
+}
+# Words that may surround an aircraft name in a reply that only picks an aircraft:
+# "A-200", "the B-340 please", "and for the C-75?", "what about the B340".
+_FILLER = frozenset(
+    "a an and the for on please what about how ok okay yes it its that same then one aircraft "
+    "type i mean meant is now instead use with to of again same question answer".split()
+)
+
+
+def detect_aircraft(text: str) -> str | None:
+    """The single aircraft type named in the text, or None if none or more than one."""
+    found = [a for a, pattern in _AIRCRAFT_PATTERNS.items() if pattern.search(text)]
+    return found[0] if len(found) == 1 else None
+
+
+def is_aircraft_only(text: str) -> bool:
+    """True for a reply that just names an aircraft, rather than asking a new question."""
+    if detect_aircraft(text) is None:
+        return False
+    rest = text
+    for pattern in _AIRCRAFT_PATTERNS.values():
+        rest = pattern.sub(" ", rest)
+    return all(word in _FILLER for word in re.findall(r"[a-z]+", rest.lower()))
+
+
+@dataclass(frozen=True)
+class AskRequest:
+    question: str  # sent to the API: always a complete, standalone question
+    aircraft: str  # AUTO_DETECT or an aircraft type
+    shown: str  # the user's own words, for their chat bubble
+
+
+@dataclass(frozen=True)
+class Turn:
+    role: Literal["user", "assistant"]
+    text: str = ""  # user: what they typed or clicked
+    view: View | None = None  # assistant: what to show
+    question: str = ""  # assistant: the standalone question this turn answered
+
+
+@dataclass(frozen=True)
+class Conversation:
+    turns: tuple[Turn, ...] = ()
+    aircraft: str = AUTO_DETECT
+
+    @property
+    def last_question(self) -> str | None:
+        for turn in reversed(self.turns):
+            if turn.role == "assistant" and turn.question:
+                return turn.question
+        return None
+
+    @property
+    def pending_clarification(self) -> Turn | None:
+        """The last message, if it is the assistant asking which aircraft."""
+        if self.turns:
+            last = self.turns[-1]
+            if last.role == "assistant" and last.view and last.view.kind == "clarification":
+                return last
+        return None
+
+
+@dataclass(frozen=True)
+class Plan:
+    """What to do with a message: ask the API, or only reply locally (no API call)."""
+
+    request: AskRequest | None
+    notice: str | None = None
+    aircraft: str | None = None  # new conversation aircraft for a local reply
+
+
+def plan_message(conversation: Conversation, text: str) -> Plan | None:
+    text = text.strip()
+    if not text:
+        return None
+    named = detect_aircraft(text)
+    if named and is_aircraft_only(text):
+        pending = conversation.pending_clarification
+        if pending is not None and named in pending.view.options:
+            return Plan(AskRequest(pending.question, named, text))  # answers "which aircraft?"
+        if conversation.last_question:
+            return Plan(AskRequest(conversation.last_question, named, text))  # same, other type
+        return Plan(None, notice=f"Aircraft set to {named}. What would you like to know?",
+                    aircraft=named)  # fmt: skip
+    return Plan(AskRequest(text, named or conversation.aircraft, text))
+
+
+def plan_clarification(conversation: Conversation, option: str) -> Plan | None:
+    """An aircraft button under "which aircraft?": re-ask the original question for it."""
+    pending = conversation.pending_clarification
+    if pending is None or option not in pending.view.options:
+        return None
+    return Plan(AskRequest(pending.question, option, option))
+
+
+def plan_example(example: Example) -> Plan:
+    return Plan(AskRequest(example.question, example.aircraft, example.question))
+
+
+def record_exchange(conversation: Conversation, request: AskRequest, view: View) -> Conversation:
+    """Add the user's message and the answer. An aircraft that was used becomes the current one."""
+    aircraft = request.aircraft if request.aircraft != AUTO_DETECT else conversation.aircraft
+    turns = (
+        *conversation.turns,
+        Turn("user", text=request.shown),
+        Turn("assistant", view=view, question=request.question),
+    )
+    return Conversation(turns, aircraft)
+
+
+def record_notice(conversation: Conversation, shown: str, plan: Plan) -> Conversation:
+    notice = View("notice", "", escape_markdown(plan.notice or ""))
+    turns = (*conversation.turns, Turn("user", text=shown), Turn("assistant", view=notice))
+    return Conversation(turns, plan.aircraft or conversation.aircraft)
+
+
+def with_aircraft(conversation: Conversation, aircraft: str) -> Conversation:
+    if aircraft not in AIRCRAFT_CHOICES:
+        return conversation
+    return Conversation(conversation.turns, aircraft)
+
+
+CONVERSATION_NOTE = (
+    "The assistant remembers the **aircraft** for this conversation, nothing else. Every "
+    "question is searched and checked against the manuals on its own: earlier answers are never "
+    "sent back to the model, so one answer cannot leak into the next. Ask complete questions; "
+    "to repeat the last question for another aircraft, just type the aircraft (for example "
+    "*B-340*)."
+)

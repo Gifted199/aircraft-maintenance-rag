@@ -9,9 +9,11 @@ Three rules:
   * Tracing never breaks a request. Every call into the SDK is guarded; the first failure logs one
     warning and switches tracing off for the rest of the process. Spans are recorded in memory and
     exported by a background thread, so a slow or unreachable Langfuse never delays an answer.
-  * Traces follow the logging rules: sizes, decisions, scores, ids, tokens and cost. Never the
-    question text, the prompt or the model's output. Every value sent is passed through the same
-    secret and hostname redaction as the JSON logs.
+  * By default traces follow the logging rules: sizes, decisions, scores, ids, tokens and cost;
+    never the question, the prompt or the answer. LANGFUSE_CAPTURE_TEXT=true adds the question
+    and the final answer text (never the prompt or the retrieved manual text). That is for the
+    synthetic demo data only and must stay false for real, proprietary manuals. Every value sent
+    is passed through the same secret and hostname redaction as the JSON logs.
   * Missing keys mean no tracing (one warning at start-up), not an error.
 
 The service talks only to the small interface below (Tracer / QueryTrace / Span). The base classes
@@ -49,14 +51,20 @@ class QueryTrace:
     def span(self, name: str, *, as_type: str = "span", **fields: Any) -> Iterator[Span]:
         yield Span()
 
-    def finish(self, *, status: str, aircraft_type: str | None, output: dict) -> None:
-        pass
+    def finish(
+        self, *, status: str, aircraft_type: str | None, output: dict, text: dict | None = None
+    ) -> None:
+        """`text` is the final answer text; a tracer sends it only if text capture is on."""
 
 
 class Tracer:
     enabled = False
+    capture_text = False
 
-    def start_query(self, request_id: str, input: dict) -> QueryTrace:  # noqa: A002
+    def start_query(
+        self, request_id: str, input: dict, question: str | None = None  # noqa: A002
+    ) -> QueryTrace:
+        """`question` is the raw question; a tracer sends it only if text capture is on."""
         return QueryTrace()
 
     def shutdown(self) -> None:
@@ -79,10 +87,13 @@ def _release() -> str:
 class LangfuseTracer(Tracer):
     enabled = True
 
-    def __init__(self, client: Any, redact: list[str] | tuple[str, ...] = ()):
+    def __init__(
+        self, client: Any, redact: list[str] | tuple[str, ...] = (), capture_text: bool = False
+    ):
         self._client = client
         self._redact = redaction_list(redact)
         self._broken = False
+        self.capture_text = capture_text
 
     # -- guard: one warning, then off
     def safe(self, action: Callable[[], Any]) -> Any:
@@ -101,7 +112,11 @@ class LangfuseTracer(Tracer):
     def clean(self, fields: dict) -> dict:
         return {k: redact_value(v, self._redact) for k, v in fields.items() if v is not None}
 
-    def start_query(self, request_id: str, input: dict) -> QueryTrace:  # noqa: A002
+    def start_query(
+        self, request_id: str, input: dict, question: str | None = None  # noqa: A002
+    ) -> QueryTrace:
+        if self.capture_text and question is not None:
+            input = {**input, "question": question}  # redacted by clean() like everything else
         trace = self.safe(lambda: _LangfuseQueryTrace(self, request_id, input))
         return trace or QueryTrace()
 
@@ -153,10 +168,14 @@ class _LangfuseQueryTrace(QueryTrace):
         finally:
             handle.end()
 
-    def finish(self, *, status: str, aircraft_type: str | None, output: dict) -> None:
+    def finish(
+        self, *, status: str, aircraft_type: str | None, output: dict, text: dict | None = None
+    ) -> None:
         from langfuse import propagate_attributes
 
         tracer = self._tracer
+        if tracer.capture_text and text:
+            output = {**text, **output}  # answer text first, so it leads in the Langfuse UI
         tags = [f"status:{status}", f"aircraft:{aircraft_type or 'none'}",
                 f"request_id:{self._request_id}"]  # fmt: skip
         clean = tracer.clean({"output": output})
@@ -210,5 +229,8 @@ def build_tracer(settings: Any, client_factory: Callable[..., Any] | None = None
             except Exception:  # noqa: BLE001
                 pass
         return NULL_TRACER
-    log.info("tracing enabled", extra={"tracing": "langfuse", "environment": settings.environment})
-    return LangfuseTracer(client, redact=settings.secret_values())
+    log.info("tracing enabled", extra={"tracing": "langfuse", "environment": settings.environment,
+                                       "capture_text": settings.langfuse_capture_text})  # fmt: skip
+    return LangfuseTracer(
+        client, redact=settings.secret_values(), capture_text=settings.langfuse_capture_text
+    )

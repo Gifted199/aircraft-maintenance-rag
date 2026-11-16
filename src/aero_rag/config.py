@@ -71,6 +71,9 @@ class Settings(BaseSettings):
     langfuse_secret_key: SecretStr | None = None
     langfuse_host: str | None = None
     langfuse_timeout_seconds: int = 5
+    # Send the question and the final answer text to the trace (still redacted). Off by default:
+    # it must stay false for real, proprietary manuals. True only for the synthetic demo data.
+    langfuse_capture_text: bool = False
     environment: str = "dev"
 
     @property

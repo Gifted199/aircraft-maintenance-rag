@@ -1,8 +1,14 @@
 # Deploy phases 6 + 7a to ECS (task definition revision 2)
 
 What changes: the API image goes from 0.1.0 to 0.2.0 (evaluation v2 fixes and Langfuse tracing);
-a second container, the Streamlit UI 0.2.0, joins the same task; the task gets the three Langfuse
-keys from the same secret; the public port moves from 8000 (API) to 8501 (UI).
+a second container, the Streamlit chat UI 0.2.0, joins the same task; the task gets the three
+Langfuse keys from the same secret and `LANGFUSE_CAPTURE_TEXT=true`; the public port moves from
+8000 (API) to 8501 (UI).
+
+**`LANGFUSE_CAPTURE_TEXT=true`** sends each question and final answer to Langfuse (redacted for
+secrets and host names). It is on only because the manuals are synthetic; it must be `false` for
+real, proprietary manuals. JSON has no comments, so the task definition carries this warning as a
+Docker label on the API container (`aero-rag.note.LANGFUSE_CAPTURE_TEXT`).
 
 Every command below changes AWS and is run by you (CLAUDE.md rule 2). PowerShell syntax.
 Current state, read on 16 November 2026: cluster `akinsds1126-aero-rag-cluster`, service
@@ -28,6 +34,10 @@ aws ecr create-repository @P --repository-name akinsds1126-aero-rag-ui `
 ```
 
 ## 2. Push both images (the ones built and tested locally by `scripts/compose_up.ps1`)
+
+The ECR repositories use immutable tags, so a pushed `0.2.0` can never be replaced. Push only after
+the last local rebuild (`.\scripts\compose_up.ps1`) of the version you want to demo, and check
+both containers are up on `0.2.0` with `docker compose ps`.
 
 ```powershell
 aws ecr get-login-password @P | docker login --username AWS --password-stdin $Registry

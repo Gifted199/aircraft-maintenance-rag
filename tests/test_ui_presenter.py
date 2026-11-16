@@ -12,21 +12,33 @@ from pathlib import Path
 import pytest
 
 from aero_rag.retrieval.aircraft import AIRCRAFT_TYPES
+from aero_rag.retrieval.aircraft import detect_aircraft as api_detect_aircraft
 from aero_rag.schemas import QueryResponse
 from presenter import (
     AIRCRAFT_CHOICES,
     AUTO_DETECT,
+    CONVERSATION_NOTE,
     DEFAULT_API_URL,
     EXAMPLES,
     ApiError,
+    AskRequest,
+    Conversation,
     UiConfig,
     build_view,
     call_api,
     check_health,
     escape_markdown,
+    is_aircraft_only,
+    plan_clarification,
+    plan_example,
+    plan_message,
     query_payload,
+    record_exchange,
+    record_notice,
     ui_config,
+    with_aircraft,
 )
+from presenter import detect_aircraft as ui_detect_aircraft
 from tests.fakes import make_hit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -243,3 +255,125 @@ def test_ui_has_no_access_to_secrets_or_backends():
     allowed = (ROOT / "ui" / ".dockerignore").read_text().split()
     assert sorted(p for p in allowed if p.startswith("!")) == ["!app.py", "!presenter.py",
                                                                "!requirements.txt"]  # fmt: skip
+
+
+# ------------------------------------------------------------------ the chat conversation
+
+CLARIFY = api_response(status="clarification_needed", answer="Which aircraft type do you mean?",
+                       clarification_options=["A-200", "B-340", "C-75"])  # fmt: skip
+ANSWERED = api_response(status="answered", answer="135 Nm.")
+
+
+def ask(conversation, text, response=ANSWERED):
+    """Send a typed message through the planner and record a canned API reply."""
+    plan = plan_message(conversation, text)
+    assert plan is not None and plan.request is not None
+    return plan.request, record_exchange(conversation, plan.request, build_view(response))
+
+
+@pytest.mark.parametrize(
+    "text",
+    ["A-200", "a200", "the B 340 please", "C-75?", "torque on the A-200 axle nut",
+     "A200-32-4112", "A-200 and B-340", "nothing here", "XA-200", "A-2000"],
+)  # fmt: skip
+def test_ui_aircraft_detection_matches_the_api(text):
+    assert ui_detect_aircraft(text) == api_detect_aircraft(text)
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [("A-200", True), ("the B-340 please", True), ("and for the C-75?", True),
+     ("What about the B340", True), ("B-340 brake bolt torque", False),
+     ("A200-32-4112", False), ("torque please", False)],
+)  # fmt: skip
+def test_aircraft_only_replies_are_told_apart_from_new_questions(text, expected):
+    assert is_aircraft_only(text) is expected
+
+
+def test_a_question_is_sent_alone_with_the_conversation_aircraft():
+    conversation = Conversation(aircraft="B-340")
+    request, conversation = ask(conversation, "What is the torque for the axle nut?")
+    assert request == AskRequest("What is the torque for the axle nut?", "B-340",
+                                 "What is the torque for the axle nut?")  # fmt: skip
+    # The second question is sent exactly as typed: no earlier question or answer is attached.
+    request, _ = ask(conversation, "Which O-ring part number for the fuel boost pump?")
+    assert request.question == "Which O-ring part number for the fuel boost pump?"
+    assert "135" not in request.question and "axle" not in request.question
+
+
+def test_naming_an_aircraft_in_a_question_uses_it_and_makes_it_current():
+    request, conversation = ask(Conversation(aircraft="A-200"), "Brake bolt torque on the C-75?")
+    assert request.aircraft == "C-75" and conversation.aircraft == "C-75"
+
+
+def test_auto_detect_question_without_aircraft_keeps_auto_detect():
+    request, conversation = ask(Conversation(), "Main wheel axle nut torque?", CLARIFY)
+    assert request.aircraft == AUTO_DETECT and conversation.aircraft == AUTO_DETECT
+    assert conversation.pending_clarification is not None
+
+
+def test_clarification_resolved_by_a_button_re_asks_the_original_question():
+    _, conversation = ask(Conversation(), "Main wheel axle nut torque?", CLARIFY)
+    plan = plan_clarification(conversation, "B-340")
+    assert plan.request == AskRequest("Main wheel axle nut torque?", "B-340", "B-340")
+    conversation = record_exchange(conversation, plan.request, build_view(ANSWERED))
+    assert conversation.aircraft == "B-340" and conversation.pending_clarification is None
+    assert plan_clarification(conversation, "A-200") is None  # nothing pending any more
+
+
+def test_clarification_resolved_by_typing_the_aircraft():
+    _, conversation = ask(Conversation(), "Main wheel axle nut torque?", CLARIFY)
+    request, conversation = ask(conversation, "the a200 please")
+    assert request.question == "Main wheel axle nut torque?" and request.aircraft == "A-200"
+    assert conversation.turns[-2].text == "the a200 please"  # the bubble shows what was typed
+
+
+def test_a_new_question_while_a_clarification_is_pending_is_just_a_new_question():
+    _, conversation = ask(Conversation(), "Main wheel axle nut torque?", CLARIFY)
+    request, _ = ask(conversation, "What is the part number of the B-340 heated pitot probe?")
+    assert request.question.startswith("What is the part number") and request.aircraft == "B-340"
+
+
+def test_typing_only_an_aircraft_repeats_the_last_question_for_it():
+    _, conversation = ask(Conversation(), "Main wheel axle nut torque on the A-200?")
+    request, conversation = ask(conversation, "and for the C-75?")
+    assert request.question == "Main wheel axle nut torque on the A-200?"
+    assert request.aircraft == "C-75" and conversation.aircraft == "C-75"
+
+
+def test_typing_only_an_aircraft_at_the_start_just_sets_it():
+    plan = plan_message(Conversation(), "B-340")
+    assert plan.request is None and "B-340" in plan.notice
+    conversation = record_notice(Conversation(), "B-340", plan)
+    assert conversation.aircraft == "B-340" and conversation.turns[-1].view.kind == "notice"
+
+
+def test_empty_message_does_nothing_and_examples_send_their_question():
+    assert plan_message(Conversation(), "   ") is None
+    plan = plan_example(EXAMPLES[1])
+    assert plan.request.question == EXAMPLES[1].question and plan.request.aircraft == "B-340"
+
+
+def test_history_is_kept_in_order_newest_last_and_aircraft_can_be_changed():
+    conversation = Conversation()
+    for question in ("first question A-200", "second question"):
+        _, conversation = ask(conversation, question)
+    assert [t.role for t in conversation.turns] == ["user", "assistant"] * 2
+    assert conversation.turns[2].text == "second question"
+    assert with_aircraft(conversation, "C-75").aircraft == "C-75"
+    assert with_aircraft(conversation, "Z-9").aircraft == conversation.aircraft
+    assert len(with_aircraft(conversation, "C-75").turns) == 4
+
+
+def test_citation_markdown_has_revision_date_and_s3_key():
+    view = build_view(api_response(status="answered", answer="x", citations=[{
+        "aircraft_type": "A-200", "task_number": "32-41-01", "title": "Main Wheel Axle Nut",
+        "revision": 3, "revision_date": "2026-01-19",
+        "source_key": "manuals/A-200_32-41-01_rev03.md"}]))  # fmt: skip
+    text = view.citations[0].markdown
+    assert "Revision 3, dated 2026\\-01\\-19" in text
+    assert "`manuals/A-200_32-41-01_rev03.md`" in text
+
+
+def test_sidebar_note_explains_that_answers_are_independent():
+    assert "never" in CONVERSATION_NOTE and "aircraft" in CONVERSATION_NOTE

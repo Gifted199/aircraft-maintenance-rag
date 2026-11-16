@@ -40,6 +40,9 @@ services:
       - LANGFUSE_PUBLIC_KEY
       - LANGFUSE_SECRET_KEY
       - LANGFUSE_HOST
+      # Send question and answer text to Langfuse (synthetic demo data only). It MUST be false
+      # for real, proprietary manuals; the default in code is false.
+      - LANGFUSE_CAPTURE_TEXT=true
     # ECS sends SIGTERM then waits stopTimeout; compose waits this long, so traces can be flushed.
     stop_grace_period: 30s
     ports:

@@ -75,9 +75,11 @@ class RagService:
         # Never the question text or the prompt: only sizes, decisions and scores are logged.
         trace: dict = {"request_id": request_id, "question_chars": len(question), "llm_calls": 0,
                        "prompt_tokens": 0, "completion_tokens": 0}  # fmt: skip
+        # The texts are handed to the tracer, which sends them only if LANGFUSE_CAPTURE_TEXT is on.
         spans = self._tracer.start_query(
-            request_id, {"question_chars": len(question), "aircraft_given": bool(aircraft_type)}
-        )
+            request_id, {"question_chars": len(question), "aircraft_given": bool(aircraft_type)},
+            question=question,
+        )  # fmt: skip
         response = None
         try:
             response = self._answer(question, aircraft_type, request_id, trace, spans)
@@ -102,6 +104,7 @@ class RagService:
                 status=response.status if response is not None else "error",
                 aircraft_type=trace.get("aircraft_type"),
                 output={k: v for k, v in trace.items() if k != "request_id"},
+                text=_answer_text(response) if response is not None else None,
             )
         log.info("query", extra=trace)
         return response
@@ -282,6 +285,14 @@ class RagService:
             ),
             "aircraft_unspecified": result.aircraft_unspecified,
         }
+
+
+def _answer_text(response: QueryResponse) -> dict:
+    """The final, verified answer as the user saw it (for optional text capture in traces)."""
+    text: dict = {"answer": response.answer}
+    if response.steps:
+        text["steps"] = [f"{s.number}. {s.text}" for s in response.steps]
+    return text
 
 
 def _identifier_problem(identifiers: dict[str, list[int]]) -> str:

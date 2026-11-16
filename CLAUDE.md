@@ -90,8 +90,14 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
   (pure, tested offline); `ui/app.py` is layout only. Model text is Markdown-escaped before display.
   Locally (compose) the UI reaches the API at `http://api:8000`; on ECS both containers share the
   task's network, so `http://localhost:8000`.
+- The UI is a chat. The conversation remembers only the messages to display and the current
+  aircraft; every message is sent to `/query` as one standalone question (never earlier answers).
+  A reply that only names an aircraft resolves a pending clarification or re-asks the last
+  question for that aircraft. UI aircraft detection must match `detect_aircraft` (a test checks).
 - Never log the question text, the prompt or model output; log sizes, decisions, scores, tokens.
-  The same rule applies to Langfuse traces.
+  The same rule applies to Langfuse step spans. Only `LANGFUSE_CAPTURE_TEXT=true` (default false
+  in code; true in `.env.example`, compose and the task definition for the synthetic demo) adds the
+  question and final answer to the trace root, redacted. It must be false for real manuals.
 - Tracing (`tracing.py`) is optional and must never fail or slow a request: the service only uses
   the no-op `Tracer` / `QueryTrace` / `Span` interface; `LangfuseTracer` guards every SDK call (first
   failure: one warning, then off) and redacts every value like the logs. One trace per `/query`, trace

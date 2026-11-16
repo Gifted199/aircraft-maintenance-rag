@@ -6,6 +6,7 @@ import json
 import logging
 import uuid
 from contextlib import contextmanager
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -61,8 +62,9 @@ class RecordingTrace(QueryTrace):
         self.spans.append(record)
         yield RecordingSpan(record)
 
-    def finish(self, *, status, aircraft_type, output):
+    def finish(self, *, status, aircraft_type, output, text=None):
         self.finished = {"status": status, "aircraft_type": aircraft_type, "output": output}
+        self.text = text
 
     def names(self):
         return [s["name"] for s in self.spans]
@@ -77,8 +79,9 @@ class RecordingTracer(Tracer):
     def __init__(self):
         self.traces: list[RecordingTrace] = []
 
-    def start_query(self, request_id, input):  # noqa: A002
+    def start_query(self, request_id, input, question=None):  # noqa: A002
         self.traces.append(RecordingTrace(request_id, input))
+        self.traces[-1].question = question
         return self.traces[-1]
 
 
@@ -166,11 +169,13 @@ def test_unknown_aircraft_is_recorded_by_the_detection_span():
     assert tracer.traces[0].out("aircraft_detection")["source"] == "unknown"
 
 
-def test_a_trace_never_contains_the_question_or_the_answer_text():
+def test_spans_never_contain_the_question_or_the_answer_text():
     tracer = RecordingTracer()
     question = "What is the torque for the main wheel axle nut on the A-200? zebra-marker"
     make_service(FakeGenerator(good), tracer).answer(question)
     (trace,) = tracer.traces
+    # The texts are only offered to the tracer (which decides); the steps never carry them.
+    assert trace.question == question and trace.text == {"answer": GOOD}
     dumped = json.dumps([trace.input, trace.spans, trace.finished], default=str)
     assert "zebra-marker" not in dumped and "main wheel" not in dumped
     assert "135 Nm" not in dumped and "final torque" not in dumped
@@ -364,3 +369,77 @@ def test_tracing_library_logs_are_limited_to_one_line(capsys):
     lines = capsys.readouterr().out.strip().splitlines()
     assert len(lines) == 2 and "still logging" in lines[1]
     assert any(isinstance(f, TracingOnceFilter) for f in logging.getLogger().handlers[0].filters)
+
+
+# ------------------------------------------------------------------ LANGFUSE_CAPTURE_TEXT
+
+
+def exported_root(exporter) -> dict:
+    (root,) = [s for s in exporter.get_finished_spans() if s.name == "query"]
+    return dict(root.attributes)
+
+
+def test_text_capture_off_by_default_sends_no_question_or_answer():
+    exporter = InMemorySpanExporter()
+    tracer, _ = real_tracer(exporter)
+    assert tracer.capture_text is False
+    make_service(FakeGenerator(good), tracer).answer(QUESTION)
+    tracer.shutdown()
+    root = json.dumps(exported_root(exporter))
+    assert "main wheel axle nut" not in root.lower() and "135 Nm" not in root
+
+
+def test_text_capture_on_sends_question_and_final_answer_redacted():
+    exporter = InMemorySpanExporter()
+    host = "search-akinsds.eu-west-2.es.amazonaws.com"
+    client = Langfuse(public_key=f"pk-lf-test-{uuid.uuid4().hex}", secret_key="sk-lf-test",
+                      base_url="http://127.0.0.1:9", span_exporter=exporter,
+                      tracer_provider=TracerProvider(), timeout=1)  # fmt: skip
+    tracer = LangfuseTracer(client, redact=[host], capture_text=True)
+    question = f"What is the torque for the main wheel axle nut on the A-200? ({host})"
+    make_service(FakeGenerator(good), tracer).answer(question)
+    tracer.shutdown()
+
+    root = exported_root(exporter)
+    trace_input = json.loads(root["langfuse.observation.input"])
+    trace_output = json.loads(root["langfuse.observation.output"])
+    assert trace_input["question"].startswith("What is the torque for the main wheel axle nut")
+    assert host not in trace_input["question"] and "***" in trace_input["question"]
+    assert trace_output["answer"] == GOOD and trace_output["status"] == "answered"
+    # Only the question and the final answer: never the prompt or the retrieved manual text.
+    everything = json.dumps([dict(s.attributes) for s in exporter.get_finished_spans()])
+    assert "TRUST BOUNDARY" not in everything and "<source" not in everything
+    assert "DO NOT USE THE SEATING TORQUE" not in everything
+
+
+def test_procedure_steps_are_captured_as_text_when_capture_is_on():
+    tracer = RecordingTracer()
+    generator = FakeGenerator(lambda q, context, p: faithful_answer(context, with_steps=True))
+    make_service(generator, tracer).answer("List the steps to install the A-200 axle nut")
+    steps = tracer.traces[0].text["steps"]
+    assert steps[0].startswith("1. ") and len(steps) == 10
+
+
+@pytest.mark.parametrize(("value", "expected"), [(None, False), ("true", True), ("false", False)])
+def test_capture_text_setting(monkeypatch, value, expected):
+    if value is None:
+        monkeypatch.delenv("LANGFUSE_CAPTURE_TEXT", raising=False)
+    else:
+        monkeypatch.setenv("LANGFUSE_CAPTURE_TEXT", value)
+    settings = Settings(_env_file=None, langfuse_public_key="pk-lf-x",
+                        langfuse_secret_key=SecretStr("sk-lf-y"))  # fmt: skip
+    assert settings.langfuse_capture_text is expected
+    factory = lambda **kw: SimpleNamespace(auth_check=lambda: True, shutdown=lambda: None)  # noqa: E731
+    assert build_tracer(settings, factory).capture_text is expected
+
+
+def test_examples_and_deployment_turn_capture_on_with_a_warning():
+    root = Path(__file__).resolve().parents[1]
+    example = (root / ".env.example").read_text()
+    assert "LANGFUSE_CAPTURE_TEXT=true" in example and "proprietary" in example
+    compose = (root / "docker-compose.yml").read_text()
+    assert "LANGFUSE_CAPTURE_TEXT=true" in compose and "proprietary" in compose
+    taskdef = json.loads((root / "deploy" / "ecs" / "task-definition-rev2.json").read_text())
+    api = taskdef["containerDefinitions"][0]
+    assert {"name": "LANGFUSE_CAPTURE_TEXT", "value": "true"} in api["environment"]
+    assert "proprietary" in json.dumps(api.get("dockerLabels", {}))

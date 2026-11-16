@@ -1,10 +1,10 @@
-"""Technician-facing web page for the maintenance manual assistant.
+"""Technician-facing chat for the maintenance manual assistant.
 
     streamlit run ui/app.py            (API_URL defaults to http://localhost:8000)
 
-Layout only: every decision (what to send, how to read the reply, what to show for each status)
-lives in presenter.py, which is tested offline. This page calls the FastAPI service over HTTP and
-nothing else: no secrets, no Azure OpenAI, no OpenSearch.
+Layout only: every decision (what to send for a message, clarifications, the remembered aircraft,
+how to show each status) lives in presenter.py, which is tested offline. This page calls the
+FastAPI service over HTTP and nothing else: no secrets, no Azure OpenAI, no OpenSearch.
 """
 
 import os
@@ -14,17 +14,26 @@ import streamlit as st
 from presenter import (
     AIRCRAFT_CHOICES,
     AUTO_DETECT,
+    CONVERSATION_NOTE,
     EXAMPLES,
     MAX_QUESTION_CHARS,
     NOTICE,
+    Conversation,
     View,
     build_view,
     call_api,
     check_health,
+    plan_clarification,
+    plan_example,
+    plan_message,
+    record_exchange,
+    record_notice,
     ui_config,
+    with_aircraft,
 )
 
 CONFIG = ui_config(os.environ)
+AVATARS = {"user": ":material/engineering:", "assistant": ":material/menu_book:"}
 
 st.set_page_config(
     page_title="Maintenance manual assistant",
@@ -42,29 +51,46 @@ def cached_health():
 # ------------------------------------------------------------------ state and callbacks
 
 state = st.session_state
-state.setdefault("question", "")
-state.setdefault("aircraft", AUTO_DETECT)
-state.setdefault("pending", False)
-state.setdefault("view", None)
+state.setdefault("conversation", Conversation())
+state.setdefault("queued", None)  # an AskRequest waiting to be sent
 
 
-def use_example(index: int) -> None:
-    example = EXAMPLES[index]
-    state.question, state.aircraft, state.pending = example.question, example.aircraft, True
+def queue(plan, shown: str = "") -> None:
+    if plan is None:
+        return
+    if plan.request is not None:
+        state.queued = plan.request
+    else:  # a local reply, e.g. "Aircraft set to B-340"
+        state.conversation = record_notice(state.conversation, shown, plan)
 
 
-def choose_aircraft(aircraft: str) -> None:
-    state.aircraft, state.pending = aircraft, True
+def on_chat_submit() -> None:
+    text = state.chat_input or ""
+    queue(plan_message(state.conversation, text), shown=text)
 
 
-def submit() -> None:
-    state.pending = True
+def on_example() -> None:
+    index = state.example_pill
+    state.example_pill = None
+    if index is not None:
+        queue(plan_example(EXAMPLES[index]))
+
+
+def on_clarify(option: str) -> None:
+    queue(plan_clarification(state.conversation, option))
+
+
+def on_aircraft_change() -> None:
+    state.conversation = with_aircraft(state.conversation, state.aircraft_select)
+
+
+def new_conversation() -> None:
+    state.conversation, state.queued = Conversation(), None
 
 
 # ------------------------------------------------------------------ sidebar
 
 with st.sidebar:
-    st.header("Service status")
     health = cached_health()
     icon = {"ok": ":material/check_circle:", "degraded": ":material/warning:",
             "down": ":material/error:"}[health.level]  # fmt: skip
@@ -75,85 +101,68 @@ with st.sidebar:
         st.rerun()
 
     st.divider()
-    st.subheader("How answers are checked")
-    st.markdown(
-        "- Only the **latest revision** of each task is searched.\n"
-        "- Every torque value and part number is checked against the cited task.\n"
-        "- Procedures are returned complete and word for word, with WARNINGs and CAUTIONs.\n"
-        "- If an answer cannot be verified, the assistant says it does not know."
-    )
+    state.aircraft_select = state.conversation.aircraft  # keep the selector in step with the chat
+    st.selectbox(
+        "Aircraft for this conversation", AIRCRAFT_CHOICES, key="aircraft_select",
+        on_change=on_aircraft_change,
+        help="Auto-detect reads the aircraft from each question and asks when it is unclear.",
+    )  # fmt: skip
+    st.button("New conversation", icon=":material/add_comment:", width="stretch",
+              on_click=new_conversation)  # fmt: skip
+    st.info(CONVERSATION_NOTE, icon=":material/info:")
+
     st.divider()
+    st.caption(
+        "Only the latest revision of each task is searched. Every torque value and part number "
+        "is checked against the cited task, and procedures are returned complete, word for word."
+    )
     st.caption(NOTICE)
 
-# ------------------------------------------------------------------ question
+# ------------------------------------------------------------------ chat
 
 st.title("Maintenance manual assistant")
-st.caption("Ask about torque values, part numbers or procedures for the A-200, B-340 and C-75.")
-
-with st.form("ask", border=False):
-    st.selectbox(
-        "Aircraft", AIRCRAFT_CHOICES, key="aircraft",
-        help="Auto-detect reads the aircraft type from your question, and asks if it is unclear.",
-    )  # fmt: skip
-    st.text_area(
-        "Question", key="question", max_chars=MAX_QUESTION_CHARS, height=100,
-        placeholder="e.g. What is the final torque for the main wheel axle nut?",
-    )  # fmt: skip
-    st.form_submit_button("Ask", type="primary", icon=":material/search:", on_click=submit)
-
-st.caption("Examples")
-columns = st.columns(2)
-for index, example in enumerate(EXAMPLES):
-    columns[index % 2].button(
-        f"{example.label}: {example.question}", key=f"example-{index}",
-        on_click=use_example, args=(index,), width="stretch",
-    )  # fmt: skip
-
-# ------------------------------------------------------------------ ask the API
-
-if state.pending:
-    state.pending = False
-    if not state.question.strip():
-        st.warning("Type a question first.", icon=":material/edit:")
-    else:
-        with st.spinner("Searching the manuals and checking the answer..."):
-            state.view = build_view(call_api(CONFIG, state.question, state.aircraft))
-        if state.view.kind == "error":
-            cached_health.clear()  # the status panel should reflect what just happened
+conversation: Conversation = state.conversation
+aircraft = conversation.aircraft
+st.badge(aircraft if aircraft != AUTO_DETECT else "Aircraft: auto-detect",
+         icon=":material/flight:", color="blue" if aircraft != AUTO_DETECT else "gray")  # fmt: skip
 
 
-# ------------------------------------------------------------------ show the result
+def render_alerts(alerts) -> None:
+    for alert in alerts:
+        if alert.kind == "WARNING":
+            st.error(alert.markdown, icon=":material/warning:")
+        else:
+            st.warning(alert.markdown, icon=":material/error_outline:")
 
 
-def render(view: View) -> None:
-    st.divider()
+def render(view: View, index: int, is_last: bool) -> None:
+    if view.kind == "notice":
+        st.markdown(view.message)
+        return
     if view.kind == "answered":
-        st.subheader(view.title)
         st.markdown(view.message)
         for group in view.alert_groups:  # short answers: the alerts of the steps relied on
             st.markdown(f"**{group.heading}**")
             render_alerts(group.alerts)
         if view.steps:
-            st.subheader("Procedure")
+            st.markdown("**Procedure**")
             for step in view.steps:
                 with st.container(border=True):
                     render_alerts(step.alerts)  # read before doing the step
                     st.markdown(step.markdown)
         if view.citations:
-            st.subheader("Sources")
-            for c in view.citations:
-                with st.container(border=True):
-                    st.markdown(f"**{c.heading}**  \n{c.detail}")
-                    st.caption("Source document")
-                    st.code(c.source_key, language=None)
+            st.markdown("**Sources**")
+            for citation in view.citations:
+                st.markdown(citation.markdown)
     elif view.kind == "clarification":
         st.info(f"**{view.title}**  \n{view.message}", icon=":material/help:")
-        columns = st.columns(max(len(view.options), 1))
-        for column, option in zip(columns, view.options, strict=False):
-            column.button(
-                f"Ask for the {option}", key=f"clarify-{option}", on_click=choose_aircraft,
-                args=(option,), width="stretch",
-            )  # fmt: skip
+        if is_last:
+            columns = st.columns(max(len(view.options), 1))
+            for column, option in zip(columns, view.options, strict=False):
+                column.button(
+                    option, key=f"clarify-{index}-{option}", on_click=on_clarify,
+                    args=(option,), icon=":material/flight:", width="stretch",
+                )  # fmt: skip
     elif view.kind == "abstained":
         st.info(f"**{view.title}**  \n{view.message}", icon=":material/block:")
     elif view.kind == "rejected":
@@ -166,16 +175,38 @@ def render(view: View) -> None:
             for label, value in view.details:
                 st.markdown(f"{label}: `{value}`")
     if view.request_id:
-        st.caption(f"Request ID: `{view.request_id}` (quote this when reporting a problem)")
+        st.caption(f"Request ID: `{view.request_id}`")
 
 
-def render_alerts(alerts) -> None:
-    for alert in alerts:
-        if alert.kind == "WARNING":
-            st.error(alert.markdown, icon=":material/warning:")
+for index, turn in enumerate(conversation.turns):
+    with st.chat_message(turn.role, avatar=AVATARS[turn.role]):
+        if turn.role == "user":
+            st.text(turn.text)  # the user's words, shown exactly as typed
         else:
-            st.warning(alert.markdown, icon=":material/error_outline:")
+            render(turn.view, index, is_last=index == len(conversation.turns) - 1)
 
+if not conversation.turns and state.queued is None:
+    with st.chat_message("assistant", avatar=AVATARS["assistant"]):
+        st.markdown("Ask about torque values, part numbers or procedures for the A-200, B-340 "
+                    "and C-75. Try one of these:")  # fmt: skip
+        st.pills(
+            "Examples", range(len(EXAMPLES)), key="example_pill", on_change=on_example,
+            format_func=lambda i: f"{EXAMPLES[i].label}: {EXAMPLES[i].question}",
+            label_visibility="collapsed",
+        )  # fmt: skip
 
-if state.view is not None:
-    render(state.view)
+if state.queued is not None:
+    request = state.queued
+    with st.chat_message("user", avatar=AVATARS["user"]):
+        st.text(request.shown)
+    with st.chat_message("assistant", avatar=AVATARS["assistant"]):
+        with st.spinner("Searching the manuals and checking the answer..."):
+            view = build_view(call_api(CONFIG, request.question, request.aircraft))
+    state.conversation = record_exchange(state.conversation, request, view)
+    state.queued = None
+    if view.kind == "error":
+        cached_health.clear()  # the status panel should reflect what just happened
+    st.rerun()
+
+st.chat_input("Ask a maintenance question", key="chat_input", max_chars=MAX_QUESTION_CHARS,
+              on_submit=on_chat_submit)  # fmt: skip

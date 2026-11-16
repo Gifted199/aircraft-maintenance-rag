@@ -3,7 +3,9 @@
   "taskRoleArn": "arn:aws:iam::666127452756:role/akinsds1126-aero-rag-task-role",
   "executionRoleArn": "arn:aws:iam::666127452756:role/akinsds1126-aero-rag-exec-role",
   "networkMode": "awsvpc",
-  "requiresCompatibilities": ["FARGATE"],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
   "runtimePlatform": {
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
@@ -25,13 +27,38 @@
         }
       ],
       "environment": [
-        { "name": "S3_BUCKET", "value": "akinsds1126-aero-rag-docs" },
-        { "name": "AWS_REGION", "value": "eu-west-2" },
-        { "name": "AZURE_OPENAI_CHAT_DEPLOYMENT", "value": "gpt-5.4-mini" },
-        { "name": "AZURE_OPENAI_API_VERSION", "value": "2025-04-01-preview" },
-        { "name": "OPENSEARCH_INDEX", "value": "aero-manuals" },
-        { "name": "AZURE_OPENAI_EMBED_DEPLOYMENT", "value": "text-embedding-3-small" },
-        { "name": "ENVIRONMENT", "value": "dev" }
+        {
+          "name": "S3_BUCKET",
+          "value": "akinsds1126-aero-rag-docs"
+        },
+        {
+          "name": "AWS_REGION",
+          "value": "eu-west-2"
+        },
+        {
+          "name": "AZURE_OPENAI_CHAT_DEPLOYMENT",
+          "value": "gpt-5.4-mini"
+        },
+        {
+          "name": "AZURE_OPENAI_API_VERSION",
+          "value": "2025-04-01-preview"
+        },
+        {
+          "name": "OPENSEARCH_INDEX",
+          "value": "aero-manuals"
+        },
+        {
+          "name": "AZURE_OPENAI_EMBED_DEPLOYMENT",
+          "value": "text-embedding-3-small"
+        },
+        {
+          "name": "ENVIRONMENT",
+          "value": "dev"
+        },
+        {
+          "name": "LANGFUSE_CAPTURE_TEXT",
+          "value": "true"
+        }
       ],
       "secrets": [
         {
@@ -85,6 +112,9 @@
           "awslogs-region": "eu-west-2",
           "awslogs-stream-prefix": "api"
         }
+      },
+      "dockerLabels": {
+        "aero-rag.note.LANGFUSE_CAPTURE_TEXT": "true sends question and answer text to Langfuse; demo with synthetic manuals only. Must be false for real proprietary manuals."
       }
     },
     {
@@ -101,10 +131,16 @@
         }
       ],
       "environment": [
-        { "name": "API_URL", "value": "http://localhost:8000" }
+        {
+          "name": "API_URL",
+          "value": "http://localhost:8000"
+        }
       ],
       "dependsOn": [
-        { "containerName": "api", "condition": "HEALTHY" }
+        {
+          "containerName": "api",
+          "condition": "HEALTHY"
+        }
       ],
       "healthCheck": {
         "command": [
@@ -128,8 +164,17 @@
     }
   ],
   "tags": [
-    { "key": "project", "value": "aero-rag" },
-    { "key": "env", "value": "dev" },
-    { "key": "owner", "value": "akinlolu" }
+    {
+      "key": "project",
+      "value": "aero-rag"
+    },
+    {
+      "key": "env",
+      "value": "dev"
+    },
+    {
+      "key": "owner",
+      "value": "akinlolu"
+    }
   ]
 }
