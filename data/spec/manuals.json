@@ -1,0 +1,3631 @@
+{
+  "spec_version": 1,
+  "notice": "SYNTHETIC TRAINING DATA - NOT FOR MAINTENANCE USE. All aircraft, part numbers and values are fictional.",
+  "aircraft": [
+    {
+      "aircraft_type": "A-200",
+      "description": "Twin-turboprop regional airliner (fictional)",
+      "part_number_prefix": "A200"
+    },
+    {
+      "aircraft_type": "B-340",
+      "description": "Twin-turbofan regional jet (fictional)",
+      "part_number_prefix": "B340"
+    },
+    {
+      "aircraft_type": "C-75",
+      "description": "Single-turboprop pressurised utility aircraft (fictional)",
+      "part_number_prefix": "C75"
+    }
+  ],
+  "ata_chapters": {
+    "21": "Air Conditioning and Pressurisation",
+    "24": "Electrical Power",
+    "27": "Flight Controls",
+    "28": "Fuel",
+    "29": "Hydraulic Power",
+    "32": "Landing Gear",
+    "34": "Navigation",
+    "61": "Propellers",
+    "79": "Engine Oil"
+  },
+  "tasks": [
+    {
+      "aircraft_type": "A-200",
+      "ata_chapter": "21",
+      "task_number": "21-31-04",
+      "title": "Cabin Pressure Sensor - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2024-06-10",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Protective caps and plugs",
+            "Leak detection fluid",
+            "Cabin pressurisation test unit"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-21-3115",
+              "description": "O-ring, sensor port",
+              "quantity": 1,
+              "step": 7
+            },
+            {
+              "part_number": "A200-21-3104",
+              "description": "Cabin pressure sensor",
+              "quantity": 1,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Sensor mounting bolts",
+              "value": 35,
+              "unit": "in-lb",
+              "step": 8
+            },
+            {
+              "fastener": "Sense line B-nut",
+              "value": 15,
+              "unit": "Nm",
+              "step": 9
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the aircraft is on the ground, the cabin is fully depressurised and the outflow valve is open.",
+              "warnings": [
+                "DO NOT DISCONNECT THE PRESSURE SENSE LINE WHILE THE CABIN IS PRESSURISED. A RAPID RELEASE OF PRESSURE CAN CAUSE INJURY TO PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the circuit breaker CABIN PRESS CTL and attach a DO NOT CLOSE tag.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Remove access panel 131AL to get access to the cabin pressure sensor on the aft pressure bulkhead.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Disconnect the electrical connector from the sensor. Install protective caps on the connector and the receptacle.",
+              "warnings": [],
+              "cautions": [
+                "Do not pull on the wiring harness. Hold the connector body when you disconnect it."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Disconnect the sense line B-nut from the sensor. Install a cap on the sense line.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Remove the 4 mounting bolts and remove the sensor. Discard the O-ring.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Install a new O-ring (P/N A200-21-3115) on the new cabin pressure sensor (P/N A200-21-3104).",
+              "warnings": [],
+              "cautions": [
+                "Do not use sealant or thread tape on the sense port. Contamination will block the port and cause an incorrect cabin pressure indication."
+              ]
+            },
+            {
+              "number": 8,
+              "text": "Put the sensor in position, install the 4 mounting bolts and torque them to 35 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Connect the sense line to the sensor and torque the B-nut to 15 Nm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Connect the electrical connector. Remove the tag and close the circuit breaker CABIN PRESS CTL.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 11,
+              "text": "Pressurise the cabin to 2.0 psi differential and do a leak check of the sense line connection with leak detection fluid. No bubbles are permitted.",
+              "warnings": [
+                "MAKE SURE ALL PERSONNEL ARE CLEAR OF THE DOORS AND HATCHES BEFORE YOU PRESSURISE THE CABIN."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 12,
+              "text": "Do the functional test of the cabin pressure control system, then install access panel 131AL.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        },
+        {
+          "revision": 2,
+          "revision_date": "2025-11-03",
+          "change_summary": "The cabin pressure sensor part number is changed. The earlier sensor must not be installed.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Protective caps and plugs",
+            "Leak detection fluid",
+            "Cabin pressurisation test unit"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-21-3115",
+              "description": "O-ring, sensor port",
+              "quantity": 1,
+              "step": 7
+            },
+            {
+              "part_number": "A200-21-3110",
+              "description": "Cabin pressure sensor",
+              "quantity": 1,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Sensor mounting bolts",
+              "value": 35,
+              "unit": "in-lb",
+              "step": 8
+            },
+            {
+              "fastener": "Sense line B-nut",
+              "value": 15,
+              "unit": "Nm",
+              "step": 9
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the aircraft is on the ground, the cabin is fully depressurised and the outflow valve is open.",
+              "warnings": [
+                "DO NOT DISCONNECT THE PRESSURE SENSE LINE WHILE THE CABIN IS PRESSURISED. A RAPID RELEASE OF PRESSURE CAN CAUSE INJURY TO PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the circuit breaker CABIN PRESS CTL and attach a DO NOT CLOSE tag.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Remove access panel 131AL to get access to the cabin pressure sensor on the aft pressure bulkhead.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Disconnect the electrical connector from the sensor. Install protective caps on the connector and the receptacle.",
+              "warnings": [],
+              "cautions": [
+                "Do not pull on the wiring harness. Hold the connector body when you disconnect it."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Disconnect the sense line B-nut from the sensor. Install a cap on the sense line.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Remove the 4 mounting bolts and remove the sensor. Discard the O-ring.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Install a new O-ring (P/N A200-21-3115) on the new cabin pressure sensor (P/N A200-21-3110).",
+              "warnings": [],
+              "cautions": [
+                "Do not use sealant or thread tape on the sense port. Contamination will block the port and cause an incorrect cabin pressure indication."
+              ]
+            },
+            {
+              "number": 8,
+              "text": "Put the sensor in position, install the 4 mounting bolts and torque them to 35 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Connect the sense line to the sensor and torque the B-nut to 15 Nm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Connect the electrical connector. Remove the tag and close the circuit breaker CABIN PRESS CTL.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 11,
+              "text": "Pressurise the cabin to 2.0 psi differential and do a leak check of the sense line connection with leak detection fluid. No bubbles are permitted.",
+              "warnings": [
+                "MAKE SURE ALL PERSONNEL ARE CLEAR OF THE DOORS AND HATCHES BEFORE YOU PRESSURISE THE CABIN."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 12,
+              "text": "Do the functional test of the cabin pressure control system, then install access panel 131AL.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "A-200",
+      "ata_chapter": "24",
+      "task_number": "24-31-01",
+      "title": "Main Battery - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 3,
+          "revision_date": "2026-02-23",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Insulated spanners",
+            "Eye protection and protective gloves",
+            "Multimeter"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-24-3101",
+              "description": "Main battery, 24 V",
+              "quantity": 1,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Battery hold-down nuts",
+              "value": 55,
+              "unit": "in-lb",
+              "step": 7
+            },
+            {
+              "fastener": "Battery terminal bolts",
+              "value": 14,
+              "unit": "Nm",
+              "step": 8
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure external power is disconnected and the battery switch is in the OFF position.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the battery compartment door.",
+              "warnings": [
+                "BATTERY ELECTROLYTE IS CORROSIVE. WEAR EYE PROTECTION AND PROTECTIVE GLOVES WHEN YOU WORK ON THE BATTERY."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Disconnect the negative (-) cable from the battery first, then disconnect the positive (+) cable.",
+              "warnings": [
+                "ALWAYS DISCONNECT THE NEGATIVE CABLE FIRST. A TOOL THAT TOUCHES THE POSITIVE TERMINAL AND THE STRUCTURE AT THE SAME TIME CAN CAUSE AN ARC, BURNS AND FIRE."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Disconnect the vent tubes and the temperature sensor connector.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Loosen the hold-down nuts and remove the battery from the tray.",
+              "warnings": [],
+              "cautions": [
+                "The battery weighs 37 kg. Two persons are necessary to lift it."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Examine the battery tray for corrosion and spilled electrolyte. Clean the tray if necessary.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Put the main battery (P/N A200-24-3101) on the tray and torque the hold-down nuts to 55 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Connect the positive (+) cable first, then the negative (-) cable. Torque the terminal bolts to 14 Nm.",
+              "warnings": [],
+              "cautions": [
+                "Do not torque the terminal bolts more than the specified value. This will damage the battery terminals."
+              ]
+            },
+            {
+              "number": 9,
+              "text": "Connect the vent tubes and the temperature sensor connector.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Set the battery switch to ON and make sure the battery voltage is not less than 24 V. Set the battery switch to OFF and close the battery compartment door.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "A-200",
+      "ata_chapter": "28",
+      "task_number": "28-21-05",
+      "title": "Fuel Boost Pump - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2025-02-17",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Bonding meter",
+            "Grounding cables",
+            "Fuel-resistant container",
+            "Defuelling equipment"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-28-2108",
+              "description": "O-ring, fuel boost pump",
+              "quantity": 1,
+              "step": 6
+            },
+            {
+              "part_number": "A200-28-2105",
+              "description": "Fuel boost pump",
+              "quantity": 1,
+              "step": 6
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Fuel boost pump mounting bolts",
+              "value": 50,
+              "unit": "in-lb",
+              "step": 7
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Connect the aircraft and the defuelling equipment to an approved ground point.",
+              "warnings": [
+                "FUEL VAPOUR IS FLAMMABLE AND EXPLOSIVE. DO NOT PERMIT OPEN FLAMES, SPARKS OR SMOKING WITHIN 15 METRES OF THE AIRCRAFT. BOND THE AIRCRAFT AND ALL EQUIPMENT TO GROUND BEFORE YOU OPEN THE FUEL SYSTEM."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the circuit breaker L FUEL BOOST PUMP and attach a DO NOT CLOSE tag.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Defuel the left wing collector tank.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Remove access panel 521AB and disconnect the electrical connector from the fuel boost pump.",
+              "warnings": [],
+              "cautions": [
+                "Put a container below the pump. Some fuel will drain when you remove the pump."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Remove the 6 mounting bolts and remove the fuel boost pump. Discard the O-ring.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Lubricate a new O-ring (P/N A200-28-2108) with clean fuel and install it on the new fuel boost pump (P/N A200-28-2105).",
+              "warnings": [],
+              "cautions": [
+                "Use only clean fuel to lubricate the O-ring. Grease or oil will contaminate the fuel system."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Install the fuel boost pump with the 6 mounting bolts and torque the bolts to 50 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Connect the electrical connector. Measure the bonding resistance between the pump body and the structure. The resistance must not be more than 0.010 ohm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Refuel the left wing collector tank, remove the tag and close the circuit breaker L FUEL BOOST PUMP.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Operate the fuel boost pump. Make sure the fuel pressure is between 22 and 28 psi and that there are no leaks at the pump.",
+              "warnings": [
+                "DO NOT OPERATE THE FUEL BOOST PUMP IN A DRY TANK. THE PUMP CAN OVERHEAT AND IGNITE FUEL VAPOUR."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 11,
+              "text": "Install access panel 521AB.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "A-200",
+      "ata_chapter": "29",
+      "task_number": "29-11-03",
+      "title": "Hydraulic Return Filter Element - Replacement",
+      "revisions": [
+        {
+          "revision": 2,
+          "revision_date": "2025-09-08",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 5 to 50 Nm",
+            "Fluid-resistant container",
+            "Lockwire, 0.8 mm",
+            "Hydraulic fluid",
+            "Protective gloves"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-29-3303",
+              "description": "Filter element, hydraulic return",
+              "quantity": 1,
+              "step": 5
+            },
+            {
+              "part_number": "A200-29-3307",
+              "description": "O-ring, filter bowl",
+              "quantity": 1,
+              "step": 5
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Hydraulic return filter bowl",
+              "value": 25,
+              "unit": "Nm",
+              "step": 6
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Depressurise the hydraulic system and release the pressure in the hydraulic reservoir.",
+              "warnings": [
+                "MAKE SURE THE HYDRAULIC PRESSURE IS ZERO BEFORE YOU OPEN THE FILTER. HYDRAULIC FLUID UNDER PRESSURE CAN PENETRATE THE SKIN."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Put a container below the return filter, cut the lockwire and remove the filter bowl.",
+              "warnings": [],
+              "cautions": [
+                "Hydraulic fluid damages paint and irritates the skin. Wear protective gloves and clean spilled fluid immediately."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Remove the filter element and the O-ring from the filter bowl and discard them.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Examine the filter bowl and the removed element for metal particles. If you find metal particles, do not continue; report the contamination for investigation.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Install the new filter element (P/N A200-29-3303) and a new O-ring (P/N A200-29-3307) lubricated with clean hydraulic fluid.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Install the filter bowl and torque it to 25 Nm. Safety the bowl with lockwire.",
+              "warnings": [],
+              "cautions": [
+                "Do not torque the filter bowl more than the specified value. This will damage the O-ring and cause a leak."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Fill the hydraulic reservoir to the correct level, pressurise the hydraulic system and make sure there are no leaks at the filter bowl. Make sure the differential pressure indicator is reset.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "A-200",
+      "ata_chapter": "32",
+      "task_number": "32-41-01",
+      "title": "Main Wheel Axle Nut - Installation and Torque",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2024-02-12",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 20 to 250 Nm",
+            "Torque wrench, 10 to 100 in-lb",
+            "Axle nut socket",
+            "Wheel bearing grease",
+            "Lockwire, 0.8 mm"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-32-4107",
+              "description": "Axle nut, main wheel",
+              "quantity": 1,
+              "step": 2
+            },
+            {
+              "part_number": "A200-32-4109",
+              "description": "Lock bolt, axle nut",
+              "quantity": 2,
+              "step": 9
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Axle nut, bearing seating torque",
+              "value": 200,
+              "unit": "Nm",
+              "step": 5
+            },
+            {
+              "fastener": "Axle nut, final torque",
+              "value": 120,
+              "unit": "Nm",
+              "step": 7
+            },
+            {
+              "fastener": "Axle nut lock bolts",
+              "value": 45,
+              "unit": "in-lb",
+              "step": 9
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the aircraft is on jacks and the main wheel is clear of the ground.",
+              "warnings": [
+                "MAKE SURE THE AIRCRAFT IS STABLE ON THE JACKS AND THE AREA BELOW THE LANDING GEAR IS CLEAR. AN AIRCRAFT THAT FALLS FROM THE JACKS CAN KILL OR INJURE PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Examine the axle threads and the axle nut (P/N A200-32-4107) for damage and corrosion. Replace the axle nut if the threads are damaged.",
+              "warnings": [],
+              "cautions": [
+                "Do not use a wire brush on the axle threads. Damage to the protective coating will cause corrosion."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Apply a thin layer of wheel bearing grease to the axle threads and to the bearing face of the axle nut.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Install the axle nut by hand until it touches the outer wheel bearing.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "While you turn the wheel by hand, torque the axle nut to 200 Nm to seat the bearings.",
+              "warnings": [],
+              "cautions": [
+                "Turn the wheel continuously while you apply the seating torque. If the wheel does not turn, the bearings will not seat correctly."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Loosen the axle nut until the torque is zero.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "While you turn the wheel by hand, torque the axle nut to the final torque of 120 Nm.",
+              "warnings": [
+                "DO NOT USE THE SEATING TORQUE AS THE FINAL TORQUE. AN AXLE NUT WITH TOO MUCH TORQUE CAN CAUSE BEARING FAILURE AND LOSS OF THE WHEEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "If the locking holes in the axle nut and the axle are not aligned, tighten the axle nut to the next hole.",
+              "warnings": [],
+              "cautions": [
+                "Do not loosen the axle nut to align the locking holes."
+              ]
+            },
+            {
+              "number": 9,
+              "text": "Install the 2 lock bolts (P/N A200-32-4109) and torque them to 45 in-lb. Safety the lock bolts with lockwire.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Make sure the wheel turns freely and has no axial play. Install the hub cap and lower the aircraft from the jacks.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        },
+        {
+          "revision": 2,
+          "revision_date": "2025-03-03",
+          "change_summary": "The lock bolt part number is changed.",
+          "tools": [
+            "Torque wrench, 20 to 250 Nm",
+            "Torque wrench, 10 to 100 in-lb",
+            "Axle nut socket",
+            "Wheel bearing grease",
+            "Lockwire, 0.8 mm"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-32-4107",
+              "description": "Axle nut, main wheel",
+              "quantity": 1,
+              "step": 2
+            },
+            {
+              "part_number": "A200-32-4112",
+              "description": "Lock bolt, axle nut",
+              "quantity": 2,
+              "step": 9
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Axle nut, bearing seating torque",
+              "value": 200,
+              "unit": "Nm",
+              "step": 5
+            },
+            {
+              "fastener": "Axle nut, final torque",
+              "value": 120,
+              "unit": "Nm",
+              "step": 7
+            },
+            {
+              "fastener": "Axle nut lock bolts",
+              "value": 45,
+              "unit": "in-lb",
+              "step": 9
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the aircraft is on jacks and the main wheel is clear of the ground.",
+              "warnings": [
+                "MAKE SURE THE AIRCRAFT IS STABLE ON THE JACKS AND THE AREA BELOW THE LANDING GEAR IS CLEAR. AN AIRCRAFT THAT FALLS FROM THE JACKS CAN KILL OR INJURE PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Examine the axle threads and the axle nut (P/N A200-32-4107) for damage and corrosion. Replace the axle nut if the threads are damaged.",
+              "warnings": [],
+              "cautions": [
+                "Do not use a wire brush on the axle threads. Damage to the protective coating will cause corrosion."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Apply a thin layer of wheel bearing grease to the axle threads and to the bearing face of the axle nut.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Install the axle nut by hand until it touches the outer wheel bearing.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "While you turn the wheel by hand, torque the axle nut to 200 Nm to seat the bearings.",
+              "warnings": [],
+              "cautions": [
+                "Turn the wheel continuously while you apply the seating torque. If the wheel does not turn, the bearings will not seat correctly."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Loosen the axle nut until the torque is zero.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "While you turn the wheel by hand, torque the axle nut to the final torque of 120 Nm.",
+              "warnings": [
+                "DO NOT USE THE SEATING TORQUE AS THE FINAL TORQUE. AN AXLE NUT WITH TOO MUCH TORQUE CAN CAUSE BEARING FAILURE AND LOSS OF THE WHEEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "If the locking holes in the axle nut and the axle are not aligned, tighten the axle nut to the next hole.",
+              "warnings": [],
+              "cautions": [
+                "Do not loosen the axle nut to align the locking holes."
+              ]
+            },
+            {
+              "number": 9,
+              "text": "Install the 2 lock bolts (P/N A200-32-4112) and torque them to 45 in-lb. Safety the lock bolts with lockwire.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Make sure the wheel turns freely and has no axial play. Install the hub cap and lower the aircraft from the jacks.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        },
+        {
+          "revision": 3,
+          "revision_date": "2026-01-19",
+          "change_summary": "The final torque of the main wheel axle nut is changed. Use only the value given in this revision.",
+          "tools": [
+            "Torque wrench, 20 to 250 Nm",
+            "Torque wrench, 10 to 100 in-lb",
+            "Axle nut socket",
+            "Wheel bearing grease",
+            "Lockwire, 0.8 mm"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-32-4107",
+              "description": "Axle nut, main wheel",
+              "quantity": 1,
+              "step": 2
+            },
+            {
+              "part_number": "A200-32-4112",
+              "description": "Lock bolt, axle nut",
+              "quantity": 2,
+              "step": 9
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Axle nut, bearing seating torque",
+              "value": 200,
+              "unit": "Nm",
+              "step": 5
+            },
+            {
+              "fastener": "Axle nut, final torque",
+              "value": 135,
+              "unit": "Nm",
+              "step": 7
+            },
+            {
+              "fastener": "Axle nut lock bolts",
+              "value": 45,
+              "unit": "in-lb",
+              "step": 9
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the aircraft is on jacks and the main wheel is clear of the ground.",
+              "warnings": [
+                "MAKE SURE THE AIRCRAFT IS STABLE ON THE JACKS AND THE AREA BELOW THE LANDING GEAR IS CLEAR. AN AIRCRAFT THAT FALLS FROM THE JACKS CAN KILL OR INJURE PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Examine the axle threads and the axle nut (P/N A200-32-4107) for damage and corrosion. Replace the axle nut if the threads are damaged.",
+              "warnings": [],
+              "cautions": [
+                "Do not use a wire brush on the axle threads. Damage to the protective coating will cause corrosion."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Apply a thin layer of wheel bearing grease to the axle threads and to the bearing face of the axle nut.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Install the axle nut by hand until it touches the outer wheel bearing.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "While you turn the wheel by hand, torque the axle nut to 200 Nm to seat the bearings.",
+              "warnings": [],
+              "cautions": [
+                "Turn the wheel continuously while you apply the seating torque. If the wheel does not turn, the bearings will not seat correctly."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Loosen the axle nut until the torque is zero.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "While you turn the wheel by hand, torque the axle nut to the final torque of 135 Nm.",
+              "warnings": [
+                "DO NOT USE THE SEATING TORQUE AS THE FINAL TORQUE. AN AXLE NUT WITH TOO MUCH TORQUE CAN CAUSE BEARING FAILURE AND LOSS OF THE WHEEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "If the locking holes in the axle nut and the axle are not aligned, tighten the axle nut to the next hole.",
+              "warnings": [],
+              "cautions": [
+                "Do not loosen the axle nut to align the locking holes."
+              ]
+            },
+            {
+              "number": 9,
+              "text": "Install the 2 lock bolts (P/N A200-32-4112) and torque them to 45 in-lb. Safety the lock bolts with lockwire.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Make sure the wheel turns freely and has no axial play. Install the hub cap and lower the aircraft from the jacks.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "A-200",
+      "ata_chapter": "32",
+      "task_number": "32-42-03",
+      "title": "Main Wheel Brake Assembly - Wear Check and Replacement",
+      "revisions": [
+        {
+          "revision": 2,
+          "revision_date": "2025-07-14",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 10 to 100 Nm",
+            "Depth gauge or steel rule",
+            "Wheel jack",
+            "Brake bleed equipment",
+            "Protective caps and plugs"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-32-4301",
+              "description": "Brake assembly, main wheel",
+              "quantity": 1,
+              "step": 7
+            },
+            {
+              "part_number": "A200-32-4306",
+              "description": "Bolt, brake attachment",
+              "quantity": 6,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Brake attachment bolts",
+              "value": 54,
+              "unit": "Nm",
+              "step": 7
+            },
+            {
+              "fastener": "Brake hydraulic line fitting",
+              "value": 22,
+              "unit": "Nm",
+              "step": 8
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Chock the nose wheels, set the parking brake and let the brakes cool.",
+              "warnings": [
+                "DO NOT TOUCH THE BRAKE ASSEMBLY UNTIL IT IS COOL. HOT BRAKES CAN CAUSE SEVERE BURNS."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "With the parking brake set, measure how far each wear pin extends from the brake housing. Replace the brake assembly if any wear pin extends less than 2.5 mm. If all wear pins are in limits, record the measurements and stop this task here.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Release the parking brake and depressurise the hydraulic system.",
+              "warnings": [
+                "MAKE SURE THE HYDRAULIC PRESSURE IS ZERO BEFORE YOU DISCONNECT THE BRAKE LINE. HYDRAULIC FLUID UNDER PRESSURE CAN PENETRATE THE SKIN."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Lift the main wheel on a jack and remove the main wheel.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Disconnect the brake hydraulic line. Install caps on the line and on the brake port.",
+              "warnings": [],
+              "cautions": [
+                "Hydraulic fluid damages paint and tyres. Clean spilled fluid immediately."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Remove the 6 brake attachment bolts and remove the brake assembly from the axle flange.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Install the new brake assembly (P/N A200-32-4301) with 6 new attachment bolts (P/N A200-32-4306). Torque the bolts in a cross pattern to 54 Nm.",
+              "warnings": [],
+              "cautions": [
+                "Do not use the removed attachment bolts again. Always install new bolts."
+              ]
+            },
+            {
+              "number": 8,
+              "text": "Connect the brake hydraulic line and torque the fitting to 22 Nm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Bleed the brake system, then install the main wheel and lower the aircraft.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Pressurise the hydraulic system and apply the brakes 5 times. Make sure there are no leaks, then measure and record the wear pin length of the new brake assembly.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "A-200",
+      "ata_chapter": "34",
+      "task_number": "34-11-02",
+      "title": "Pitot Probe - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 2,
+          "revision_date": "2025-04-07",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Pitot-static test set",
+            "Aerodynamic sealant",
+            "Protective caps"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-34-1105",
+              "description": "Gasket, pitot probe",
+              "quantity": 1,
+              "step": 5
+            },
+            {
+              "part_number": "A200-34-1102",
+              "description": "Pitot probe, heated",
+              "quantity": 1,
+              "step": 5
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Pitot line B-nut",
+              "value": 11,
+              "unit": "Nm",
+              "step": 6
+            },
+            {
+              "fastener": "Pitot probe mounting screws",
+              "value": 28,
+              "unit": "in-lb",
+              "step": 7
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Open the circuit breaker PITOT HEAT and attach a DO NOT CLOSE tag.",
+              "warnings": [
+                "MAKE SURE THE PITOT HEAT IS OFF AND THE PROBE IS COOL BEFORE YOU TOUCH IT. A HOT PITOT PROBE CAN CAUSE SEVERE BURNS."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Remove the 4 mounting screws and carefully pull the pitot probe out until you can get access to the connections.",
+              "warnings": [],
+              "cautions": [
+                "Do not pull the probe out more than necessary. This can damage the wiring harness and the pitot line."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Disconnect the electrical connector and the pitot line from the probe. Install a cap on the pitot line.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Remove the pitot probe and discard the gasket.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Install a new gasket (P/N A200-34-1105) on the new pitot probe (P/N A200-34-1102).",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Connect the pitot line and torque the B-nut to 11 Nm. Connect the electrical connector.",
+              "warnings": [],
+              "cautions": [
+                "Do not blow into the pitot probe or apply pressure to it unless the pitot-static test set is connected. This can damage the airspeed instruments."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Put the probe in position, install the 4 mounting screws and torque them to 28 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Apply aerodynamic sealant around the base of the probe and let it cure.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Do a leak test of the pitot system with the pitot-static test set at 150 knots indicated. The leak rate must not be more than 2 knots in one minute.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Remove the tag, close the circuit breaker PITOT HEAT and do an operational test of the pitot heat.",
+              "warnings": [],
+              "cautions": [
+                "Do not operate the pitot heat on the ground for more than 30 seconds. The probe will overheat."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "A-200",
+      "ata_chapter": "61",
+      "task_number": "61-10-02",
+      "title": "Propeller Assembly - Installation",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2024-12-02",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 20 to 200 Nm",
+            "Torque wrench, 10 to 100 in-lb",
+            "Propeller sling",
+            "Hoist, 250 kg minimum",
+            "Engine oil"
+          ],
+          "parts": [
+            {
+              "part_number": "A200-61-2203",
+              "description": "O-ring, propeller shaft flange",
+              "quantity": 1,
+              "step": 3
+            },
+            {
+              "part_number": "A200-61-2210",
+              "description": "Nut, propeller mounting",
+              "quantity": 8,
+              "step": 5
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Propeller mounting nuts, first stage",
+              "value": 60,
+              "unit": "Nm",
+              "step": 6
+            },
+            {
+              "fastener": "Propeller mounting nuts, final torque",
+              "value": 115,
+              "unit": "Nm",
+              "step": 6
+            },
+            {
+              "fastener": "Spinner screws",
+              "value": 35,
+              "unit": "in-lb",
+              "step": 7
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Open the circuit breakers IGNITION and START CTL for the applicable engine and attach DO NOT CLOSE tags.",
+              "warnings": [
+                "MAKE SURE THE ENGINE CANNOT BE STARTED WHILE YOU WORK ON THE PROPELLER. A PROPELLER THAT TURNS CAN KILL OR INJURE PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Clean the propeller shaft flange and the mounting face of the propeller hub. Examine them for damage.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Lubricate a new O-ring (P/N A200-61-2203) with engine oil and install it in the groove of the propeller shaft flange.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Lift the propeller assembly with the sling and hoist and align it with the dowels of the propeller shaft flange.",
+              "warnings": [],
+              "cautions": [
+                "Keep the propeller supported by the sling at all times. Do not let the blades touch the ground or the work stand."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Install the 8 mounting nuts (P/N A200-61-2210) with their washers and tighten them by hand.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Torque the mounting nuts in a cross pattern in two stages: first to 60 Nm, then to the final torque of 115 Nm.",
+              "warnings": [
+                "DO NOT OPERATE THE ENGINE UNTIL ALL 8 MOUNTING NUTS ARE AT THE FINAL TORQUE. A PROPELLER THAT IS NOT CORRECTLY ATTACHED CAN SEPARATE FROM THE ENGINE."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Install the spinner and torque the spinner screws to 35 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Remove the sling, remove the tags and close the circuit breakers. Do an engine ground run and make sure there are no oil leaks at the propeller shaft flange and no unusual vibration.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "B-340",
+      "ata_chapter": "21",
+      "task_number": "21-31-04",
+      "title": "Cabin Pressure Sensor - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 3,
+          "revision_date": "2025-08-25",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Protective caps and plugs",
+            "Leak detection fluid",
+            "Cabin pressurisation test unit"
+          ],
+          "parts": [
+            {
+              "part_number": "B340-21-5215",
+              "description": "O-ring, sensor port",
+              "quantity": 1,
+              "step": 7
+            },
+            {
+              "part_number": "B340-21-5210",
+              "description": "Cabin pressure sensor",
+              "quantity": 1,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Sensor mounting bolts",
+              "value": 40,
+              "unit": "in-lb",
+              "step": 8
+            },
+            {
+              "fastener": "Sense line B-nut",
+              "value": 18,
+              "unit": "Nm",
+              "step": 9
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the aircraft is on the ground, the cabin is fully depressurised and the outflow valve is open.",
+              "warnings": [
+                "DO NOT DISCONNECT THE PRESSURE SENSE LINE WHILE THE CABIN IS PRESSURISED. A RAPID RELEASE OF PRESSURE CAN CAUSE INJURY TO PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the circuit breaker CPC SENSOR and attach a DO NOT CLOSE tag.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Remove access panel 212CR to get access to the cabin pressure sensor on the forward equipment bay frame.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Disconnect the electrical connector from the sensor. Install protective caps on the connector and the receptacle.",
+              "warnings": [],
+              "cautions": [
+                "Do not pull on the wiring harness. Hold the connector body when you disconnect it."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Disconnect the sense line B-nut from the sensor. Install a cap on the sense line.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Remove the 4 mounting bolts and remove the sensor. Discard the O-ring.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Install a new O-ring (P/N B340-21-5215) on the new cabin pressure sensor (P/N B340-21-5210).",
+              "warnings": [],
+              "cautions": [
+                "Do not use sealant or thread tape on the sense port. Contamination will block the port and cause an incorrect cabin pressure indication."
+              ]
+            },
+            {
+              "number": 8,
+              "text": "Put the sensor in position, install the 4 mounting bolts and torque them to 40 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Connect the sense line to the sensor and torque the B-nut to 18 Nm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Connect the electrical connector. Remove the tag and close the circuit breaker CPC SENSOR.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 11,
+              "text": "Pressurise the cabin to 2.0 psi differential and do a leak check of the sense line connection with leak detection fluid. No bubbles are permitted.",
+              "warnings": [
+                "MAKE SURE ALL PERSONNEL ARE CLEAR OF THE DOORS AND HATCHES BEFORE YOU PRESSURISE THE CABIN."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 12,
+              "text": "Do the functional test of the cabin pressure control system, then install access panel 212CR.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "B-340",
+      "ata_chapter": "24",
+      "task_number": "24-31-01",
+      "title": "Main Battery - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 2,
+          "revision_date": "2025-10-13",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Insulated spanners",
+            "Eye protection and protective gloves",
+            "Multimeter"
+          ],
+          "parts": [
+            {
+              "part_number": "B340-24-5101",
+              "description": "Main battery, 24 V",
+              "quantity": 1,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Battery hold-down nuts",
+              "value": 70,
+              "unit": "in-lb",
+              "step": 7
+            },
+            {
+              "fastener": "Battery terminal bolts",
+              "value": 18,
+              "unit": "Nm",
+              "step": 8
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure external power is disconnected and the battery switch is in the OFF position.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the battery compartment door.",
+              "warnings": [
+                "BATTERY ELECTROLYTE IS CORROSIVE. WEAR EYE PROTECTION AND PROTECTIVE GLOVES WHEN YOU WORK ON THE BATTERY."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Disconnect the negative (-) cable from the battery first, then disconnect the positive (+) cable.",
+              "warnings": [
+                "ALWAYS DISCONNECT THE NEGATIVE CABLE FIRST. A TOOL THAT TOUCHES THE POSITIVE TERMINAL AND THE STRUCTURE AT THE SAME TIME CAN CAUSE AN ARC, BURNS AND FIRE."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Disconnect the vent tubes and the temperature sensor connector.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Loosen the hold-down nuts and remove the battery from the tray.",
+              "warnings": [],
+              "cautions": [
+                "The battery weighs 42 kg. Two persons are necessary to lift it."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Examine the battery tray for corrosion and spilled electrolyte. Clean the tray if necessary.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Put the main battery (P/N B340-24-5101) on the tray and torque the hold-down nuts to 70 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Connect the positive (+) cable first, then the negative (-) cable. Torque the terminal bolts to 18 Nm.",
+              "warnings": [],
+              "cautions": [
+                "Do not torque the terminal bolts more than the specified value. This will damage the battery terminals."
+              ]
+            },
+            {
+              "number": 9,
+              "text": "Connect the vent tubes and the temperature sensor connector.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Set the battery switch to ON and make sure the battery voltage is not less than 24 V. Set the battery switch to OFF and close the battery compartment door.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "B-340",
+      "ata_chapter": "27",
+      "task_number": "27-51-04",
+      "title": "Flap Actuator - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2025-01-13",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 10 to 100 Nm",
+            "Flap safety locks",
+            "Protective caps and plugs",
+            "Cotter pin pliers"
+          ],
+          "parts": [
+            {
+              "part_number": "B340-27-7504",
+              "description": "Flap actuator",
+              "quantity": 1,
+              "step": 5
+            },
+            {
+              "part_number": "B340-27-7511",
+              "description": "Bolt, actuator body attachment",
+              "quantity": 1,
+              "step": 5
+            },
+            {
+              "part_number": "B340-27-7513",
+              "description": "Bolt, actuator rod end",
+              "quantity": 1,
+              "step": 6
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Flap actuator body attachment bolt",
+              "value": 48,
+              "unit": "Nm",
+              "step": 5
+            },
+            {
+              "fastener": "Flap actuator rod-end bolt",
+              "value": 34,
+              "unit": "Nm",
+              "step": 6
+            },
+            {
+              "fastener": "Flap actuator hydraulic fittings",
+              "value": 20,
+              "unit": "Nm",
+              "step": 7
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Extend the flaps fully and install the flap safety locks.",
+              "warnings": [
+                "INSTALL THE FLAP SAFETY LOCKS BEFORE YOU WORK IN THE FLAP AREA. FLAP MOVEMENT CAN KILL OR INJURE PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the circuit breaker FLAP CTL, attach a DO NOT CLOSE tag and depressurise the hydraulic system.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Disconnect the electrical connector of the position sensor and the two hydraulic lines from the flap actuator. Install caps on the lines and ports.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Remove the rod-end bolt that attaches the actuator to the flap. Support the actuator and remove the body attachment bolt.",
+              "warnings": [],
+              "cautions": [
+                "The flap actuator weighs 9 kg. Support it before you remove the last bolt."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Put the new flap actuator (P/N B340-27-7504) in position, install the body attachment bolt (P/N B340-27-7511) and torque it to 48 Nm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Adjust the rod end until the rod-end bolt (P/N B340-27-7513) goes in freely by hand. Torque the rod-end bolt to 34 Nm and install a new cotter pin.",
+              "warnings": [],
+              "cautions": [
+                "Do not use force to install the rod-end bolt. A bolt that does not go in freely shows that the rod end is not adjusted correctly."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Connect the two hydraulic lines and torque the fittings to 20 Nm. Connect the electrical connector.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Remove the flap safety locks, remove the tag, close the circuit breaker FLAP CTL and pressurise the hydraulic system.",
+              "warnings": [
+                "MAKE SURE ALL PERSONNEL AND EQUIPMENT ARE CLEAR OF THE FLAPS BEFORE YOU PRESSURISE THE HYDRAULIC SYSTEM."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Operate the flaps through 3 full cycles. Make sure the movement is smooth, there is no FLAP ASYMMETRY caution and there are no hydraulic leaks at the actuator.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "B-340",
+      "ata_chapter": "28",
+      "task_number": "28-21-05",
+      "title": "Fuel Boost Pump - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 2,
+          "revision_date": "2024-10-21",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Bonding meter",
+            "Grounding cables",
+            "Fuel-resistant container",
+            "Defuelling equipment"
+          ],
+          "parts": [
+            {
+              "part_number": "B340-28-5208",
+              "description": "O-ring, fuel boost pump",
+              "quantity": 1,
+              "step": 6
+            },
+            {
+              "part_number": "B340-28-5205",
+              "description": "Fuel boost pump",
+              "quantity": 1,
+              "step": 6
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Fuel boost pump mounting bolts",
+              "value": 65,
+              "unit": "in-lb",
+              "step": 7
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Connect the aircraft and the defuelling equipment to an approved ground point.",
+              "warnings": [
+                "FUEL VAPOUR IS FLAMMABLE AND EXPLOSIVE. DO NOT PERMIT OPEN FLAMES, SPARKS OR SMOKING WITHIN 15 METRES OF THE AIRCRAFT. BOND THE AIRCRAFT AND ALL EQUIPMENT TO GROUND BEFORE YOU OPEN THE FUEL SYSTEM."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the circuit breaker FUEL PUMP 1 and attach a DO NOT CLOSE tag.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Defuel the centre tank.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Remove access panel 191BL and disconnect the electrical connector from the fuel boost pump.",
+              "warnings": [],
+              "cautions": [
+                "Put a container below the pump. Some fuel will drain when you remove the pump."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Remove the 8 mounting bolts and remove the fuel boost pump. Discard the O-ring.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Lubricate a new O-ring (P/N B340-28-5208) with clean fuel and install it on the new fuel boost pump (P/N B340-28-5205).",
+              "warnings": [],
+              "cautions": [
+                "Use only clean fuel to lubricate the O-ring. Grease or oil will contaminate the fuel system."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Install the fuel boost pump with the 8 mounting bolts and torque the bolts to 65 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Connect the electrical connector. Measure the bonding resistance between the pump body and the structure. The resistance must not be more than 0.010 ohm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Refuel the centre tank, remove the tag and close the circuit breaker FUEL PUMP 1.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Operate the fuel boost pump. Make sure the fuel pressure is between 30 and 38 psi and that there are no leaks at the pump.",
+              "warnings": [
+                "DO NOT OPERATE THE FUEL BOOST PUMP IN A DRY TANK. THE PUMP CAN OVERHEAT AND IGNITE FUEL VAPOUR."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 11,
+              "text": "Install access panel 191BL.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        },
+        {
+          "revision": 3,
+          "revision_date": "2026-04-13",
+          "change_summary": "The O-ring part number is changed to a new material. The earlier O-ring must not be installed.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Bonding meter",
+            "Grounding cables",
+            "Fuel-resistant container",
+            "Defuelling equipment"
+          ],
+          "parts": [
+            {
+              "part_number": "B340-28-5209",
+              "description": "O-ring, fuel boost pump",
+              "quantity": 1,
+              "step": 6
+            },
+            {
+              "part_number": "B340-28-5205",
+              "description": "Fuel boost pump",
+              "quantity": 1,
+              "step": 6
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Fuel boost pump mounting bolts",
+              "value": 65,
+              "unit": "in-lb",
+              "step": 7
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Connect the aircraft and the defuelling equipment to an approved ground point.",
+              "warnings": [
+                "FUEL VAPOUR IS FLAMMABLE AND EXPLOSIVE. DO NOT PERMIT OPEN FLAMES, SPARKS OR SMOKING WITHIN 15 METRES OF THE AIRCRAFT. BOND THE AIRCRAFT AND ALL EQUIPMENT TO GROUND BEFORE YOU OPEN THE FUEL SYSTEM."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the circuit breaker FUEL PUMP 1 and attach a DO NOT CLOSE tag.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Defuel the centre tank.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Remove access panel 191BL and disconnect the electrical connector from the fuel boost pump.",
+              "warnings": [],
+              "cautions": [
+                "Put a container below the pump. Some fuel will drain when you remove the pump."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Remove the 8 mounting bolts and remove the fuel boost pump. Discard the O-ring.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Lubricate a new O-ring (P/N B340-28-5209) with clean fuel and install it on the new fuel boost pump (P/N B340-28-5205).",
+              "warnings": [],
+              "cautions": [
+                "Use only clean fuel to lubricate the O-ring. Grease or oil will contaminate the fuel system."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Install the fuel boost pump with the 8 mounting bolts and torque the bolts to 65 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Connect the electrical connector. Measure the bonding resistance between the pump body and the structure. The resistance must not be more than 0.010 ohm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Refuel the centre tank, remove the tag and close the circuit breaker FUEL PUMP 1.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Operate the fuel boost pump. Make sure the fuel pressure is between 30 and 38 psi and that there are no leaks at the pump.",
+              "warnings": [
+                "DO NOT OPERATE THE FUEL BOOST PUMP IN A DRY TANK. THE PUMP CAN OVERHEAT AND IGNITE FUEL VAPOUR."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 11,
+              "text": "Install access panel 191BL.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "B-340",
+      "ata_chapter": "32",
+      "task_number": "32-41-01",
+      "title": "Main Wheel Axle Nut - Installation and Torque",
+      "revisions": [
+        {
+          "revision": 4,
+          "revision_date": "2025-05-20",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 50 to 350 Nm",
+            "Torque wrench, 10 to 100 in-lb",
+            "Axle nut socket",
+            "Wheel bearing grease",
+            "Lockwire, 0.8 mm"
+          ],
+          "parts": [
+            {
+              "part_number": "B340-32-5107",
+              "description": "Axle nut, main wheel",
+              "quantity": 1,
+              "step": 2
+            },
+            {
+              "part_number": "B340-32-5112",
+              "description": "Lock bolt, axle nut",
+              "quantity": 2,
+              "step": 9
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Axle nut, bearing seating torque",
+              "value": 270,
+              "unit": "Nm",
+              "step": 5
+            },
+            {
+              "fastener": "Axle nut, final torque",
+              "value": 175,
+              "unit": "Nm",
+              "step": 7
+            },
+            {
+              "fastener": "Axle nut lock bolts",
+              "value": 60,
+              "unit": "in-lb",
+              "step": 9
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the aircraft is on jacks and the main wheel is clear of the ground.",
+              "warnings": [
+                "MAKE SURE THE AIRCRAFT IS STABLE ON THE JACKS AND THE AREA BELOW THE LANDING GEAR IS CLEAR. AN AIRCRAFT THAT FALLS FROM THE JACKS CAN KILL OR INJURE PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Examine the axle threads and the axle nut (P/N B340-32-5107) for damage and corrosion. Replace the axle nut if the threads are damaged.",
+              "warnings": [],
+              "cautions": [
+                "Do not use a wire brush on the axle threads. Damage to the protective coating will cause corrosion."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Apply a thin layer of wheel bearing grease to the axle threads and to the bearing face of the axle nut.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Install the axle nut by hand until it touches the outer wheel bearing.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "While you turn the wheel by hand, torque the axle nut to 270 Nm to seat the bearings.",
+              "warnings": [],
+              "cautions": [
+                "Turn the wheel continuously while you apply the seating torque. If the wheel does not turn, the bearings will not seat correctly."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Loosen the axle nut until the torque is zero.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "While you turn the wheel by hand, torque the axle nut to the final torque of 175 Nm.",
+              "warnings": [
+                "DO NOT USE THE SEATING TORQUE AS THE FINAL TORQUE. AN AXLE NUT WITH TOO MUCH TORQUE CAN CAUSE BEARING FAILURE AND LOSS OF THE WHEEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "If the locking holes in the axle nut and the axle are not aligned, tighten the axle nut to the next hole.",
+              "warnings": [],
+              "cautions": [
+                "Do not loosen the axle nut to align the locking holes."
+              ]
+            },
+            {
+              "number": 9,
+              "text": "Install the 2 lock bolts (P/N B340-32-5112) and torque them to 60 in-lb. Safety the lock bolts with lockwire.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Make sure the wheel turns freely and has no axial play. Install the hub cap and lower the aircraft from the jacks.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        },
+        {
+          "revision": 5,
+          "revision_date": "2026-02-09",
+          "change_summary": "The final torque of the main wheel axle nut is changed. Use only the value given in this revision.",
+          "tools": [
+            "Torque wrench, 50 to 350 Nm",
+            "Torque wrench, 10 to 100 in-lb",
+            "Axle nut socket",
+            "Wheel bearing grease",
+            "Lockwire, 0.8 mm"
+          ],
+          "parts": [
+            {
+              "part_number": "B340-32-5107",
+              "description": "Axle nut, main wheel",
+              "quantity": 1,
+              "step": 2
+            },
+            {
+              "part_number": "B340-32-5112",
+              "description": "Lock bolt, axle nut",
+              "quantity": 2,
+              "step": 9
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Axle nut, bearing seating torque",
+              "value": 270,
+              "unit": "Nm",
+              "step": 5
+            },
+            {
+              "fastener": "Axle nut, final torque",
+              "value": 190,
+              "unit": "Nm",
+              "step": 7
+            },
+            {
+              "fastener": "Axle nut lock bolts",
+              "value": 60,
+              "unit": "in-lb",
+              "step": 9
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the aircraft is on jacks and the main wheel is clear of the ground.",
+              "warnings": [
+                "MAKE SURE THE AIRCRAFT IS STABLE ON THE JACKS AND THE AREA BELOW THE LANDING GEAR IS CLEAR. AN AIRCRAFT THAT FALLS FROM THE JACKS CAN KILL OR INJURE PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Examine the axle threads and the axle nut (P/N B340-32-5107) for damage and corrosion. Replace the axle nut if the threads are damaged.",
+              "warnings": [],
+              "cautions": [
+                "Do not use a wire brush on the axle threads. Damage to the protective coating will cause corrosion."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Apply a thin layer of wheel bearing grease to the axle threads and to the bearing face of the axle nut.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Install the axle nut by hand until it touches the outer wheel bearing.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "While you turn the wheel by hand, torque the axle nut to 270 Nm to seat the bearings.",
+              "warnings": [],
+              "cautions": [
+                "Turn the wheel continuously while you apply the seating torque. If the wheel does not turn, the bearings will not seat correctly."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Loosen the axle nut until the torque is zero.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "While you turn the wheel by hand, torque the axle nut to the final torque of 190 Nm.",
+              "warnings": [
+                "DO NOT USE THE SEATING TORQUE AS THE FINAL TORQUE. AN AXLE NUT WITH TOO MUCH TORQUE CAN CAUSE BEARING FAILURE AND LOSS OF THE WHEEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "If the locking holes in the axle nut and the axle are not aligned, tighten the axle nut to the next hole.",
+              "warnings": [],
+              "cautions": [
+                "Do not loosen the axle nut to align the locking holes."
+              ]
+            },
+            {
+              "number": 9,
+              "text": "Install the 2 lock bolts (P/N B340-32-5112) and torque them to 60 in-lb. Safety the lock bolts with lockwire.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Make sure the wheel turns freely and has no axial play. Install the hub cap and lower the aircraft from the jacks.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "B-340",
+      "ata_chapter": "32",
+      "task_number": "32-42-03",
+      "title": "Main Wheel Brake Assembly - Wear Check and Replacement",
+      "revisions": [
+        {
+          "revision": 3,
+          "revision_date": "2026-03-02",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 10 to 100 Nm",
+            "Depth gauge or steel rule",
+            "Wheel jack",
+            "Brake bleed equipment",
+            "Protective caps and plugs"
+          ],
+          "parts": [
+            {
+              "part_number": "B340-32-5301",
+              "description": "Brake assembly, main wheel",
+              "quantity": 1,
+              "step": 7
+            },
+            {
+              "part_number": "B340-32-5306",
+              "description": "Bolt, brake attachment",
+              "quantity": 8,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Brake attachment bolts",
+              "value": 75,
+              "unit": "Nm",
+              "step": 7
+            },
+            {
+              "fastener": "Brake hydraulic line fitting",
+              "value": 27,
+              "unit": "Nm",
+              "step": 8
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Chock the nose wheels, set the parking brake and let the brakes cool.",
+              "warnings": [
+                "DO NOT TOUCH THE BRAKE ASSEMBLY UNTIL IT IS COOL. HOT BRAKES CAN CAUSE SEVERE BURNS."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "With the parking brake set, measure how far each wear pin extends from the brake housing. Replace the brake assembly if any wear pin extends less than 3.0 mm. If all wear pins are in limits, record the measurements and stop this task here.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Release the parking brake and depressurise the hydraulic system.",
+              "warnings": [
+                "MAKE SURE THE HYDRAULIC PRESSURE IS ZERO BEFORE YOU DISCONNECT THE BRAKE LINE. HYDRAULIC FLUID UNDER PRESSURE CAN PENETRATE THE SKIN."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Lift the main wheel on a jack and remove the main wheel.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Disconnect the brake hydraulic line. Install caps on the line and on the brake port.",
+              "warnings": [],
+              "cautions": [
+                "Hydraulic fluid damages paint and tyres. Clean spilled fluid immediately."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Remove the 8 brake attachment bolts and remove the brake assembly from the axle flange.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Install the new brake assembly (P/N B340-32-5301) with 8 new attachment bolts (P/N B340-32-5306). Torque the bolts in a cross pattern to 75 Nm.",
+              "warnings": [],
+              "cautions": [
+                "Do not use the removed attachment bolts again. Always install new bolts."
+              ]
+            },
+            {
+              "number": 8,
+              "text": "Connect the brake hydraulic line and torque the fitting to 27 Nm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Bleed the brake system, then install the main wheel and lower the aircraft.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Pressurise the hydraulic system and apply the brakes 5 times. Make sure there are no leaks, then measure and record the wear pin length of the new brake assembly.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "B-340",
+      "ata_chapter": "34",
+      "task_number": "34-11-02",
+      "title": "Pitot Probe - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2024-09-30",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Pitot-static test set",
+            "Aerodynamic sealant",
+            "Protective caps"
+          ],
+          "parts": [
+            {
+              "part_number": "B340-34-5105",
+              "description": "Gasket, pitot probe",
+              "quantity": 1,
+              "step": 5
+            },
+            {
+              "part_number": "B340-34-5102",
+              "description": "Pitot probe, heated",
+              "quantity": 1,
+              "step": 5
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Pitot line B-nut",
+              "value": 14,
+              "unit": "Nm",
+              "step": 6
+            },
+            {
+              "fastener": "Pitot probe mounting screws",
+              "value": 30,
+              "unit": "in-lb",
+              "step": 7
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Open the circuit breaker PITOT HEAT and attach a DO NOT CLOSE tag.",
+              "warnings": [
+                "MAKE SURE THE PITOT HEAT IS OFF AND THE PROBE IS COOL BEFORE YOU TOUCH IT. A HOT PITOT PROBE CAN CAUSE SEVERE BURNS."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Remove the 6 mounting screws and carefully pull the pitot probe out until you can get access to the connections.",
+              "warnings": [],
+              "cautions": [
+                "Do not pull the probe out more than necessary. This can damage the wiring harness and the pitot line."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Disconnect the electrical connector and the pitot line from the probe. Install a cap on the pitot line.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Remove the pitot probe and discard the gasket.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Install a new gasket (P/N B340-34-5105) on the new pitot probe (P/N B340-34-5102).",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Connect the pitot line and torque the B-nut to 14 Nm. Connect the electrical connector.",
+              "warnings": [],
+              "cautions": [
+                "Do not blow into the pitot probe or apply pressure to it unless the pitot-static test set is connected. This can damage the airspeed instruments."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Put the probe in position, install the 6 mounting screws and torque them to 30 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Apply aerodynamic sealant around the base of the probe and let it cure.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Do a leak test of the pitot system with the pitot-static test set at 150 knots indicated. The leak rate must not be more than 1 knots in one minute.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Remove the tag, close the circuit breaker PITOT HEAT and do an operational test of the pitot heat.",
+              "warnings": [],
+              "cautions": [
+                "Do not operate the pitot heat on the ground for more than 30 seconds. The probe will overheat."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "B-340",
+      "ata_chapter": "79",
+      "task_number": "79-21-02",
+      "title": "Engine Oil Filter Element - Replacement",
+      "revisions": [
+        {
+          "revision": 2,
+          "revision_date": "2025-12-15",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 5 to 50 Nm",
+            "Container, 5 litres",
+            "Lockwire, 0.8 mm",
+            "Engine oil"
+          ],
+          "parts": [
+            {
+              "part_number": "B340-79-2102",
+              "description": "Filter element, engine oil",
+              "quantity": 1,
+              "step": 5
+            },
+            {
+              "part_number": "B340-79-2105",
+              "description": "O-ring, filter cover",
+              "quantity": 1,
+              "step": 5
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Engine oil filter cover",
+              "value": 16,
+              "unit": "Nm",
+              "step": 6
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the engine has been shut down for a minimum of 15 minutes.",
+              "warnings": [
+                "HOT ENGINE OIL CAN CAUSE SEVERE BURNS. LET THE ENGINE COOL BEFORE YOU OPEN THE OIL SYSTEM."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the engine cowl and put a container below the oil filter housing.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Cut the lockwire, remove the filter cover and remove the oil filter element. Discard the O-ring.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Examine the removed filter element for metal particles.",
+              "warnings": [],
+              "cautions": [
+                "If you find metal particles in the filter element, do not release the engine for service. Keep the element for laboratory analysis."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Install the new oil filter element (P/N B340-79-2102) and a new O-ring (P/N B340-79-2105) lubricated with clean engine oil.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Install the filter cover and torque it to 16 Nm. Safety the cover with lockwire.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Check the engine oil level and add oil if necessary. Close the engine cowl.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Do an engine ground run at idle for 5 minutes, shut down the engine and make sure there are no leaks at the filter cover.",
+              "warnings": [],
+              "cautions": [
+                "Do not increase power above idle until the oil pressure is stable in the green range."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "C-75",
+      "ata_chapter": "21",
+      "task_number": "21-31-04",
+      "title": "Cabin Pressure Sensor - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2025-01-27",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Protective caps and plugs",
+            "Leak detection fluid",
+            "Cabin pressurisation test unit"
+          ],
+          "parts": [
+            {
+              "part_number": "C75-21-6115",
+              "description": "O-ring, sensor port",
+              "quantity": 1,
+              "step": 7
+            },
+            {
+              "part_number": "C75-21-6110",
+              "description": "Cabin pressure sensor",
+              "quantity": 1,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Sensor mounting bolts",
+              "value": 30,
+              "unit": "in-lb",
+              "step": 8
+            },
+            {
+              "fastener": "Sense line B-nut",
+              "value": 12,
+              "unit": "Nm",
+              "step": 9
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the aircraft is on the ground, the cabin is fully depressurised and the outflow valve is open.",
+              "warnings": [
+                "DO NOT DISCONNECT THE PRESSURE SENSE LINE WHILE THE CABIN IS PRESSURISED. A RAPID RELEASE OF PRESSURE CAN CAUSE INJURY TO PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the circuit breaker CAB PRESS and attach a DO NOT CLOSE tag.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Remove access panel 121AR to get access to the cabin pressure sensor on the cockpit floor frame.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Disconnect the electrical connector from the sensor. Install protective caps on the connector and the receptacle.",
+              "warnings": [],
+              "cautions": [
+                "Do not pull on the wiring harness. Hold the connector body when you disconnect it."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Disconnect the sense line B-nut from the sensor. Install a cap on the sense line.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Remove the 2 mounting bolts and remove the sensor. Discard the O-ring.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Install a new O-ring (P/N C75-21-6115) on the new cabin pressure sensor (P/N C75-21-6110).",
+              "warnings": [],
+              "cautions": [
+                "Do not use sealant or thread tape on the sense port. Contamination will block the port and cause an incorrect cabin pressure indication."
+              ]
+            },
+            {
+              "number": 8,
+              "text": "Put the sensor in position, install the 2 mounting bolts and torque them to 30 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Connect the sense line to the sensor and torque the B-nut to 12 Nm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Connect the electrical connector. Remove the tag and close the circuit breaker CAB PRESS.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 11,
+              "text": "Pressurise the cabin to 2.0 psi differential and do a leak check of the sense line connection with leak detection fluid. No bubbles are permitted.",
+              "warnings": [
+                "MAKE SURE ALL PERSONNEL ARE CLEAR OF THE DOORS AND HATCHES BEFORE YOU PRESSURISE THE CABIN."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 12,
+              "text": "Do the functional test of the cabin pressure control system, then install access panel 121AR.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "C-75",
+      "ata_chapter": "24",
+      "task_number": "24-31-01",
+      "title": "Main Battery - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2024-08-19",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Insulated spanners",
+            "Eye protection and protective gloves",
+            "Multimeter"
+          ],
+          "parts": [
+            {
+              "part_number": "C75-24-6101",
+              "description": "Main battery, 24 V",
+              "quantity": 1,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Battery hold-down nuts",
+              "value": 45,
+              "unit": "in-lb",
+              "step": 7
+            },
+            {
+              "fastener": "Battery terminal bolts",
+              "value": 10,
+              "unit": "Nm",
+              "step": 8
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure external power is disconnected and the battery switch is in the OFF position.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the battery compartment door.",
+              "warnings": [
+                "BATTERY ELECTROLYTE IS CORROSIVE. WEAR EYE PROTECTION AND PROTECTIVE GLOVES WHEN YOU WORK ON THE BATTERY."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Disconnect the negative (-) cable from the battery first, then disconnect the positive (+) cable.",
+              "warnings": [
+                "ALWAYS DISCONNECT THE NEGATIVE CABLE FIRST. A TOOL THAT TOUCHES THE POSITIVE TERMINAL AND THE STRUCTURE AT THE SAME TIME CAN CAUSE AN ARC, BURNS AND FIRE."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Disconnect the vent tubes and the temperature sensor connector.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Loosen the hold-down nuts and remove the battery from the tray.",
+              "warnings": [],
+              "cautions": [
+                "The battery weighs 26 kg. Two persons are necessary to lift it."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Examine the battery tray for corrosion and spilled electrolyte. Clean the tray if necessary.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Put the main battery (P/N C75-24-6101) on the tray and torque the hold-down nuts to 45 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Connect the positive (+) cable first, then the negative (-) cable. Torque the terminal bolts to 10 Nm.",
+              "warnings": [],
+              "cautions": [
+                "Do not torque the terminal bolts more than the specified value. This will damage the battery terminals."
+              ]
+            },
+            {
+              "number": 9,
+              "text": "Connect the vent tubes and the temperature sensor connector.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Set the battery switch to ON and make sure the battery voltage is not less than 24 V. Set the battery switch to OFF and close the battery compartment door.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        },
+        {
+          "revision": 2,
+          "revision_date": "2026-03-23",
+          "change_summary": "The torque of the battery terminal bolts is changed. Use only the value given in this revision.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Insulated spanners",
+            "Eye protection and protective gloves",
+            "Multimeter"
+          ],
+          "parts": [
+            {
+              "part_number": "C75-24-6101",
+              "description": "Main battery, 24 V",
+              "quantity": 1,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Battery hold-down nuts",
+              "value": 45,
+              "unit": "in-lb",
+              "step": 7
+            },
+            {
+              "fastener": "Battery terminal bolts",
+              "value": 12,
+              "unit": "Nm",
+              "step": 8
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure external power is disconnected and the battery switch is in the OFF position.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the battery compartment door.",
+              "warnings": [
+                "BATTERY ELECTROLYTE IS CORROSIVE. WEAR EYE PROTECTION AND PROTECTIVE GLOVES WHEN YOU WORK ON THE BATTERY."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Disconnect the negative (-) cable from the battery first, then disconnect the positive (+) cable.",
+              "warnings": [
+                "ALWAYS DISCONNECT THE NEGATIVE CABLE FIRST. A TOOL THAT TOUCHES THE POSITIVE TERMINAL AND THE STRUCTURE AT THE SAME TIME CAN CAUSE AN ARC, BURNS AND FIRE."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Disconnect the vent tubes and the temperature sensor connector.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Loosen the hold-down nuts and remove the battery from the tray.",
+              "warnings": [],
+              "cautions": [
+                "The battery weighs 26 kg. Two persons are necessary to lift it."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Examine the battery tray for corrosion and spilled electrolyte. Clean the tray if necessary.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Put the main battery (P/N C75-24-6101) on the tray and torque the hold-down nuts to 45 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Connect the positive (+) cable first, then the negative (-) cable. Torque the terminal bolts to 12 Nm.",
+              "warnings": [],
+              "cautions": [
+                "Do not torque the terminal bolts more than the specified value. This will damage the battery terminals."
+              ]
+            },
+            {
+              "number": 9,
+              "text": "Connect the vent tubes and the temperature sensor connector.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Set the battery switch to ON and make sure the battery voltage is not less than 24 V. Set the battery switch to OFF and close the battery compartment door.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "C-75",
+      "ata_chapter": "27",
+      "task_number": "27-31-02",
+      "title": "Elevator Trim Actuator - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 2,
+          "revision_date": "2025-05-12",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Inclinometer",
+            "Cotter pin pliers"
+          ],
+          "parts": [
+            {
+              "part_number": "C75-27-6302",
+              "description": "Elevator trim actuator",
+              "quantity": 1,
+              "step": 5
+            },
+            {
+              "part_number": "C75-27-6307",
+              "description": "Bolt, trim actuator rod end",
+              "quantity": 1,
+              "step": 6
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Trim actuator mounting bolts",
+              "value": 50,
+              "unit": "in-lb",
+              "step": 5
+            },
+            {
+              "fastener": "Trim actuator rod-end nut",
+              "value": 30,
+              "unit": "in-lb",
+              "step": 6
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Set the elevator trim to neutral, open the circuit breaker PITCH TRIM and attach a DO NOT CLOSE tag.",
+              "warnings": [
+                "MAKE SURE ELECTRICAL POWER TO THE TRIM SYSTEM IS OFF. MOVEMENT OF THE TRIM TAB CAN INJURE PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Remove access panel 331BB on the lower surface of the horizontal stabiliser.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Disconnect the electrical connector from the trim actuator and remove the rod-end bolt at the trim tab horn.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Remove the 4 mounting bolts and remove the elevator trim actuator.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Install the new elevator trim actuator (P/N C75-27-6302) with the 4 mounting bolts and torque the bolts to 50 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Connect the rod end to the trim tab horn with a new rod-end bolt (P/N C75-27-6307). Torque the nut to 30 in-lb and install a new cotter pin.",
+              "warnings": [],
+              "cautions": [
+                "Make sure the rod end can turn freely on the bolt after you torque the nut. A rod end that cannot turn will cause the actuator to bind."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Connect the electrical connector, remove the tag and close the circuit breaker PITCH TRIM.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Operate the elevator trim through its full range. The trim tab travel must be 12 degrees up and 20 degrees down. Make sure a nose-up trim command moves the trim tab down.",
+              "warnings": [
+                "A TRIM TAB THAT MOVES IN THE WRONG DIRECTION OR BEYOND ITS LIMITS CAN CAUSE LOSS OF CONTROL OF THE AIRCRAFT. DO NOT RELEASE THE AIRCRAFT UNTIL THE DIRECTION AND THE TRAVEL ARE CORRECT."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Get an independent inspection of the installation by a second authorised person, then install access panel 331BB.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "C-75",
+      "ata_chapter": "28",
+      "task_number": "28-21-05",
+      "title": "Fuel Boost Pump - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 2,
+          "revision_date": "2025-06-30",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Bonding meter",
+            "Grounding cables",
+            "Fuel-resistant container",
+            "Defuelling equipment"
+          ],
+          "parts": [
+            {
+              "part_number": "C75-28-6108",
+              "description": "O-ring, fuel boost pump",
+              "quantity": 1,
+              "step": 6
+            },
+            {
+              "part_number": "C75-28-6105",
+              "description": "Fuel boost pump",
+              "quantity": 1,
+              "step": 6
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Fuel boost pump mounting bolts",
+              "value": 40,
+              "unit": "in-lb",
+              "step": 7
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Connect the aircraft and the defuelling equipment to an approved ground point.",
+              "warnings": [
+                "FUEL VAPOUR IS FLAMMABLE AND EXPLOSIVE. DO NOT PERMIT OPEN FLAMES, SPARKS OR SMOKING WITHIN 15 METRES OF THE AIRCRAFT. BOND THE AIRCRAFT AND ALL EQUIPMENT TO GROUND BEFORE YOU OPEN THE FUEL SYSTEM."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Open the circuit breaker FUEL BOOST and attach a DO NOT CLOSE tag.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Defuel the header tank.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Remove access panel 141AL and disconnect the electrical connector from the fuel boost pump.",
+              "warnings": [],
+              "cautions": [
+                "Put a container below the pump. Some fuel will drain when you remove the pump."
+              ]
+            },
+            {
+              "number": 5,
+              "text": "Remove the 4 mounting bolts and remove the fuel boost pump. Discard the O-ring.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Lubricate a new O-ring (P/N C75-28-6108) with clean fuel and install it on the new fuel boost pump (P/N C75-28-6105).",
+              "warnings": [],
+              "cautions": [
+                "Use only clean fuel to lubricate the O-ring. Grease or oil will contaminate the fuel system."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Install the fuel boost pump with the 4 mounting bolts and torque the bolts to 40 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Connect the electrical connector. Measure the bonding resistance between the pump body and the structure. The resistance must not be more than 0.010 ohm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Refuel the header tank, remove the tag and close the circuit breaker FUEL BOOST.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Operate the fuel boost pump. Make sure the fuel pressure is between 14 and 20 psi and that there are no leaks at the pump.",
+              "warnings": [
+                "DO NOT OPERATE THE FUEL BOOST PUMP IN A DRY TANK. THE PUMP CAN OVERHEAT AND IGNITE FUEL VAPOUR."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 11,
+              "text": "Install access panel 141AL.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "C-75",
+      "ata_chapter": "32",
+      "task_number": "32-21-02",
+      "title": "Nose Landing Gear Shimmy Damper - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2025-03-24",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 5 to 25 Nm",
+            "Nose jack",
+            "Wheel chocks",
+            "Cotter pin pliers"
+          ],
+          "parts": [
+            {
+              "part_number": "C75-32-6202",
+              "description": "Shimmy damper, nose landing gear",
+              "quantity": 1,
+              "step": 4
+            },
+            {
+              "part_number": "C75-32-6209",
+              "description": "Cotter pin, piston rod nut",
+              "quantity": 1,
+              "step": 6
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Shimmy damper body attachment bolt",
+              "value": 14,
+              "unit": "Nm",
+              "step": 5
+            },
+            {
+              "fastener": "Shimmy damper piston rod nut",
+              "value": 9,
+              "unit": "Nm",
+              "step": 6
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Lift the nose of the aircraft on a jack until the nose wheel is clear of the ground.",
+              "warnings": [
+                "MAKE SURE THE AIRCRAFT IS STABLE ON THE JACK AND THE MAIN WHEELS ARE CHOCKED. AN AIRCRAFT THAT FALLS FROM THE JACK CAN KILL OR INJURE PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Remove the cotter pin, the nut and the bolt that attach the damper piston rod to the steering collar. Discard the cotter pin.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Remove the bolt that attaches the damper body to the nose gear leg and remove the shimmy damper.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Before installation, move the piston rod of the new shimmy damper (P/N C75-32-6202) through its full stroke by hand. The resistance must be smooth and constant and there must be no fluid leaks.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Attach the damper body to the nose gear leg with the body attachment bolt and torque the bolt to 14 Nm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Attach the piston rod to the steering collar and torque the nut to 9 Nm. Tighten the nut to the next slot and install a new cotter pin (P/N C75-32-6209).",
+              "warnings": [],
+              "cautions": [
+                "Do not loosen the nut to align the cotter pin hole. Do not use the removed cotter pin again."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Turn the nose wheel through its full steering range in both directions. Make sure there is no binding.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Lower the aircraft from the jack.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "C-75",
+      "ata_chapter": "32",
+      "task_number": "32-41-01",
+      "title": "Main Wheel Axle Nut - Installation and Torque",
+      "revisions": [
+        {
+          "revision": 2,
+          "revision_date": "2025-09-15",
+          "change_summary": "General revision of the task. No earlier revisions of this task are held in this library.",
+          "tools": [
+            "Torque wrench, 10 to 100 Nm",
+            "Torque wrench, 10 to 100 in-lb",
+            "Axle nut socket",
+            "Wheel bearing grease",
+            "Lockwire, 0.8 mm"
+          ],
+          "parts": [
+            {
+              "part_number": "C75-32-6107",
+              "description": "Axle nut, main wheel",
+              "quantity": 1,
+              "step": 2
+            },
+            {
+              "part_number": "C75-32-6112",
+              "description": "Lock bolt, axle nut",
+              "quantity": 2,
+              "step": 9
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Axle nut, bearing seating torque",
+              "value": 70,
+              "unit": "Nm",
+              "step": 5
+            },
+            {
+              "fastener": "Axle nut, final torque",
+              "value": 40,
+              "unit": "Nm",
+              "step": 7
+            },
+            {
+              "fastener": "Axle nut lock bolts",
+              "value": 25,
+              "unit": "in-lb",
+              "step": 9
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Make sure the aircraft is on jacks and the main wheel is clear of the ground.",
+              "warnings": [
+                "MAKE SURE THE AIRCRAFT IS STABLE ON THE JACKS AND THE AREA BELOW THE LANDING GEAR IS CLEAR. AN AIRCRAFT THAT FALLS FROM THE JACKS CAN KILL OR INJURE PERSONNEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Examine the axle threads and the axle nut (P/N C75-32-6107) for damage and corrosion. Replace the axle nut if the threads are damaged.",
+              "warnings": [],
+              "cautions": [
+                "Do not use a wire brush on the axle threads. Damage to the protective coating will cause corrosion."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Apply a thin layer of wheel bearing grease to the axle threads and to the bearing face of the axle nut.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Install the axle nut by hand until it touches the outer wheel bearing.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "While you turn the wheel by hand, torque the axle nut to 70 Nm to seat the bearings.",
+              "warnings": [],
+              "cautions": [
+                "Turn the wheel continuously while you apply the seating torque. If the wheel does not turn, the bearings will not seat correctly."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Loosen the axle nut until the torque is zero.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "While you turn the wheel by hand, torque the axle nut to the final torque of 40 Nm.",
+              "warnings": [
+                "DO NOT USE THE SEATING TORQUE AS THE FINAL TORQUE. AN AXLE NUT WITH TOO MUCH TORQUE CAN CAUSE BEARING FAILURE AND LOSS OF THE WHEEL."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "If the locking holes in the axle nut and the axle are not aligned, tighten the axle nut to the next hole.",
+              "warnings": [],
+              "cautions": [
+                "Do not loosen the axle nut to align the locking holes."
+              ]
+            },
+            {
+              "number": 9,
+              "text": "Install the 2 lock bolts (P/N C75-32-6112) and torque them to 25 in-lb. Safety the lock bolts with lockwire.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Make sure the wheel turns freely and has no axial play. Install the hub cap and lower the aircraft from the jacks.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "C-75",
+      "ata_chapter": "32",
+      "task_number": "32-42-03",
+      "title": "Main Wheel Brake Assembly - Wear Check and Replacement",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2024-11-18",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 5 to 50 Nm",
+            "Depth gauge or steel rule",
+            "Wheel jack",
+            "Brake bleed equipment",
+            "Protective caps and plugs"
+          ],
+          "parts": [
+            {
+              "part_number": "C75-32-6301",
+              "description": "Brake assembly, main wheel",
+              "quantity": 1,
+              "step": 7
+            },
+            {
+              "part_number": "C75-32-6306",
+              "description": "Bolt, brake attachment",
+              "quantity": 4,
+              "step": 7
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Brake attachment bolts",
+              "value": 28,
+              "unit": "Nm",
+              "step": 7
+            },
+            {
+              "fastener": "Brake hydraulic line fitting",
+              "value": 16,
+              "unit": "Nm",
+              "step": 8
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Chock the nose wheels, set the parking brake and let the brakes cool.",
+              "warnings": [
+                "DO NOT TOUCH THE BRAKE ASSEMBLY UNTIL IT IS COOL. HOT BRAKES CAN CAUSE SEVERE BURNS."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "With the parking brake set, measure how far each wear pin extends from the brake housing. Replace the brake assembly if any wear pin extends less than 1.5 mm. If all wear pins are in limits, record the measurements and stop this task here.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 3,
+              "text": "Release the parking brake and depressurise the hydraulic system.",
+              "warnings": [
+                "MAKE SURE THE HYDRAULIC PRESSURE IS ZERO BEFORE YOU DISCONNECT THE BRAKE LINE. HYDRAULIC FLUID UNDER PRESSURE CAN PENETRATE THE SKIN."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Lift the main wheel on a jack and remove the main wheel.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Disconnect the brake hydraulic line. Install caps on the line and on the brake port.",
+              "warnings": [],
+              "cautions": [
+                "Hydraulic fluid damages paint and tyres. Clean spilled fluid immediately."
+              ]
+            },
+            {
+              "number": 6,
+              "text": "Remove the 4 brake attachment bolts and remove the brake assembly from the axle flange.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 7,
+              "text": "Install the new brake assembly (P/N C75-32-6301) with 4 new attachment bolts (P/N C75-32-6306). Torque the bolts in a cross pattern to 28 Nm.",
+              "warnings": [],
+              "cautions": [
+                "Do not use the removed attachment bolts again. Always install new bolts."
+              ]
+            },
+            {
+              "number": 8,
+              "text": "Connect the brake hydraulic line and torque the fitting to 16 Nm.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Bleed the brake system, then install the main wheel and lower the aircraft.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Pressurise the hydraulic system and apply the brakes 5 times. Make sure there are no leaks, then measure and record the wear pin length of the new brake assembly.",
+              "warnings": [],
+              "cautions": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "aircraft_type": "C-75",
+      "ata_chapter": "34",
+      "task_number": "34-11-02",
+      "title": "Pitot Probe - Removal and Installation",
+      "revisions": [
+        {
+          "revision": 1,
+          "revision_date": "2024-05-06",
+          "change_summary": "Initial issue.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Pitot-static test set",
+            "Aerodynamic sealant",
+            "Protective caps"
+          ],
+          "parts": [
+            {
+              "part_number": "C75-34-6105",
+              "description": "Gasket, pitot probe",
+              "quantity": 1,
+              "step": 5
+            },
+            {
+              "part_number": "C75-34-6102",
+              "description": "Pitot probe, heated",
+              "quantity": 1,
+              "step": 5
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Pitot line B-nut",
+              "value": 9,
+              "unit": "Nm",
+              "step": 6
+            },
+            {
+              "fastener": "Pitot probe mounting screws",
+              "value": 20,
+              "unit": "in-lb",
+              "step": 7
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Open the circuit breaker PITOT HEAT and attach a DO NOT CLOSE tag.",
+              "warnings": [
+                "MAKE SURE THE PITOT HEAT IS OFF AND THE PROBE IS COOL BEFORE YOU TOUCH IT. A HOT PITOT PROBE CAN CAUSE SEVERE BURNS."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Remove the 4 mounting screws and carefully pull the pitot probe out until you can get access to the connections.",
+              "warnings": [],
+              "cautions": [
+                "Do not pull the probe out more than necessary. This can damage the wiring harness and the pitot line."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Disconnect the electrical connector and the pitot line from the probe. Install a cap on the pitot line.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Remove the pitot probe and discard the gasket.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Install a new gasket (P/N C75-34-6105) on the new pitot probe (P/N C75-34-6102).",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Connect the pitot line and torque the B-nut to 9 Nm. Connect the electrical connector.",
+              "warnings": [],
+              "cautions": [
+                "Do not blow into the pitot probe or apply pressure to it unless the pitot-static test set is connected. This can damage the airspeed instruments."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Put the probe in position, install the 4 mounting screws and torque them to 20 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Apply aerodynamic sealant around the base of the probe and let it cure.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Do a leak test of the pitot system with the pitot-static test set at 150 knots indicated. The leak rate must not be more than 2 knots in one minute.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Remove the tag, close the circuit breaker PITOT HEAT and do an operational test of the pitot heat.",
+              "warnings": [],
+              "cautions": [
+                "Do not operate the pitot heat on the ground for more than 30 seconds. The probe will overheat."
+              ]
+            }
+          ]
+        },
+        {
+          "revision": 2,
+          "revision_date": "2025-12-08",
+          "change_summary": "The torque of the pitot probe mounting screws is changed. Use only the value given in this revision.",
+          "tools": [
+            "Torque wrench, 10 to 100 in-lb",
+            "Torque wrench, 5 to 25 Nm",
+            "Pitot-static test set",
+            "Aerodynamic sealant",
+            "Protective caps"
+          ],
+          "parts": [
+            {
+              "part_number": "C75-34-6105",
+              "description": "Gasket, pitot probe",
+              "quantity": 1,
+              "step": 5
+            },
+            {
+              "part_number": "C75-34-6102",
+              "description": "Pitot probe, heated",
+              "quantity": 1,
+              "step": 5
+            }
+          ],
+          "torques": [
+            {
+              "fastener": "Pitot line B-nut",
+              "value": 9,
+              "unit": "Nm",
+              "step": 6
+            },
+            {
+              "fastener": "Pitot probe mounting screws",
+              "value": 25,
+              "unit": "in-lb",
+              "step": 7
+            }
+          ],
+          "steps": [
+            {
+              "number": 1,
+              "text": "Open the circuit breaker PITOT HEAT and attach a DO NOT CLOSE tag.",
+              "warnings": [
+                "MAKE SURE THE PITOT HEAT IS OFF AND THE PROBE IS COOL BEFORE YOU TOUCH IT. A HOT PITOT PROBE CAN CAUSE SEVERE BURNS."
+              ],
+              "cautions": []
+            },
+            {
+              "number": 2,
+              "text": "Remove the 4 mounting screws and carefully pull the pitot probe out until you can get access to the connections.",
+              "warnings": [],
+              "cautions": [
+                "Do not pull the probe out more than necessary. This can damage the wiring harness and the pitot line."
+              ]
+            },
+            {
+              "number": 3,
+              "text": "Disconnect the electrical connector and the pitot line from the probe. Install a cap on the pitot line.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 4,
+              "text": "Remove the pitot probe and discard the gasket.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 5,
+              "text": "Install a new gasket (P/N C75-34-6105) on the new pitot probe (P/N C75-34-6102).",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 6,
+              "text": "Connect the pitot line and torque the B-nut to 9 Nm. Connect the electrical connector.",
+              "warnings": [],
+              "cautions": [
+                "Do not blow into the pitot probe or apply pressure to it unless the pitot-static test set is connected. This can damage the airspeed instruments."
+              ]
+            },
+            {
+              "number": 7,
+              "text": "Put the probe in position, install the 4 mounting screws and torque them to 25 in-lb.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 8,
+              "text": "Apply aerodynamic sealant around the base of the probe and let it cure.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 9,
+              "text": "Do a leak test of the pitot system with the pitot-static test set at 150 knots indicated. The leak rate must not be more than 2 knots in one minute.",
+              "warnings": [],
+              "cautions": []
+            },
+            {
+              "number": 10,
+              "text": "Remove the tag, close the circuit breaker PITOT HEAT and do an operational test of the pitot heat.",
+              "warnings": [],
+              "cautions": [
+                "Do not operate the pitot heat on the ground for more than 30 seconds. The probe will overheat."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

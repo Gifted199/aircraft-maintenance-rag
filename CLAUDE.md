@@ -19,7 +19,8 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
    estimated cost, and wait for a go-ahead.
 5. **Phases.** Work one phase at a time and stop after each for the user to check:
    0 setup, 1 documents, 2 ingestion + hybrid search, 3 generation + API + guardrails,
-   4 evaluation, 5 UI + Docker, 6 AWS deploy, 7 Langfuse + README.
+   4 deploy the API to ECS Fargate, 5 evaluation, 6 Streamlit UI and redeploy, 7 Langfuse + README.
+   The live ECS demo is assessed, so deployment comes before evaluation. Cut from the end if time runs short.
 6. **Explain every design choice** in one or two plain sentences. The user is new to AWS and must
    defend this work, so say what the thing is and why we chose it over the obvious alternative.
 
@@ -34,6 +35,10 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
   always build clients from `settings.azure_openai_base_url`, not the raw endpoint.
 - S3 bucket `akinsds1126-aero-rag-docs`; OpenSearch index `aero-manuals`.
 - Documents are synthetic, generated from a JSON spec, so evaluation labels are correct by construction.
+  `data/spec/manuals.json` is the single source of truth: 3 fictional aircraft (A-200, B-340, C-75),
+  24 tasks, 31 task revisions (7 superseded). Never edit `data/manuals/*.md` by hand; edit the spec
+  and run `scripts/generate_manuals.py`. The Markdown layout is a contract between
+  `docgen/render.py` and `ingestion/parser.py`: change them together.
 
 ## Engineering conventions
 
@@ -63,6 +68,7 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
 uv sync                                  # install dependencies
 uv run pytest                            # offline tests
 uv run ruff check .                      # lint
+uv run python scripts/generate_manuals.py    # rebuild data/manuals/ from the spec (offline, free)
 aws sso login --profile aero             # needed before anything that touches AWS
 uv run python scripts/check_connections.py   # PASS/FAIL: Secrets Manager, S3, OpenSearch, Azure chat, embeddings
 ```

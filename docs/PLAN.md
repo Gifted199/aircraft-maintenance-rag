@@ -37,12 +37,28 @@ Each choice is written so it can be defended in one or two sentences.
   the evaluation set is known to be correct because it is the same data the document was built from.
 - **Fictional aircraft types, with a "synthetic, not for maintenance use" banner.** Nobody can
   mistake a demo answer for real airworthiness data.
-- **Markdown, one file per aircraft type x ATA chapter x revision** (3 aircraft x about 7 chapters
-  = 21+ current files, plus superseded revisions). Markdown keeps headings, numbered steps and
-  WARNING blocks explicit, which is what structure-aware chunking needs; it stands in for the
-  structured formats (S1000D/XML) real manuals use.
-- **Superseded revisions are deliberately included, with changed torque values.** This is the trap
-  the "outdated revision" metric measures: the old and new chunks look almost identical.
+- **Markdown, one file per task revision: 31 documents** (3 aircraft x 8 tasks = 24 latest, plus 7
+  superseded). Markdown keeps headings, numbered steps and WARNING blocks explicit, which is what
+  structure-aware chunking needs; it stands in for the structured formats (S1000D/XML) real manuals use.
+- **Three aircraft: A-200, B-340, C-75.** Six tasks (axle nut, cabin pressure sensor, brake, pitot
+  probe, fuel boost pump, battery) exist on all three with the same task number and title but
+  different torque values and part numbers, so retrieving the wrong aircraft gives a wrong answer
+  and the aircraft-type filter is properly tested. Each aircraft also has two tasks of its own.
+- **Superseded revisions are deliberately included: 6 tasks, 7 old documents, each with a changed
+  torque value or part number.** This is the trap the "outdated revision" metric measures: the old
+  and new documents are otherwise word-for-word identical. One task (A-200 axle nut) has two old revisions.
+- **A document does not say whether it is current.** Its header gives revision, date and what it
+  supersedes, exactly like a printed page, which cannot know it has been replaced. Ingestion decides
+  `is_latest` by comparing revisions, so that logic is real and tested rather than read off a label.
+- **WARNING and CAUTION sit inside their step block, before the action.** The reader sees the hazard
+  first, and a step block is a self-contained unit that cannot be cut away from its warning.
+- **Torques and part numbers are listed in tables and written in the step text, and the spec loader
+  rejects any mismatch.** The summary table can never disagree with the procedure.
+- **Deterministic string templating, no LLM.** Free, reproducible, and a test fails if the files on
+  disk are not exactly what the spec renders.
+- **The parser is strict and shares one data model with the generator.** Each document must parse
+  back to exactly its spec entry; anything unexpected stops ingestion rather than indexing a
+  half-understood procedure.
 
 ### Chunking and metadata
 - **One task = one chunk.** A maintenance task is the unit a mechanic acts on; splitting it could
@@ -128,13 +144,18 @@ Each choice is written so it can be defended in one or two sentences.
 | # | Phase | Deliverable | Check before moving on |
 |---|-------|-------------|------------------------|
 | 0 | Setup | Repo skeleton, config (Secrets Manager), JSON logging, `check_connections.py` | Five PASS lines (done) |
-| 1 | Documents | `data/spec/spec.json`, generator, 21+ manuals, eval labels, upload command | Read 2 or 3 manuals; counts match spec |
-| 2 | Ingestion + hybrid search | Parser/chunker, embeddings, index + search pipeline, search function, `python -m aero_rag.ingestion` | Chunking invariant tests pass; spot-check queries |
+| 1 | Documents | `data/spec/manuals.json`, generator, 31 manuals, parser, round-trip tests | Done; user uploads `data/manuals/` to S3 under `manuals/` |
+| 2 | Ingestion + hybrid search | Chunker, embeddings, index + search pipeline, search function, `python -m aero_rag.ingestion` | Chunking invariant tests pass; spot-check queries |
 | 3 | Generation + API + guardrails | `/health`, `/query`, abstention, grounding check | Curl examples; guardrail tests |
-| 4 | Evaluation | Metrics script, baseline vs improved report | Numbers reproducible from one command |
-| 5 | UI + Docker | Streamlit app, Dockerfile, local compose run | Both containers work locally |
-| 6 | AWS deploy | Commands for ECR, IAM, ECS service, and the one-off ingestion task | Public URL answers a question; ingestion task exits 0 with logs in CloudWatch |
+| 4 | Deploy the API to ECS Fargate | Dockerfile, commands for ECR, IAM, ECS service, and the one-off ingestion task | Public URL answers `/query`; ingestion task exits 0 with logs in CloudWatch |
+| 5 | Evaluation | Questions from the spec, metrics script, before/after report | Numbers reproducible from one command |
+| 6 | Streamlit UI and redeploy | Streamlit app as a second container in the same task | UI on the public URL answers a question |
 | 7 | Langfuse + README | Tracing, README with diagram, "Future: agents" | Trace visible; README runs from clean clone |
+
+**Why this order.** The live ECS demo is assessed, so the API is deployed as soon as it works
+(phase 4) and everything after that adds to a system that is already live. **If time runs short,
+cut from the end:** first Langfuse, then the UI (the API's built-in `/docs` page can be demonstrated
+instead), then the size of the evaluation. The README is short but is never cut.
 
 ## 4. Evaluation
 
@@ -187,16 +208,17 @@ Rough figures, to be confirmed against current price pages before each paid run.
 | Mon 16 Nov, until 2:30pm | Phases 1 to 7, in order; each phase leaves something demonstrable |
 | Mon 16 Nov, 2:30pm | Everything frozen; rehearse the demo; keep a local-run fallback ready |
 
-Phases 1 to 7 all fall on presentation day, so the cut order below is likely to be used. A working
-local demo with real metrics (phases 1 to 5) beats a half-finished cloud deployment.
+Phases 1 to 7 all fall on presentation day, so the cut order is likely to be used. The live ECS
+demo is assessed, so the first goal is the API answering on ECS (end of phase 4); a local run stays
+ready as the fallback.
 
-If we fall behind, cut in this order: extra retrieval ablation, Langfuse polish, any HTTPS/load
-balancer work. Never cut: the chunking invariants, the latest-revision filter, the grounding
+If we fall behind, cut from the end of the phase list (see section 3); within a phase, drop the
+extra retrieval ablation and any HTTPS/load balancer work first. Never cut: the chunking invariants, the latest-revision filter, the grounding
 guardrail, the four metrics.
 
 ## 8. Open decisions (not blocking)
 
-1. **How the UI is exposed (phase 6).** Recommended: the task's public IP with a security group
+1. **How the API and UI are exposed (phases 4 and 6).** Recommended: the task's public IP with a security group
    limited to the presenter's IP address; fewer resources in a shared account and quick to build.
    A load balancer with HTTPS is the production answer and goes in the README as a next step.
 2. **Abstention threshold value.** Chosen from the phase 4 score distribution, not guessed.
