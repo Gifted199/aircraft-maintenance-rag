@@ -18,6 +18,7 @@ from presenter import (
     EXAMPLES,
     MAX_QUESTION_CHARS,
     NOTICE,
+    UI_VERSION,
     Conversation,
     View,
     build_view,
@@ -31,16 +32,19 @@ from presenter import (
     ui_config,
     with_aircraft,
 )
+from theme import APP_NAME, footer_html, header_html, page_css
 
 CONFIG = ui_config(os.environ)
 AVATARS = {"user": ":material/engineering:", "assistant": ":material/menu_book:"}
 
 st.set_page_config(
-    page_title="Maintenance manual assistant",
-    page_icon=":material/build:",
+    page_title=APP_NAME,
+    page_icon=":material/flight:",
     layout="centered",
-    menu_items={"About": f"Aircraft maintenance manual assistant. {NOTICE}"},
+    menu_items={"About": f"{APP_NAME}. {NOTICE}"},
 )
+st.html(page_css())  # USWDS-aligned styling (theme.py); the colours also live in .streamlit/
+st.html(header_html())
 
 
 @st.cache_data(ttl=15, show_spinner=False)
@@ -116,11 +120,10 @@ with st.sidebar:
         "Only the latest revision of each task is searched. Every torque value and part number "
         "is checked against the cited task, and procedures are returned complete, word for word."
     )
-    st.caption(NOTICE)
+    st.caption(f"{NOTICE} UI version {UI_VERSION}.")
 
 # ------------------------------------------------------------------ chat
 
-st.title("Maintenance manual assistant")
 conversation: Conversation = state.conversation
 aircraft = conversation.aircraft
 st.badge(aircraft if aircraft != AUTO_DETECT else "Aircraft: auto-detect",
@@ -161,7 +164,7 @@ def render(view: View, index: int, is_last: bool) -> None:
             for column, option in zip(columns, view.options, strict=False):
                 column.button(
                     option, key=f"clarify-{index}-{option}", on_click=on_clarify,
-                    args=(option,), icon=":material/flight:", width="stretch",
+                    args=(option,), icon=":material/flight:", width="stretch", type="primary",
                 )  # fmt: skip
     elif view.kind == "abstained":
         st.info(f"**{view.title}**  \n{view.message}", icon=":material/block:")
@@ -210,3 +213,4 @@ if state.queued is not None:
 
 st.chat_input("Ask a maintenance question", key="chat_input", max_chars=MAX_QUESTION_CHARS,
               on_submit=on_chat_submit)  # fmt: skip
+st.html(footer_html())

@@ -51,7 +51,7 @@ services:
   ui:
     build:
       context: ui
-    image: akinsds1126-aero-rag-ui:0.2.0
+    image: akinsds1126-aero-rag-ui:0.2.1
     container_name: akinsds1126-aero-rag-ui
     platform: linux/amd64
     environment:

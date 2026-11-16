@@ -1,6 +1,8 @@
-# Allow-list: the UI image needs exactly three files.
+# Allow-list: the UI image needs exactly these files.
 *
 
 !requirements.txt
 !app.py
 !presenter.py
+!theme.py
+!.streamlit/config.toml

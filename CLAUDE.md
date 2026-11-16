@@ -29,7 +29,7 @@ Speed matters, but correctness and clear reasoning matter more. Full plan: [docs
 
 - AWS: region `eu-west-2`, CLI profile `aero` (SSO, AdministratorAccess). Log in with `aws sso login --profile aero`.
 - OpenSearch: domain `akinsds1126-aero-rag`, OpenSearch 2.19, 1 x t3.small.search, public endpoint,
-  fine-grained access control, master user `aero_admin`.
+  fine-grained access control; the master user name and password are in the secret only.
 - Models (Azure OpenAI): chat `gpt-5.4-mini` (use `max_completion_tokens`, not `max_tokens`);
   embeddings `text-embedding-3-small`, 1,536 dimensions. API version `2025-04-01-preview`
   (verified by `check_connections.py`). The stored endpoint is the portal's full target URI, so
@@ -123,7 +123,7 @@ uv run python scripts/build_eval_set.py      # rebuild data/eval/questions.json 
 uv run python scripts/evaluate.py --dry-run  # evaluation call count + cost estimate (free)
 uv run python scripts/evaluate.py            # full evaluation -> data/results/ (paid: ~51 LLM calls, ~$0.14)
 docker build --platform linux/amd64 -t akinsds1126-aero-rag-api:0.2.0 .   # local API image build
-docker build --platform linux/amd64 -t akinsds1126-aero-rag-ui:0.2.0 ui    # local UI image build
+docker build --platform linux/amd64 -t akinsds1126-aero-rag-ui:0.2.1 ui    # local UI image build
 .\scripts\run_local_container.ps1        # run the API image alone with secrets as env vars; -Stop
 .\scripts\compose_up.ps1                 # API + UI together (UI on :8501); -Down to remove
 uv run --group ui streamlit run ui/app.py    # UI without Docker, against an API on :8000

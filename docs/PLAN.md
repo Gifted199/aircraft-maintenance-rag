@@ -267,9 +267,9 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
 | 4a | Containerise the API | Dockerfile, `.dockerignore`, `scripts/run_local_container.ps1` | Done: image `akinsds1126-aero-rag-api:0.1.0` answers locally as user `app` |
 | 4b | Deploy the API to ECS Fargate | Commands for ECR, IAM, ECS service, and the one-off ingestion task | Public URL answers `/query`; ingestion task exits 0 with logs in CloudWatch |
 | 5 | Evaluation | 47 labelled questions, metrics, before/after tables, README Metrics draft | Done: `scripts/evaluate.py` reproduces `data/results/` (~$0.14); v2 fixed both v1 failures (47/47) |
-| 6 | Streamlit UI and redeploy | `ui/` chat (app, presenter, Dockerfile), `docker-compose.yml`, `scripts/compose_up.ps1`; then the UI as a second container in the same task | Local: done, compose runs both healthy (UI :8501). ECS: UI on the public URL answers a question |
+| 6 | Streamlit UI and redeploy | `ui/` chat (app, presenter, Dockerfile), `docker-compose.yml`, `scripts/compose_up.ps1`; then the UI as a second container in the same task | Done: rev 2 on ECS, UI on port 8501 answers; port 8000 closed |
 | 7a | Langfuse tracing | `tracing.py`, a span per step, flush on shutdown, `docs/DEPLOY.md` + task definition rev 2 | Done locally: a compose query produced an 8-observation trace in Langfuse Cloud. ECS: rev 2 deployed by the user |
-| 7b | README | README with diagram, "Future: agents" | README runs from clean clone |
+| 7b | Final polish | USWDS-aligned UI (`ui/theme.py`), small-talk replies, aircraft chip follows detection, UI 0.2.1 + task definition rev 3; full README; `.env.example` with every setting; secret scan | Done locally (compose, UI 0.2.1). ECS: rev 3 deployed by the user |
 
 **Why this order.** The live ECS demo is assessed, so the API is deployed as soon as it works
 (phase 4) and everything after that adds to a system that is already live. **If time runs short,

@@ -35,6 +35,7 @@ from presenter import (
     query_payload,
     record_exchange,
     record_notice,
+    small_talk_kind,
     ui_config,
     with_aircraft,
 )
@@ -246,15 +247,17 @@ def test_ui_image_pins_the_same_streamlit_as_the_local_group():
 
 
 def test_ui_has_no_access_to_secrets_or_backends():
-    source = (ROOT / "ui" / "app.py").read_text() + (ROOT / "ui" / "presenter.py").read_text()
+    source = "".join((ROOT / "ui" / name).read_text(encoding="utf-8")
+                     for name in ("app.py", "presenter.py", "theme.py"))  # fmt: skip
     imports = " ".join(re.findall(r"^\s*(?:from|import) (\S+)", source, flags=re.MULTILINE))
     for forbidden in ("aero_rag", "openai", "opensearch", "boto3", "requests", "httpx"):
         assert forbidden not in imports
     environ_keys = set(re.findall(r"environ\.get\(\"(\w+)\"", source))
     assert environ_keys == {"API_URL", "API_TIMEOUT_SECONDS"}  # the UI's only settings
     allowed = (ROOT / "ui" / ".dockerignore").read_text().split()
-    assert sorted(p for p in allowed if p.startswith("!")) == ["!app.py", "!presenter.py",
-                                                               "!requirements.txt"]  # fmt: skip
+    assert sorted(p for p in allowed if p.startswith("!")) == [
+        "!.streamlit/config.toml", "!app.py", "!presenter.py", "!requirements.txt", "!theme.py",
+    ]  # fmt: skip
 
 
 # ------------------------------------------------------------------ the chat conversation
@@ -377,3 +380,65 @@ def test_citation_markdown_has_revision_date_and_s3_key():
 
 def test_sidebar_note_explains_that_answers_are_independent():
     assert "never" in CONVERSATION_NOTE and "aircraft" in CONVERSATION_NOTE
+
+
+# ------------------------------------------------------------- small talk and the aircraft chip
+
+
+@pytest.mark.parametrize("text, kind", [
+    ("okay", "acknowledge"), ("OK!", "acknowledge"), ("Great", "acknowledge"),
+    ("got it.", "acknowledge"), ("thanks", "thanks"), ("Thank you!", "thanks"),
+    ("ok, thanks", "thanks"), ("Cheers 👍", "thanks"), ("that’s helpful", "thanks"),
+    ("hi", "greeting"), ("Hello there", "greeting"), ("Good morning!", "greeting"),
+    ("bye", "goodbye"), ("That's all", "goodbye"),
+])  # fmt: skip
+def test_small_talk_is_recognised(text, kind):
+    assert small_talk_kind(text) == kind
+
+
+@pytest.mark.parametrize("text", [
+    "ok what is the torque for the main wheel axle nut?",
+    "thanks, and for the B-340?",
+    "Hi, what is the part number of the heated pitot probe?",
+    "great, now list the steps",
+    "good condition limits for brake wear",
+    "fine thread bolt torque",
+    "B340-28-5209",
+    "torque?",
+    "hello, is the A-200 lock bolt reusable?",
+    "perfect seal part number",
+])  # fmt: skip
+def test_real_questions_are_never_taken_for_small_talk(text):
+    assert small_talk_kind(text) is None
+    plan = plan_message(Conversation(), text)
+    assert plan.request is not None  # it goes to the API
+
+
+def test_small_talk_gets_a_local_reply_with_no_api_call():
+    _, conversation = ask(Conversation(aircraft="B-340"), "Brake bolt torque?")
+    plan = plan_message(conversation, "Thanks!")
+    assert plan.request is None  # nothing is sent to the API
+    assert plan.notice == "Glad that helped. Ask another maintenance question when you're ready."
+    after = record_notice(conversation, "Thanks!", plan)
+    assert after.aircraft == "B-340" and after.turns[-1].view.kind == "notice"
+    assert after.turns[-2].text == "Thanks!"
+    # Small talk does not count as a question: the aircraft shortcut still repeats the real one.
+    request, _ = ask(after, "and the C-75?")
+    assert request.question == "Brake bolt torque?" and request.aircraft == "C-75"
+
+
+def test_small_talk_before_any_answer_and_goodbye():
+    assert "A-200, B-340" in plan_message(Conversation(), "ok").notice
+    assert "A-200, B-340" in plan_message(Conversation(), "hello").notice
+    assert plan_message(Conversation(), "bye").notice.startswith("Goodbye")
+
+
+def test_aircraft_chip_follows_the_aircraft_the_api_detected():
+    # An example chip is sent in auto-detect; the API detects the A-200 from the question.
+    plan = plan_example(EXAMPLES[0])
+    assert plan.request.aircraft == AUTO_DETECT and "A-200" in plan.request.question
+    conversation = record_exchange(Conversation(), plan.request, build_view(ANSWERED))
+    assert conversation.aircraft == "A-200"
+    # A later auto-detect question with no aircraft keeps it; a part number is not an aircraft.
+    request = AskRequest("What is A200-32-4112?", AUTO_DETECT, "What is A200-32-4112?")
+    assert record_exchange(Conversation(), request, build_view(ANSWERED)).aircraft == AUTO_DETECT

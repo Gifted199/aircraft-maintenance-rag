@@ -21,6 +21,7 @@ MAX_QUESTION_CHARS = 500  # the API's input guardrail limit
 AUTO_DETECT = "Auto-detect"
 AIRCRAFT_CHOICES = (AUTO_DETECT, "A-200", "B-340", "C-75")
 NOTICE = "Synthetic training data. Not for use on real aircraft."
+UI_VERSION = "0.2.1"  # the UI image tag; shown in the sidebar so the demo shows what is deployed
 
 # Characters Streamlit's Markdown treats specially ($ starts LaTeX, :red[...] colours text).
 _MARKDOWN_SPECIAL = "\\`*_{}[]<>()#+-.!|$:~"
@@ -421,10 +422,62 @@ class Plan:
     aircraft: str | None = None  # new conversation aircraft for a local reply
 
 
+# Small talk is answered by the UI itself, with no API call. The list is deliberately short and
+# matched against the WHOLE message (case, punctuation and emoji ignored), so a real question can
+# never be caught: "ok what is the torque..." or "thanks, and the B-340?" still go to the API.
+_SMALL_TALK = {
+    "thanks": frozenset(
+        "thanks|thank you|thanks a lot|thank you very much|many thanks|cheers|thx|ty|ta|"
+        "ok thanks|okay thanks|ok thank you|okay thank you|great thanks|great thank you|"
+        "perfect thanks|thanks that helps|that helps|that helped|that's helpful|thats helpful"
+        .split("|")
+    ),
+    "acknowledge": frozenset(
+        "ok|okay|k|kk|okey|great|good|cool|nice|perfect|excellent|brilliant|awesome|"
+        "got it|understood|noted|alright|all right|fine|sounds good|ok great|okay great|ok cool|"
+        "great stuff|very good|good stuff".split("|")
+    ),
+    "greeting": frozenset(
+        "hi|hello|hey|hiya|hi there|hello there|hey there|good morning|good afternoon|"
+        "good evening".split("|")
+    ),
+    "goodbye": frozenset(
+        "bye|goodbye|bye bye|see you|see you later|that's all|thats all".split("|")
+    ),
+}
+_SMALL_TALK_REPLIES = {
+    "after_answer": "Glad that helped. Ask another maintenance question when you're ready.",
+    "greeting": "Hello. Ask about torque values, part numbers or procedures for the A-200, B-340 "
+    "or C-75, and I'll answer from the latest revision of the manuals, with citations.",
+    "goodbye": "Goodbye. Start a new conversation any time.",
+}
+
+
+def small_talk_kind(text: str) -> str | None:
+    """"thanks", "acknowledge", "greeting" or "goodbye" when the whole message is small talk."""
+    normalised = " ".join(re.sub(r"[^a-z' ]+", " ", text.lower().replace("’", "'")).split())
+    for kind, phrases in _SMALL_TALK.items():
+        if normalised in phrases:
+            return kind
+    return None
+
+
+def small_talk_reply(conversation: Conversation, kind: str) -> str:
+    if kind == "goodbye":
+        return _SMALL_TALK_REPLIES["goodbye"]
+    has_answer = any(t.role == "assistant" and t.question for t in conversation.turns)
+    if kind == "greeting" or not has_answer:  # "ok" before any answer: say what to ask
+        return _SMALL_TALK_REPLIES["greeting"]
+    return _SMALL_TALK_REPLIES["after_answer"]
+
+
 def plan_message(conversation: Conversation, text: str) -> Plan | None:
     text = text.strip()
     if not text:
         return None
+    talk = small_talk_kind(text)
+    if talk is not None:
+        return Plan(None, notice=small_talk_reply(conversation, talk))  # no API call
     named = detect_aircraft(text)
     if named and is_aircraft_only(text):
         pending = conversation.pending_clarification
@@ -450,8 +503,12 @@ def plan_example(example: Example) -> Plan:
 
 
 def record_exchange(conversation: Conversation, request: AskRequest, view: View) -> Conversation:
-    """Add the user's message and the answer. An aircraft that was used becomes the current one."""
-    aircraft = request.aircraft if request.aircraft != AUTO_DETECT else conversation.aircraft
+    """Add the user's message and the answer. The aircraft the question was answered for becomes
+    the current one: the one sent, or, in auto-detect, the one the API detected in the question
+    (same rule as the API, so an example chip about the A-200 switches the chip to A-200)."""
+    aircraft = request.aircraft
+    if aircraft == AUTO_DETECT:
+        aircraft = detect_aircraft(request.question) or conversation.aircraft
     turns = (
         *conversation.turns,
         Turn("user", text=request.shown),

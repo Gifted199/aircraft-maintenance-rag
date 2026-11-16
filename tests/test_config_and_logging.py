@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 from pydantic import SecretStr
 
@@ -29,10 +30,10 @@ def test_secrets_are_masked_when_settings_are_printed():
 def test_environment_value_wins_over_secrets_manager_value():
     settings = Settings(_env_file=None, azure_openai_api_key="from-env")
     merged = merge_secret(
-        settings, {"AZURE_OPENAI_API_KEY": "from-secret", "OPENSEARCH_USERNAME": "aero_admin"}
+        settings, {"AZURE_OPENAI_API_KEY": "from-secret", "OPENSEARCH_USERNAME": "fake_user"}
     )
     assert merged.azure_openai_api_key.get_secret_value() == "from-env"
-    assert merged.opensearch_username == "aero_admin"
+    assert merged.opensearch_username == "fake_user"
     assert isinstance(merged.azure_openai_api_key, SecretStr)
 
 
@@ -91,3 +92,20 @@ def test_setup_logging_writes_json_to_stdout(capsys):
         assert entry["message"] == "hello" and entry["task_number"] == "32-11-01"
     finally:
         logging.getLogger().handlers.clear()
+
+
+def test_env_example_lists_every_setting_and_no_secret_values():
+    from pathlib import Path
+
+    from aero_rag.config import OPTIONAL_SECRET_KEYS, SECRET_KEYS, Settings
+
+    text = (Path(__file__).resolve().parents[1] / ".env.example").read_text(encoding="utf-8")
+    assigned = re.findall(r"^#?\s*([A-Z][A-Z0-9_]+)=(.*)$", text, flags=re.MULTILINE)
+    names = {name for name, _ in assigned}
+    secret_fields = {k.lower() for k in (*SECRET_KEYS, *OPTIONAL_SECRET_KEYS)}
+    for field in Settings.model_fields:
+        if field in secret_fields:
+            assert field.upper() not in names  # only named in the comment, never assigned
+            assert field.upper() in text
+        else:
+            assert field.upper() in names, f"{field.upper()} missing from .env.example"

@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
 #
 # The Streamlit UI, as its own small image (separate from the API image):
-#   docker build --platform linux/amd64 -t akinsds1126-aero-rag-ui:0.2.0 ui
+#   docker build --platform linux/amd64 -t akinsds1126-aero-rag-ui:0.2.1 ui
 #
 # The build context is the ui/ folder only, so the image cannot see .env, src/ or the spec. It
-# contains Streamlit and two Python files; it holds no secrets and talks only to API_URL.
+# contains Streamlit, three Python files and the theme config; it holds no secrets and talks only to API_URL.
 FROM --platform=linux/amd64 python:3.12-slim
 
 # A dedicated unprivileged user. Streamlit writes a small config folder in its home directory.
@@ -17,7 +17,9 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir --disable-pip-version-check -r requirements.txt
 
-COPY app.py presenter.py ./
+COPY app.py presenter.py theme.py ./
+# Streamlit reads the theme from .streamlit/config.toml next to the script.
+COPY .streamlit/config.toml ./.streamlit/config.toml
 
 # API_URL: on ECS the UI and API containers share the task's network, so the API is localhost.
 # Streamlit settings: listen on all interfaces, no browser, no usage statistics, no file watcher

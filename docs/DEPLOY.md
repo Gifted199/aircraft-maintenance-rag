@@ -1,4 +1,85 @@
-# Deploy phases 6 + 7a to ECS (task definition revision 2)
+# Deploying to ECS
+
+Every command here changes AWS and is run by you (CLAUDE.md rule 2). PowerShell syntax. Start
+every session with:
+
+```powershell
+aws sso login --profile aero
+$P = @("--profile", "aero", "--region", "eu-west-2")
+$Registry = "666127452756.dkr.ecr.eu-west-2.amazonaws.com"
+$Cluster = "akinsds1126-aero-rag-cluster"
+$Service = "akinsds1126-aero-rag-api-service-jk8marb6"
+$Sg = "sg-02fa227fd6bdc5931"
+```
+
+| Revision | API image | UI image | What changed |
+|---|---|---|---|
+| 1 | 0.1.0 | none | API only, port 8000 public |
+| 2 | 0.2.0 | 0.2.0 | chat UI joins the task, Langfuse tracing, 8501 public, 8000 closed |
+| **3** | 0.2.0 | **0.2.1** | USWDS-aligned UI, small-talk replies, aircraft chip follows detection |
+
+# Release 0.2.1: UI only (task definition revision 3)
+
+Only the UI container's image changes; the API stays on `0.2.0`, the secrets, ports, sizes and
+security group are unchanged (checked against the live revision 2 on 16 November 2026). The file
+is [deploy/ecs/task-definition-rev3.json](../deploy/ecs/task-definition-rev3.json); unlike the
+revision 2 file it already has the secret ARN filled in, so it can be registered as is.
+
+## 1. Check the local image is the one you tested
+
+`.\scripts\compose_up.ps1` built `akinsds1126-aero-rag-ui:0.2.1` and is serving it at
+http://localhost:8501. ECR tags are immutable: once `0.2.1` is pushed it can never be replaced,
+so push only when you are happy with what you see there.
+
+```powershell
+docker compose ps --format "table {{.Name}}\t{{.Image}}\t{{.Status}}"   # ui: ...-ui:0.2.1 (healthy)
+```
+
+## 2. Tag and push the UI image
+
+```powershell
+aws ecr get-login-password @P | docker login --username AWS --password-stdin $Registry
+docker tag akinsds1126-aero-rag-ui:0.2.1 "$Registry/akinsds1126-aero-rag-ui:0.2.1"
+docker push "$Registry/akinsds1126-aero-rag-ui:0.2.1"
+aws ecr describe-images @P --repository-name akinsds1126-aero-rag-ui `
+  --query "imageDetails[].imageTags" --output text      # expect 0.2.0 and 0.2.1
+```
+
+## 3. Register revision 3 and deploy it
+
+```powershell
+aws ecs register-task-definition @P --cli-input-json file://deploy/ecs/task-definition-rev3.json `
+  --query "taskDefinition.[family,revision]" --output text           # expect: ... 3
+aws ecs update-service @P --cluster $Cluster --service $Service `
+  --task-definition akinsds1126-aero-rag-api:3 --query "service.deployments[0].rolloutState"
+aws ecs wait services-stable @P --cluster $Cluster --services $Service
+```
+
+The new task starts and must pass both health checks before the old one stops; if it never
+becomes healthy, the deployment circuit breaker rolls back to revision 2 on its own.
+
+## 4. Find the new address (the public IP changes on every deployment)
+
+```powershell
+$Task = aws ecs list-tasks @P --cluster $Cluster --service-name $Service --query "taskArns[0]" --output text
+$Eni = aws ecs describe-tasks @P --cluster $Cluster --tasks $Task `
+  --query "tasks[0].attachments[0].details[?name=='networkInterfaceId'].value" --output text
+$Ip = aws ec2 describe-network-interfaces @P --network-interface-ids $Eni `
+  --query "NetworkInterfaces[0].Association.PublicIp" --output text
+"UI: http://${Ip}:8501"
+aws ecs describe-tasks @P --cluster $Cluster --tasks $Task `
+  --query "tasks[0].containers[].[name,lastStatus,healthStatus,image]" --output table
+```
+
+Expected: `api` on `...-api:0.2.0` and `ui` on `...-ui:0.2.1`, both `RUNNING` / `HEALTHY`; the
+sidebar of the UI ends with "UI version 0.2.1".
+
+**Rollback:** `aws ecs update-service @P --cluster $Cluster --service $Service --task-definition akinsds1126-aero-rag-api:2`,
+then step 4 again for the new IP.
+
+# Release 0.2.0: phases 6 + 7a (task definition revision 2, done 16 November 2026)
+
+Kept as the record of how revision 2 was deployed.
 
 What changes: the API image goes from 0.1.0 to 0.2.0 (evaluation v2 fixes and Langfuse tracing);
 a second container, the Streamlit chat UI 0.2.0, joins the same task; the task gets the three
@@ -10,19 +91,9 @@ secrets and host names). It is on only because the manuals are synthetic; it mus
 real, proprietary manuals. JSON has no comments, so the task definition carries this warning as a
 Docker label on the API container (`aero-rag.note.LANGFUSE_CAPTURE_TEXT`).
 
-Every command below changes AWS and is run by you (CLAUDE.md rule 2). PowerShell syntax.
-Current state, read on 16 November 2026: cluster `akinsds1126-aero-rag-cluster`, service
-`akinsds1126-aero-rag-api-service-jk8marb6` on `akinsds1126-aero-rag-api:1`, security group
-`sg-02fa227fd6bdc5931` (ingress: 8000 from 0.0.0.0/0 and ::/0).
-
-```powershell
-aws sso login --profile aero
-$P = @("--profile", "aero", "--region", "eu-west-2")
-$Registry = "666127452756.dkr.ecr.eu-west-2.amazonaws.com"
-$Cluster = "akinsds1126-aero-rag-cluster"
-$Service = "akinsds1126-aero-rag-api-service-jk8marb6"
-$Sg = "sg-02fa227fd6bdc5931"
-```
+State before this release: service `akinsds1126-aero-rag-api-service-jk8marb6` on
+`akinsds1126-aero-rag-api:1`, security group `sg-02fa227fd6bdc5931` (ingress: 8000 from
+0.0.0.0/0 and ::/0). Uses the variables set at the top of this page.
 
 ## 1. ECR repository for the UI (same settings as the API repository)
 
