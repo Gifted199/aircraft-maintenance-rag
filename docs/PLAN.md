@@ -2,7 +2,7 @@
 
 Presentation: **Monday 16 November 2026, 4:30pm UK**. Plan written Sunday 15 November.
 
-## 1. What we are building
+## 1. What I am building
 
 A question-answering assistant over aircraft maintenance manuals. A mechanic picks an aircraft type,
 asks a question ("What is the torque for the main wheel axle nut?"), and gets an answer with
@@ -32,7 +32,7 @@ Secrets come from AWS Secrets Manager.
 Each choice is written so it can be defended in one or two sentences.
 
 ### Documents
-- **Synthetic manuals generated from a JSON spec.** Real manuals are copyrighted and we would have
+- **Synthetic manuals generated from a JSON spec.** Real manuals are copyrighted and I would have
   to hand-label answers; generating from a spec means every torque value, part number and step in
   the evaluation set is known to be correct because it is the same data the document was built from.
 - **Fictional aircraft types, with a "synthetic, not for maintenance use" banner.** Nobody can
@@ -87,14 +87,14 @@ Each choice is written so it can be defended in one or two sentences.
   `is_latest` depends on every revision present, so a full pass is the simple way to keep it right
   (a new revision flips the old one), and one unparseable file stops the job with nothing half-written.
   Known limit: a document deleted from S3 is not removed from the index; `--recreate-index` rebuilds it.
-- **Strict mapping.** The index rejects any field we did not declare, so a typo in a field name
+- **Strict mapping.** The index rejects any field I did not declare, so a typo in a field name
   fails loudly instead of silently creating an unfiltered column.
 
 ### Retrieval
 - **Hybrid search (BM25 + k-NN).** Keyword search (BM25) is exact on part numbers like `AX2-32-4411`,
   which embeddings blur; vector search (k-NN) handles paraphrased questions. Hybrid gets both.
 - **OpenSearch search pipeline with a normalization processor.** BM25 and cosine scores are on
-  different scales; the pipeline rescales and combines them inside OpenSearch, so we make one request
+  different scales; the pipeline rescales and combines them inside OpenSearch, so I make one request
   instead of merging two result lists in Python.
 - **Pipeline `aero-manuals-hybrid`: min-max normalisation, weighted arithmetic mean, weights
   0.5 / 0.5** (keyword, vector). Equal weights are the neutral starting point; phase 5 measures
@@ -105,11 +105,11 @@ Each choice is written so it can be defended in one or two sentences.
   `include_superseded` exists only so evaluation can show what happens without the filter.
 - **Aircraft type is optional.** If it is not given, it is detected from the question (A-200, A200,
   "a 200"); a part number such as `A200-32-4112` does not count, and two aircraft in one question
-  is treated as none. With no aircraft we search all and set `aircraft_unspecified`, because a
+  is treated as none. With no aircraft I search all and set `aircraft_unspecified`, because a
   wrong guess on a hard filter is worse than no guess. Phase 3 uses that flag: when the top results
   are the same task on different aircraft, the assistant must ask which aircraft rather than pick one.
 - **Collapse children to parents in Python.** The hybrid query in OpenSearch 2.19 has no field
-  collapsing, so we fetch 4 children per wanted result, keep the best child per parent, and fetch
+  collapsing, so I fetch 4 children per wanted result, keep the best child per parent, and fetch
   the parents by id.
 - **Lucene k-NN engine.** It applies the filter while searching the vector graph, which is what
   "filter inside the sub-query" needs, and suits a small index.
@@ -118,7 +118,7 @@ Each choice is written so it can be defended in one or two sentences.
   0.66 to 0.73 cosine and unrelated tasks 0.38 to 0.59, which is the gap the abstention threshold uses.
 - **"I don't know" threshold uses raw cosine similarity of the top hit, not the hybrid score.**
   Min-max normalisation always gives the best hit a score of 1.0, even when it is irrelevant, so the
-  combined score cannot tell us that nothing matched. The threshold value is tuned in phase 4.
+  combined score cannot tell me that nothing matched. The threshold value is tuned in phase 4.
 - **Index settings:** 0 replicas (a single-node domain has nowhere to put a replica), HNSW with
   cosine similarity, 1,536 dimensions to match `text-embedding-3-small`.
 
@@ -131,7 +131,7 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
   message declares to be data, never instructions.
 - **Strict JSON schema output** (`status`, `answer`, `steps`, `source_ids`). The model cannot
   return anything outside those fields, so there is nothing to parse loosely.
-- **The model cites by source id; our code builds the citation.** Aircraft, task number, revision,
+- **The model cites by source id; my code builds the citation.** Aircraft, task number, revision,
   date and S3 key come from the index, so a citation cannot be invented or mistyped.
 - **Input guardrail (free):** empty check, 500-character limit, simple injection patterns. The
   patterns are a first filter; the real defences are the fenced prompt, the fixed output shape and
@@ -202,10 +202,10 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
   `X-Request-ID` header. Logs hold sizes, decisions, scores and token counts; never the question,
   the prompt or a secret. `python -m aero_rag.api` starts the server with every line as JSON.
 - **Streamlit UI calls the API over HTTP** rather than importing the RAG code, so the API is the single
-  entry point and is what we test and trace.
+  entry point and is what I test and trace.
 
 ### AWS
-- **ECS Fargate.** Runs containers without us managing servers; we pay per second while the task runs.
+- **ECS Fargate.** Runs containers without me managing servers; I pay per second while the task runs.
 - **One task, two containers (API + UI), two images.** Containers in one Fargate task share
   `localhost`, so the UI reaches the API at `http://localhost:8000` with no extra networking. The
   UI has its own small image (Streamlit only, no `aero_rag`, no secrets) instead of sharing the API
@@ -222,7 +222,7 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
   references each JSON key and ECS injects it as an environment variable at start-up; the code sees
   the variables are already set and does not call Secrets Manager at all.
 - **Two IAM roles.** The *execution role* is used by ECS itself to pull the image, write logs and
-  read the secret for injection. The *task role* is what our code runs as: read-only on our one S3
+  read the secret for injection. The *task role* is what my code runs as: read-only on my one S3
   bucket and nothing else. Keeping them separate means the application cannot read secrets it was not handed.
 - **Ingestion runs two ways from the same code.** `python -m aero_rag.ingestion` runs locally (profile
   `aero`) and as a one-off Fargate task: same image, same task role, with the container command
@@ -254,7 +254,7 @@ generate -> output guardrail -> one retry -> answer or abstain. Every guardrail 
 - **The trace id is derived from the request id** (`create_trace_id(seed=request_id)`), so the
   request id shown in the UI or a log line finds the trace directly.
 - **Langfuse SDK 5.x (OpenTelemetry based), with its own tracer provider**, so it never becomes the
-  process-wide OpenTelemetry tracer and exports only our spans.
+  process-wide OpenTelemetry tracer and exports only my spans.
 
 ## 3. Phases
 
@@ -342,7 +342,7 @@ Phases 1 to 7 all fall on presentation day, so the cut order is likely to be use
 demo is assessed, so the first goal is the API answering on ECS (end of phase 4); a local run stays
 ready as the fallback.
 
-If we fall behind, cut from the end of the phase list (see section 3); within a phase, drop the
+If I fall behind, cut from the end of the phase list (see section 3); within a phase, drop the
 extra retrieval ablation and any HTTPS/load balancer work first. Never cut: the chunking invariants, the latest-revision filter, the grounding
 guardrail, the four metrics.
 

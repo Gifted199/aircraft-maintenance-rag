@@ -49,9 +49,7 @@ by code, not left to the prompt.
 
 ## Architecture
 
-![Architecture diagram](docs/architecture.png)
-
-The same picture as text (GitHub renders it):
+The architecture as a Mermaid diagram (GitHub renders it):
 
 ```mermaid
 flowchart LR
@@ -98,7 +96,7 @@ receives the full parent text. That is how "list the steps" can return the compl
 | **Secrets Manager** (`akinsds1126-aero-rag/app`) | The only place the Azure key, OpenSearch password and Langfuse keys exist. | Secrets never sit in the repo, the image, `.env` or the task definition text. ECS injects them at start-up; locally the code reads them with the SSO profile. |
 | **ECR** (`akinsds1126-aero-rag-api`, `-ui`) | Private registry for the two images. | Same account and region as ECS, so pulls need no extra credentials. Tags are immutable and images are scanned on push. |
 | **ECS on Fargate** | Runs one task with two containers (API + UI); also runs the one-off ingestion task. | No servers to patch, billed per second. A Lambda function would hit its timeout and cold-start limits on a two-model-call request; EC2 would mean managing a VM. |
-| **IAM roles** | *Execution role:* ECS pulls images, writes logs, reads the secret for injection. *Task role:* what our code runs as, read-only on the one S3 bucket. | Two roles keep the application from reading secrets it was not handed, and from touching anything but its own bucket. |
+| **IAM roles** | *Execution role:* ECS pulls images, writes logs, reads the secret for injection. *Task role:* what my code runs as, read-only on the one S3 bucket. | Two roles keep the application from reading secrets it was not handed, and from touching anything but its own bucket. |
 | **CloudWatch Logs** (`/ecs/akinsds1126-aero-rag-api`) | Collects each container's stdout (streams `api/...` and `ui/...`). | The `awslogs` driver needs no logging code in the app. Logs are one JSON object per line, so Logs Insights can filter by field. |
 | **VPC security group** | Lets the internet reach port 8501 (UI) only. | The API port 8000 is closed: the UI reaches the API over the task's shared `localhost`, which a security group does not affect. |
 
