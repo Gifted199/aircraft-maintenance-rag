@@ -55,7 +55,7 @@ def test_normalise_aircraft_accepts_loose_input_and_rejects_unknown_types():
         normalise_aircraft("B-737")
 
 
-# ------------------------------------------------------------------ the request we send
+# ------------------------------------------------------------------ the request I send
 
 
 def sub_query_filters(body: dict) -> list[list[dict]]:

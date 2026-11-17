@@ -123,7 +123,7 @@ class Settings(BaseSettings):
 
 
 def aws_session(settings: Settings):
-    """One place that decides how we authenticate to AWS: profile locally, task role on ECS."""
+    """One place that decides how I authenticate to AWS: profile locally, task role on ECS."""
     import boto3
 
     return boto3.Session(profile_name=settings.aws_profile or None, region_name=settings.aws_region)

@@ -80,7 +80,7 @@ def load_secret(settings: Settings, client=None) -> Settings:
 def check_s3(settings: Settings) -> None:
     require(settings, "s3_bucket")
     s3 = aws_session(settings).client("s3", config=_boto_config())
-    s3.head_bucket(Bucket=settings.s3_bucket)  # bucket exists and we may access it
+    s3.head_bucket(Bucket=settings.s3_bucket)  # bucket exists and I may access it
     s3.list_objects_v2(Bucket=settings.s3_bucket, Prefix=settings.s3_prefix, MaxKeys=1)
 
 

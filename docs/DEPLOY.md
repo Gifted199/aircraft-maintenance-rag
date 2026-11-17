@@ -1,6 +1,6 @@
 # Deploying to ECS
 
-Every command here changes AWS and is run by you (CLAUDE.md rule 2). PowerShell syntax. Start
+Every command here changes AWS, so I run each one by hand. PowerShell syntax. Start
 every session with:
 
 ```powershell
@@ -182,7 +182,7 @@ Test-NetConnection $Ip -Port 8000 -InformationLevel Quiet   # expect False
 Test-NetConnection $Ip -Port 8501 -InformationLevel Quiet   # expect True
 ```
 
-## 8. Tag the security group (it was created by the console without our tags)
+## 8. Tag the security group (it was created by the console without my tags)
 
 ```powershell
 aws ec2 create-tags @P --resources $Sg --tags Key=project,Value=aero-rag Key=env,Value=dev Key=owner,Value=akinlolu

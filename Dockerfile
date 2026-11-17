@@ -25,7 +25,7 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 RUN uv sync --locked --no-dev --no-install-project
 
-# Then our code, installed into the environment as a normal (non-editable) package.
+# Then my code, installed into the environment as a normal (non-editable) package.
 COPY src ./src
 RUN uv sync --locked --no-dev --no-editable
 

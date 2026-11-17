@@ -4,8 +4,8 @@ Three things keep the model in its lane:
   * all instructions are in the system message; the question and the retrieved tasks go in the
     user message inside marked blocks and are described to the model as data, never instructions;
   * the reply must match a strict JSON schema, so the model cannot return anything but the fields
-    we expect;
-  * the model cites sources by id only; the citation details are filled in by our code from the
+    I expect;
+  * the model cites sources by id only; the citation details are filled in by my code from the
     index, so a citation can never be invented.
 """
 

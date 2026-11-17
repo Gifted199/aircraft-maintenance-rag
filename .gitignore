@@ -25,6 +25,10 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# Local run outputs (evaluation reports that we want to keep go in docs/)
+# Local run outputs (evaluation reports that I want to keep go in docs/)
 data/tmp/
 *.log
+
+# Private assistant notes (kept locally, never committed)
+CLAUDE.md
+.claude/

@@ -18,7 +18,7 @@ INJECTION_PATTERNS = [
     r"\bpretend (to be|you are)\b",
     r"\bjailbreak\b",
     r"\b(reveal|print|show|repeat)\b.{0,40}\b(prompt|instructions)",
-    r"</?\s*(system|source|sources|question|instructions?)\b",  # our own block markers
+    r"</?\s*(system|source|sources|question|instructions?)\b",  # my own block markers
 ]
 _INJECTION = re.compile("|".join(f"(?:{p})" for p in INJECTION_PATTERNS), re.IGNORECASE)
 

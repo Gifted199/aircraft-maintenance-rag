@@ -23,7 +23,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Ingest manuals from S3 into OpenSearch.")
     parser.add_argument("--dry-run", action="store_true", help="estimate only; write nothing")
     parser.add_argument(
-        "--recreate-index", action="store_true", help="delete and recreate our index first"
+        "--recreate-index", action="store_true", help="delete and recreate my index first"
     )
     args = parser.parse_args(argv)
 

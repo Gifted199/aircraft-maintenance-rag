@@ -207,7 +207,7 @@ def build_tracer(settings: Any, client_factory: Callable[..., Any] | None = None
             from langfuse import Langfuse
             from opentelemetry.sdk.trace import TracerProvider
 
-            # Our own provider: Langfuse does not become the process-wide OpenTelemetry tracer.
+            # My own provider: Langfuse does not become the process-wide OpenTelemetry tracer.
             client_factory = lambda **kw: Langfuse(tracer_provider=TracerProvider(), **kw)  # noqa: E731
         client = client_factory(
             public_key=settings.langfuse_public_key,

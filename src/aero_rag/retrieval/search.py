@@ -15,7 +15,7 @@ from pydantic import BaseModel
 from aero_rag.ingestion.chunker import CHILD_TYPES
 from aero_rag.retrieval.aircraft import resolve_aircraft
 
-# Each parent has two children, so we fetch several children per wanted parent before collapsing.
+# Each parent has two children, so I fetch several children per wanted parent before collapsing.
 CHILDREN_PER_RESULT = 4
 
 

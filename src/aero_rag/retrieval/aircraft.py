@@ -1,7 +1,7 @@
 """Work out which aircraft a question is about.
 
 The aircraft type is a hard filter, so guessing wrong is worse than not guessing: with no clear
-answer we search every aircraft and say so (`aircraft_unspecified`).
+answer I search every aircraft and say so (`aircraft_unspecified`).
 """
 
 import re

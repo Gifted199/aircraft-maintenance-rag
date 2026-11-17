@@ -1,6 +1,6 @@
 """Model prices used for cost estimates (evaluation) and per-call cost in traces (Langfuse).
 
-USD per 1M tokens, as listed in CLAUDE.md. Langfuse is given the cost explicitly because its own
+USD per 1M tokens. Langfuse is given the cost explicitly because its own
 price table may not know the Azure deployment name.
 """
 

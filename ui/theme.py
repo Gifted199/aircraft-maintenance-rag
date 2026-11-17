@@ -149,7 +149,7 @@ textarea:focus-visible, [tabindex]:focus-visible, summary:focus-visible {{
   outline-offset: 0.15rem;
 }}
 
-/* ---- header bar: Streamlit's top strip and our banner form one navy band ---- */
+/* ---- header bar: Streamlit's top strip and my banner form one navy band ---- */
 [data-testid="stHeader"] {{ background: {T["primary-darker"]}; }}
 [data-testid="stHeader"] button, [data-testid="stHeader"] svg,
 [data-testid="stHeader"] [data-testid="stMainMenu"] * {{ color: {T["white"]} !important; }}

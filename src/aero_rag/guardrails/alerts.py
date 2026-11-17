@@ -7,7 +7,7 @@ and can never be forgotten or reworded.
 
 A step counts as relied on if either:
   * the answer quotes a torque value or part number that the step states (decided by code), or
-  * the model pointed at it in `relied_on_steps` (a pointer only; the text still comes from us).
+  * the model pointed at it in `relied_on_steps` (a pointer only; the text comes from my code).
 The first rule is the safety net: it works even if the model points at nothing.
 """
 
